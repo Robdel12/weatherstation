@@ -44,3 +44,14 @@ app.post("/v1/collect", function(req, res) {
     }
   });
 });
+
+// TODO, very temp, just to see the data in the DB
+app.get("/v1/all_data", function(req, res) {
+  db.collection('weather').find({}).toArray(function(err, docs) {
+    if (err) {
+      handleError(res, err.message, "Failed to get weather data. :/");
+    } else {
+      res.status(200).json(docs);
+    }
+  });
+});
