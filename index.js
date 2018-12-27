@@ -1,11 +1,14 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const mongodb = require("mongodb");
+let express = require("express");
+let bodyParser = require("body-parser");
+let mongodb = require("mongodb");
 
 let db;
 let app = express();
+let { ObjectID } = mongodb.ObjectID;
 app.use(bodyParser.json());
-const { ObjectID } = mongodb.ObjectID;
+
+const WEATHER_COLLECTION = 'weather';
+const WEBHOOK_COLLECTION = 'webhookData';
 
 // Connect to the database before starting the application server.
 mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/weatherstation", function (err, client) {
@@ -31,12 +34,22 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({"error": message});
 }
 
+app.get("/", function(req, res) {
+  res.send("I'm 💯");
+});
+
+app.get("/v1/", function(req, res) {
+  res.status(200).json({ hi: "there" });
+});
+
 // Start collecting the data sent from the Photon and store it in a mongoDB
 app.post("/v1/collect", function(req, res) {
   let data = JSON.parse(req.body.data);
+
+  // Record when the server has saved this data
   data.createdAt = new Date();
 
-  db.collection('weather').insertOne(data, function(err, doc) {
+  db.collection(WEATHER_COLLECTION).insertOne(data, function(err, doc) {
     if (err) {
       handleError(res, err.message, "Failed to create new weather data point.");
     } else {
@@ -45,8 +58,8 @@ app.post("/v1/collect", function(req, res) {
   });
 });
 
-// TODO, very temp, just to see the data in the DB
-app.get("/v1/all_data", function(req, res) {
+// TODO this will grow to handle the future front end dashboard params (or will it?)
+app.get("/v1/weather", function(req, res) {
   db.collection('weather').find({}).toArray(function(err, docs) {
     if (err) {
       handleError(res, err.message, "Failed to get weather data. :/");
