@@ -1,0 +1,16 @@
+{
+  "name": "weather-station-server",
+  "version": "0.1.0",
+  "description": "Node.js server backed by MongoDB to collect weather station data",
+  "main": "index.js",
+  "author": "Robert DeLuca",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mongodb": "^3.1.10"
+  }
+}
