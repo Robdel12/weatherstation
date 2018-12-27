@@ -6,11 +6,15 @@
   "author": "Robert DeLuca",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "start:debug": "node --inspect index.js"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "mongodb": "^3.1.10"
+  },
+  "engines": {
+    "node" : "10"
   }
 }

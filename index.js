@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 const { ObjectID } = mongodb.ObjectID;
 
 // Connect to the database before starting the application server.
-mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/test", function (err, client) {
+mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/weatherstation", function (err, client) {
   if (err) {
     console.log(err);
     process.exit(1);
@@ -31,17 +31,16 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({"error": message});
 }
 
+// Start collecting the data sent from the Photon and store it in a mongoDB
 app.post("/v1/collect", function(req, res) {
-  console.log("res = ", res);
-  console.log("req = ", req);
-  // let newContact = req.body;
-  // newContact.createDate = new Date();
+  let data = JSON.parse(req.body.data);
+  data.createdAt = new Date();
 
-  // db.collection(CONTACTS_COLLECTION).insertOne(newContact, function(err, doc) {
-  //   if (err) {
-  //     handleError(res, err.message, "Failed to create new contact.");
-  //   } else {
-  //     res.status(201).json(doc.ops[0]);
-  //   }
-  // });
+  db.collection('weather').insertOne(data, function(err, doc) {
+    if (err) {
+      handleError(res, err.message, "Failed to create new weather data point.");
+    } else {
+      res.status(201).json(doc.ops[0]);
+    }
+  });
 });
