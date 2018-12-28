@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Weather Temp</title>
+  </head>
+  <body>
+    <h2>Most recent reading</h2>
+    <span>(<%= weather[0].createdAt %>)</span>
+    <ul>
+      <li>Temp: <%= weather[0].temp %></li>
+      <li>Humidity: <%= weather[0].humidity %></li>
+      <li>Pressure: <%= weather[0].pressure %></li>
+      <li>Wind Speed: <%= weather[0].windSpeed %></li>
+      <li>Rain: <%= weather[0].rain %></li>
+    </ul>
+  </body>
+</html>

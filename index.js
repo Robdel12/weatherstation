@@ -6,6 +6,8 @@ let db;
 let app = express();
 let { ObjectID } = mongodb.ObjectID;
 app.use(bodyParser.json());
+// super temp
+app.set('view engine', 'ejs');
 
 const WEATHER_COLLECTION = 'weather';
 const WEBHOOK_COLLECTION = 'webhookData';
@@ -60,11 +62,21 @@ app.post("/v1/collect", function(req, res) {
 
 // TODO this will grow to handle the future front end dashboard params (or will it?)
 app.get("/v1/weather", function(req, res) {
-  db.collection('weather').find({}).toArray(function(err, docs) {
+  db.collection('weather').find({}).sort({ createdAt: -1 }).toArray(function(err, docs) {
     if (err) {
       handleError(res, err.message, "Failed to get weather data. :/");
     } else {
       res.status(200).json(docs);
+    }
+  });
+});
+
+app.get("/temp", function(req, res) {
+  db.collection('weather').find({}).sort({ createdAt: -1 }).limit(5).toArray(function(err, docs) {
+    if (err) {
+      handleError(res, err.message, "Failed to get weather data. :/");
+    } else {
+      res.render('weather.ejs',{weather: docs})
     }
   });
 });
