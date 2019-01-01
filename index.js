@@ -72,11 +72,5 @@ app.get("/v1/weather", function(req, res) {
 });
 
 app.get("/temp", function(req, res) {
-  db.collection('weather').find({}).sort({ createdAt: -1 }).limit(5).toArray(function(err, docs) {
-    if (err) {
-      handleError(res, err.message, "Failed to get weather data. :/");
-    } else {
-      res.render('weather.ejs',{weather: docs})
-    }
-  });
+  res.render('weather.ejs');
 });

@@ -18,6 +18,7 @@
         width: 100%;
       }
     </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
     <div class="container">
@@ -84,9 +85,9 @@
                      <div class="content">
                        <p>${dataPoint.temp} F</p>
                        <p>${dataPoint.humidity}%</p>
-                       <p>${dataPoint.pressure}</p>
-                       <p>${dataPoint.windSpeed} mph</p>
-                       <p>${dataPoint.rain} in</p>
+                       <p>${dataPoint.pressure} mb</p>
+                       <p>${dataPoint.windSpeed} mph (${dataPoint.raw.windDirection})</p>
+                       <p>${dataPoint.rain} in/hr</p>
                      </div>
                    </div>
                  </div>
@@ -98,7 +99,7 @@
 
        render(html`<${App}/>`, document.getElementById('app'));
       </script>
-      <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+      <!-- <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script> -->
     </div>
   </body>
 </html>
