@@ -1,17 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Weather Temp</title>
+    <title>Temporary Weather Station</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" integrity="sha256-2pUeJf+y0ltRPSbKOeJh09ipQFYxUdct5nTY6GAXswA=" crossorigin="anonymous" />
+    <style>
+      .cardWrapper {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .card {
+        flex: 1 0 41%;
+        margin: 5px;
+      }
+      .first {
+        flex: none;
+        display: block;
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
-    <h2>Most recent reading</h2>
-    <span>(<%= weather[0].createdAt %>)</span>
-    <ul>
-      <li>Temp: <%= weather[0].temp %></li>
-      <li>Humidity: <%= weather[0].humidity %></li>
-      <li>Pressure: <%= weather[0].pressure %></li>
-      <li>Wind Speed: <%= weather[0].windSpeed %></li>
-      <li>Rain: <%= weather[0].rain %></li>
-    </ul>
+    <div class="container">
+      <div id="app"></div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.7.8/dayjs.min.js" integrity="sha256-uQ0sKs4tHW8ny6pRy18Q3fb3CNgxIv6CPB2cw1Lxj8w=" crossorigin="anonymous"></script>
+      <script type="module">
+       import { html, Component, render } from 'https://unpkg.com/htm/preact/standalone.mjs';
+
+       class WeatherModel {
+         constructor(data) {
+           this.data = data;
+         }
+
+         get raw() {
+           return this.data;
+         }
+
+         get temp() {
+           return parseInt(this.data.temp, 10);
+         }
+
+         get pressure() {
+           return parseFloat(this.data.pressure).toFixed(2);
+         }
+
+         get humidity() {
+           return parseFloat(this.data.humidity).toFixed(2);
+         }
+
+         get rain() {
+           return parseFloat(this.data.rain).toFixed(2);
+         }
+
+         get windSpeed() {
+           return parseFloat(this.data.windSpeed).toFixed(2);
+         }
+
+         get displayTime() {
+           return dayjs(this.data.createdAt).format('h:mm:ss a (MM/DD)');
+         }
+       }
+
+       class App extends Component {
+         componentDidMount() {
+           fetch('/v1/weather')
+             .then(resp => resp.json())
+             .then(weather => {
+               let data = weather.map(point => new WeatherModel(point));
+
+               this.setState({ data });
+             });
+         }
+
+         render(props, { data = [] }) {
+           return html`
+             <h1>Weather</h1>
+             <div class="cardWrapper">
+               ${data.map((dataPoint, index) => html`
+                 <div class="${index === 0 ? 'first card' : 'card'}">
+                   <div class="card-content">
+                     <p class="title">
+                       ${dataPoint.displayTime}
+                     </p>
+                     <div class="content">
+                       <p>${dataPoint.temp} F</p>
+                       <p>${dataPoint.humidity}%</p>
+                       <p>${dataPoint.pressure}</p>
+                       <p>${dataPoint.windSpeed} mph</p>
+                       <p>${dataPoint.rain} in</p>
+                     </div>
+                   </div>
+                 </div>
+               `)}
+             </div>
+           `;
+         }
+       }
+
+       render(html`<${App}/>`, document.getElementById('app'));
+      </script>
+      <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    </div>
   </body>
 </html>

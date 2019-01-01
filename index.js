@@ -62,7 +62,7 @@ app.post("/v1/collect", function(req, res) {
 
 // TODO this will grow to handle the future front end dashboard params (or will it?)
 app.get("/v1/weather", function(req, res) {
-  db.collection('weather').find({}).sort({ createdAt: -1 }).toArray(function(err, docs) {
+  db.collection('weather').find({}).sort({ createdAt: -1 }).limit(50).toArray(function(err, docs) {
     if (err) {
       handleError(res, err.message, "Failed to get weather data. :/");
     } else {
