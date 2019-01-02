@@ -40,6 +40,10 @@
            return parseInt(this.data.temp, 10);
          }
 
+         get barometerTemp() {
+           return parseInt(this.data.barometerTemp, 10);
+         }
+
          get pressure() {
            return parseFloat(this.data.pressure).toFixed(2);
          }
@@ -48,16 +52,37 @@
            return parseFloat(this.data.humidity).toFixed(2);
          }
 
-         get rainHour() {
-           return parseFloat(this.data.rainHour).toFixed(2);
+         get hourlyRain() {
+           return parseFloat(this.data.hourlyRain).toFixed(2);
          }
 
+         get dailyRain() {
+           return parseFloat(this.data.hourlyRain).toFixed(2);
+         }
+
+         // Wind
          get currentWindSpeed() {
            return parseFloat(this.data.currentWindSpeed).toFixed(2);
          }
 
+         get currentWindDirection() {
+           return this.data.currentWindDirection;
+         }
+
          get windGust() {
            return parseFloat(this.data.windGust).toFixed(2);
+         }
+
+         get windGustDirection() {
+           return this.data.windGustDirection;
+         }
+
+         get "2hWindSpeedAvg"() {
+           return parseFloat(this.data["2hWindSpeedAvg"]).toFixed(2);
+         }
+
+         get "2hWindDirectionAvg"() {
+           return this.data["2hWindDirectionAvg"];
          }
 
          get displayTime() {
@@ -105,9 +130,11 @@
                        <p>${dataPoint.temp} F</p>
                        <p>${dataPoint.humidity}%</p>
                        <p>${dataPoint.pressure} mb</p>
-                       <p>${dataPoint.currentWindSpeed} mph (${dataPoint.raw.windDirection})</p>
-                       <p>Gust: ${dataPoint.windGust} mph (${dataPoint.raw.windGustDir})</p>
-                       <p>${dataPoint.rainHour} in/hr</p>
+                       <p>${dataPoint.currentWindSpeed} mph (${dataPoint.currentWindDirection})</p>
+                       <p>Gust: ${dataPoint.windGust} mph (${dataPoint.windGustDirection})</p>
+                       <p>${dataPoint.hourlyRain} in/hr</p>
+                       <p>${dataPoint.dailyRain} in/day</p>
+                       <p>Barometer temp ${dataPoint.barometerTemp} F</p>
                      </div>
                    </div>
                  </div>

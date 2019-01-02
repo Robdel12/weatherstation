@@ -1,6 +1,7 @@
 let express = require("express");
 let bodyParser = require("body-parser");
 let mongodb = require("mongodb");
+let { parseSensorData } = require('./utils');
 
 let db;
 let app = express();
@@ -46,7 +47,7 @@ app.get("/v1/", function(req, res) {
 
 // Start collecting the data sent from the Photon and store it in a mongoDB
 app.post("/v1/collect", function(req, res) {
-  let data = JSON.parse(req.body.data);
+  let data = parseSensorData(req.body.data);
 
   // Record when the server has saved this data
   data.createdAt = new Date();
