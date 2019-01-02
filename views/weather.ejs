@@ -48,12 +48,12 @@
            return parseFloat(this.data.humidity).toFixed(2);
          }
 
-         get rain() {
-           return parseFloat(this.data.rain).toFixed(2);
+         get rainHour() {
+           return parseFloat(this.data.rainHour).toFixed(2);
          }
 
-         get windSpeed() {
-           return parseFloat(this.data.windSpeed).toFixed(2);
+         get currentWindSpeed() {
+           return parseFloat(this.data.currentWindSpeed).toFixed(2);
          }
 
          get displayTime() {
@@ -86,8 +86,8 @@
                        <p>${dataPoint.temp} F</p>
                        <p>${dataPoint.humidity}%</p>
                        <p>${dataPoint.pressure} mb</p>
-                       <p>${dataPoint.windSpeed} mph (${dataPoint.raw.windDirection})</p>
-                       <p>${dataPoint.rain} in/hr</p>
+                       <p>${dataPoint.currentWindSpeed} mph (${dataPoint.raw.windDirection})</p>
+                       <p>${dataPoint.rainHour} in/hr</p>
                      </div>
                    </div>
                  </div>
