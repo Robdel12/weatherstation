@@ -56,6 +56,10 @@
            return parseFloat(this.data.currentWindSpeed).toFixed(2);
          }
 
+         get windGust() {
+           return parseFloat(this.data.windGust).toFixed(2);
+         }
+
          get displayTime() {
            return dayjs(this.data.createdAt).format('h:mm:ss a (MM/DD)');
          }
@@ -87,6 +91,7 @@
                        <p>${dataPoint.humidity}%</p>
                        <p>${dataPoint.pressure} mb</p>
                        <p>${dataPoint.currentWindSpeed} mph (${dataPoint.raw.windDirection})</p>
+                       <p>Gust: ${dataPoint.windGust} mph (${dataPoint.raw.windGustDir})</p>
                        <p>${dataPoint.rainHour} in/hr</p>
                      </div>
                    </div>
