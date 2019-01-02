@@ -73,7 +73,22 @@
                let data = weather.map(point => new WeatherModel(point));
 
                this.setState({ data });
+               this.pollForData();
              });
+         }
+
+         pollForData() {
+           window.setInterval(() => {
+             if(!document.hidden) {
+               fetch('/v1/weather')
+                 .then(resp => resp.json())
+                 .then(weather => {
+                   let data = weather.map(point => new WeatherModel(point));
+
+                   this.setState({ data });
+                 });
+             }
+           }, 3500);
          }
 
          render(props, { data = [] }) {
