@@ -69,22 +69,6 @@
            return this.data.currentWindDirection;
          }
 
-         get windGust() {
-           return parseFloat(this.data.windGust).toFixed(2);
-         }
-
-         get windGustDirection() {
-           return this.data.windGustDirection;
-         }
-
-         get "2hWindSpeedAvg"() {
-           return parseFloat(this.data["2hWindSpeedAvg"]).toFixed(2);
-         }
-
-         get "2hWindDirectionAvg"() {
-           return this.data["2hWindDirectionAvg"];
-         }
-
          get displayTime() {
            return dayjs(this.data.createdAt).format('h:mm:ss a (MM/DD)');
          }
@@ -131,7 +115,6 @@
                        <p>${dataPoint.humidity}%</p>
                        <p>${dataPoint.pressure} mb</p>
                        <p>${dataPoint.currentWindSpeed} mph (${dataPoint.currentWindDirection})</p>
-                       <p>Gust: ${dataPoint.windGust} mph (${dataPoint.windGustDirection})</p>
                        <p>${dataPoint.hourlyRain} in/hr</p>
                        <p>${dataPoint.dailyRain} in/day</p>
                        <p>Barometer temp ${dataPoint.barometerTemp} F</p>

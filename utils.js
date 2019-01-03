@@ -11,10 +11,6 @@ function parseSensorData(rawData) {
     humidity,
     currentWindSpeed: data.cWindS,
     currentWindDirection: parseWindDirection(data.cWindD),
-    windGust: data.windG,
-    windGustDirection: parseWindDirection(data.windGD),
-    '2hWindSpeedAvg': data['2hWSA'],
-    '2hWindDirectionAvg': parseWindDirection(data['2hWDA']),
     dailyRain: data.dRain,
     hourlyRain: data.hRain,
     barometerTemp: data.baroT
