@@ -6,7 +6,7 @@
   "author": "Robert DeLuca",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js",
+    "start": "env TZ='America/Chicago' node index.js",
     "start:dev": "nodemon index.js",
     "start:debug": "nodemon --inspect index.js"
   },
