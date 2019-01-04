@@ -3,17 +3,19 @@
 // storing into the DB.
 function parseSensorData(rawData) {
   let data = JSON.parse(rawData);
-  let { pressure, humidity, temp } = data;
+  let temp = parseFloat(data.temp, 10);
+  let pressure = parseFloat(data.pressure, 10);
+  let humidity = parseFloat(data.humidity, 10);
 
   return {
     temp,
     pressure,
     humidity,
-    currentWindSpeed: data.cWindS,
+    currentWindSpeed: parseFloat(data.cWindS, 10),
     currentWindDirection: parseWindDirection(data.cWindD),
-    dailyRain: data.dRain,
-    hourlyRain: data.hRain,
-    barometerTemp: data.baroT
+    dailyRain: parseFloat(data.dRain, 10),
+    hourlyRain: parseFloat(data.hRain, 10),
+    barometerTemp: parseFloat(data.baroT, 10)
   };
 }
 

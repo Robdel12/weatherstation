@@ -14,7 +14,7 @@ const WEATHER_COLLECTION = 'weather';
 const WEBHOOK_COLLECTION = 'webhookData';
 
 // Connect to the database before starting the application server.
-mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/weatherstation", function (err, client) {
+mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/weatherstation", { useNewUrlParser: true }, function (err, client) {
   if (err) {
     console.log(err);
     process.exit(1);
@@ -63,7 +63,9 @@ app.post("/v1/collect", function(req, res) {
 
 // TODO this will grow to handle the future front end dashboard params (or will it?)
 app.get("/v1/weather", function(req, res) {
-  db.collection('weather').find({}).sort({ createdAt: -1 }).limit(50).toArray(function(err, docs) {
+  let limit = parseInt(req.query.limit, 10);
+
+  db.collection('weather').find({}).sort({ createdAt: -1 }).limit(limit).toArray(function(err, docs) {
     if (err) {
       handleError(res, err.message, "Failed to get weather data. :/");
     } else {

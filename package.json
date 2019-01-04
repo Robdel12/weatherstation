@@ -6,9 +6,9 @@
   "author": "Robert DeLuca",
   "license": "MIT",
   "scripts": {
-    "start": "env TZ='America/Chicago' node index.js",
-    "start:dev": "nodemon index.js",
-    "start:debug": "nodemon --inspect index.js"
+    "start": "TZ=\"America/Chicago\" node index.js",
+    "start:dev": "TZ=\"America/Chicago\" nodemon index.js",
+    "start:debug": "TZ=\"America/Chicago\" nodemon --inspect index.js"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
