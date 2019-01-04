@@ -2,13 +2,13 @@
   "name": "weather-station-server",
   "version": "0.1.0",
   "description": "Node.js server backed by MongoDB to collect weather station data",
-  "main": "index.js",
+  "main": "src/index.js",
   "author": "Robert DeLuca",
   "license": "MIT",
   "scripts": {
-    "start": "TZ=\"America/Chicago\" node index.js",
-    "start:dev": "TZ=\"America/Chicago\" nodemon index.js",
-    "start:debug": "TZ=\"America/Chicago\" nodemon --inspect index.js"
+    "start": "TZ=\"America/Chicago\" node ./src/index.js",
+    "start:dev": "TZ=\"America/Chicago\" nodemon ./src/index.js",
+    "start:debug": "TZ=\"America/Chicago\" nodemon --inspect ./src/index.js"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
