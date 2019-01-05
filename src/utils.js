@@ -6,10 +6,12 @@ function parseSensorData(rawData) {
   let temp = parseFloat(data.temp, 10);
   let pressure = parseFloat(data.pressure, 10);
   let humidity = parseFloat(data.humidity, 10);
+  let altitude = parseFloat(data.altitude, 10);
 
   return {
     temp,
     pressure,
+    altitude,
     humidity,
     currentWindSpeed: parseFloat(data.cWindS, 10),
     currentWindDirection: parseWindDirection(data.cWindD),

@@ -53,47 +53,30 @@ int WSPEED = D3;
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long lastSecond; //The millis counter to see when a second rolls by
 byte seconds; //When it hits 60, increase the current minute
-byte seconds_2m; //Keeps track of the "wind speed/dir avg" over last 2 minutes array of data
 byte minutes; //Keeps track of where we are in various arrays of data
-byte minutes_10m; //Keeps track of where we are in wind gust/dir over last 10 minutes array of data
 
 //We need to keep track of the following variables:
 //Wind speed/dir each update (no storage)
-//Wind gust/dir over the day (no storage)
-//Wind speed/dir, avg over 2 minutes (store 1 per second)
-//Wind gust/dir over last 10 minutes (store 1 per minute)
 //Rain over the past hour (store 1 per minute)
 //Total rain over date (store one per day)
 
-byte windspdavg[120]; //120 bytes to keep track of 2 minute average
-int winddiravg[120]; //120 ints to keep track of 2 minute average
-float windgust_10m[10]; //10 floats to keep track of 10 minute max
-int windgustdirection_10m[10]; //10 ints to keep track of 10 minute max
 volatile float rainHour[60]; //60 floating numbers to keep track of 60 minutes of rain
 
-//These are all the weather values that wunderground expects:
+//These are all the weather values that our API expects
 int winddir = 0; // [0-360 instantaneous wind direction]
 float windspeedmph = 0; // [mph instantaneous wind speed]
-float windgustmph = 0; // [mph current wind gust, using software specific time period]
-int windgustdir = 0; // [0-360 using software specific time period]
-float windspdmph_avg2m = 0; // [mph 2 minute average wind speed mph]
-int winddir_avg2m = 0; // [0-360 2 minute average wind direction]
-float windgustmph_10m = 0; // [mph past 10 minutes wind gust mph ]
-int windgustdir_10m = 0; // [0-360 past 10 minutes wind gust direction]
 float rainin = 0; // [rain inches over the past hour)] -- the accumulated rainfall in the past 60 min
-long lastWindCheck = 0;
 volatile float dailyrainin = 0; // [rain inches so far today in local time]
-
 float humidity = 0;
 float tempf = 0;
 float pascals = 0;
 float altf = 0;
 float baroTemp = 0;
-String winddirection = "None";
 
-int count = 0;
 
 // volatiles are subject to modification by IRQs
+int count = 0;
+long lastWindCheck = 0;
 volatile long lastWindIRQ = 0;
 volatile byte windClicks = 0;
 volatile unsigned long raintime, rainlast, raininterval, rain;
@@ -109,8 +92,8 @@ void rainIRQ() {
   raintime = millis(); // grab current time
   raininterval = raintime - rainlast; // calculate interval between this and last event
 
-    if (raininterval > 10) // ignore switch-bounce glitches less than 10mS after initial edge
-  {
+  // ignore switch-bounce glitches less than 10mS after initial edge
+  if (raininterval > 10) {
     dailyrainin += 0.011; //Each dump is 0.011" of water
     rainHour[minutes] += 0.011; //Increase this minute's amount of rain
     rainlast = raintime; // set up for next event
@@ -131,18 +114,16 @@ void setup() {
     pinMode(WSPEED, INPUT_PULLUP); // input from wind meters windspeed sensor
     pinMode(RAIN, INPUT_PULLUP); // input from wind meters rain gauge sensor
 
-    Serial.begin(9600);   // open serial over USB
+    Serial.begin(9600); // open serial over USB
 
-    // Make sure your Serial Terminal app is closed before powering your device
-    // Now open your Serial Terminal, and hit any key to continue!
-    Serial.println("Press any key to begin");
-    //This line pauses the Serial port until a key is pressed
+    // This line pauses the Serial port until a key is pressed
+    // Serial.println("Press any key to begin");
     // while(!Serial.available()) Spark.process();
 
     //Initialize the I2C sensors and ping them
     sensor.begin();
 
-    /*You can only receive acurate barrometric readings or acurate altitiude
+    /* You can only receive acurate barrometric readings or acurate altitiude
     readings at a given time, not both at the same time. The following two lines
     tell the sensor what mode to use. You could easily write a function that
     takes a reading in one made and then switches to the other mode to grab that
@@ -150,7 +131,6 @@ void setup() {
     readings. For this example, we will only be using the barometer mode. Be sure
     to only uncomment one line at a time. */
     sensor.setModeBarometer();//Set to Barometer Mode
-    //baro.setModeAltimeter();//Set to altimeter Mode
 
     //These are additional MPL3115A2 functions the MUST be called for the sensor to work.
     sensor.setOversampleRate(7); // Set Oversample rate
@@ -182,24 +162,49 @@ void loop() {
       seconds = 0;
 
       if(++minutes > 59) minutes = 0;
-      if(++minutes_10m > 9) minutes_10m = 0;
 
       rainHour[minutes] = 0; //Zero out this minute's rainfall amount
     }
 
     //Get readings from all sensors
     getWeather();
+
     //Rather than use a delay, keeping track of a counter allows the photon to
-    // still take readings and do work in between printing out data.
+    //still take readings and do work in between printing out data.
     count++;
-    //alter this number to change the amount of time between each reading
-    if(count == 2)
-    {
+
+    // Every two seconds
+    if(count == 2) {
        printInfo();
+       // These key names are shrunk to fit within 63 bytes that `Particle.publish` limits to.
+       // The keys are transformed into human readable names where the POST is handled in the API.
+       Particle.publish("weather",
+         "{ \"temp\": \""
+         + String(tempf)
+         + "\", \"cWindS\": \""
+         + String(windspeedmph)
+         + "\", \"cWindD\": \""
+         + String(winddir)
+         + "\", \"windG\": \""
+         + "\", \"dRain\": \""
+         + String(dailyrainin)
+         + "\", \"hRain\": \""
+         + String(rainin)
+         + "\", \"humidity\": \""
+         + String(humidity)
+         + "\", \"pressure\": \""
+         + String(pascals/100)
+         + "\", \"altitude\": \""
+         + String(altf)
+         + "\", \"baroT\": \""
+         + String(baroTemp)
+         + "\" }"
+       );
        count = 0;
     }
   }
 }
+
 //---------------------------------------------------------------
 void printInfo() {
   //This function prints the weather data out to the default Serial Port
@@ -223,31 +228,6 @@ void printInfo() {
   Serial.print(baroTemp);
   Serial.print("F, ");
 
-  Serial.print("Pressure:");
-  Serial.print(pascals/100);
-  Serial.print("hPa, ");
-  // These key names are shrunk to fit within 63 bytes that `Particle.publish` limits to.
-  // The keys are transformed into human readable names where the POST is handled in the API.
-  Particle.publish("weather",
-    "{ \"temp\": \""
-     + String(tempf)
-     + "\", \"cWindS\": \""
-     + String(windspeedmph)
-     + "\", \"cWindD\": \""
-     + String(winddir)
-     + "\", \"windG\": \""
-     + "\", \"dRain\": \""
-     + String(dailyrainin)
-     + "\", \"hRain\": \""
-     + String(rainin)
-     + "\", \"humidity\": \""
-     + String(humidity)
-     + "\", \"pressure\": \""
-     + String(pascals/100)
-     + "\", \"baroT\": \""
-     + String(baroTemp)
-     + "\" }"
-  );
   //The MPL3115A2 outputs the pressure in Pascals. However, most weather stations
   //report pressure in hectopascals or millibars. Divide by 100 to get a reading
   //more closely resembling what online weather reports may say in hPa or mb.
@@ -255,11 +235,13 @@ void printInfo() {
   //from mb to in.Hg, use the following formula. P(inHg) = 0.0295300 * P(mb)
   //More info on conversion can be found here:
   //www.srh.noaa.gov/images/epz/wxcalc/pressureConversion.pdf
+  Serial.print("Pressure:");
+  Serial.print(pascals/100);
+  Serial.print("hPa, ");
 
-  //If in altitude mode, print with these lines
-  //Serial.print("Altitude:");
-  //Serial.print(altf);
-  //Serial.println("ft.");
+  Serial.print("Altitude:");
+  Serial.print(altf);
+  Serial.println("ft.");
 }
 
 //---------------------------------------------------------------
@@ -328,60 +310,27 @@ void getWeather() {
     humidity = sensor.getRH();
 
     // Measure Temperature from the HTU21D or Si7021
-    tempf = sensor.getTempF();
     // Temperature is measured every time RH is requested.
     // It is faster, therefore, to read it from previous RH
     // measurement with getTemp() instead with readTemp()
+    tempf = sensor.getTempF();
 
-    //Measure the Barometer temperature in F from the MPL3115A2
+    // Measure the Barometer temperature in F from the MPL3115A2
+    sensor.setModeBarometer();
     baroTemp = sensor.readBaroTempF();
 
     //Measure Pressure from the MPL3115A2
     pascals = sensor.readPressure();
 
-    //If in altitude mode, you can get a reading in feet  with this line:
-    //float altf = sensor.readAltitudeFt();
+    // Set altimeter mode & measure the Altimeter in feet from the MPL3115A2
+    sensor.setModeAltimeter();
+    altf = sensor.readAltitudeFt();
 
     //Calc winddir
     winddir = get_wind_direction();
 
     //Calc windspeed
     windspeedmph = get_wind_speed();
-
-    //Calc windgustmph
-    //Calc windgustdir
-    //Report the largest windgust today
-    windgustmph = 0;
-    windgustdir = 0;
-
-    //Calc windspdmph_avg2m
-    float temp = 0;
-    for(int i = 0 ; i < 120 ; i++)
-      temp += windspdavg[i];
-    temp /= 120.0;
-    windspdmph_avg2m = temp;
-
-    //Calc winddir_avg2m
-    temp = 0; //Can't use winddir_avg2m because it's an int
-    for(int i = 0 ; i < 120 ; i++)
-      temp += winddiravg[i];
-    temp /= 120;
-    winddir_avg2m = temp;
-
-    //Calc windgustmph_10m
-    //Calc windgustdir_10m
-    //Find the largest windgust in the last 10 minutes
-    windgustmph_10m = 0;
-    windgustdir_10m = 0;
-    //Step through the 10 minutes
-    for(int i = 0; i < 10 ; i++)
-    {
-      if(windgust_10m[i] > windgustmph_10m)
-      {
-        windgustmph_10m = windgust_10m[i];
-        windgustdir_10m = windgustdirection_10m[i];
-      }
-    }
 
     //Total rainfall for the day is calculated within the interrupt
     //Calculate amount of rainfall for the last 60 minutes
