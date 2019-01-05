@@ -6,7 +6,15 @@ let { parseSensorData } = require('./utils');
 const WEATHER_COLLECTION = 'weather';
 const WEBHOOK_COLLECTION = 'webhookData';
 const LOCAL_DB = 'mongodb://localhost:27017/weatherstation';
-const DB_ADDRESS = process.env.MONGODB_URI || LOCAL_DB
+const DB_ADDRESS = process.env.MONGODB_URI || LOCAL_DB;
+const AVG_GROUP = {
+  "_id": null,
+  "avgTemp": { "$avg": "$temp" },
+  "avgBarometerTemp": { "$avg": "$barometerTemp" },
+  "avgPressure": { "$avg": "$pressure" },
+  "avgHumidity": { "$avg": "$humidity" },
+  "avgWindSpeed": { "$avg": "$currentWindSpeed" }
+};
 
 let db;
 let app = express();
@@ -94,16 +102,10 @@ app.get("/v1/ten-min-average", function(req, res) {
         }
       },
       {
-        "$group": {
-          "_id": null,
-          "avgTemp": { "$avg": "$temp" },
-          "avgPressure": { "$avg": "$pressure" },
-          "avgHumidity": { "$avg": "$humidity" }
-        }
+        "$group": AVG_GROUP
       }
     ])
     .toArray((err, data) => {
-      console.log(data);
       if (err) {
         handleError(res, err.message, "Failed to get weather 10 min avg. :/");
       } else {
@@ -130,16 +132,10 @@ app.get("/v1/hourly-average", function(req, res) {
         }
       },
       {
-        "$group": {
-          "_id": null,
-          "avgTemp": { "$avg": "$temp" },
-          "avgPressure": { "$avg": "$pressure" },
-          "avgHumidity": { "$avg": "$humidity" }
-        }
+        "$group": AVG_GROUP
       }
     ])
     .toArray((err, data) => {
-      console.log(data);
       if (err) {
         handleError(res, err.message, "Failed to get weather 10 min avg. :/");
       } else {
@@ -153,7 +149,6 @@ app.get("/v1/daily-average", function(req, res) {
   let oneDayAgo = new Date();
 
   oneDayAgo.setDate(oneDayAgo.getDate() - 1);
-  console.log("oneDayAgo.setDate = ", oneDayAgo);
 
   db
     .collection('weather')
@@ -167,19 +162,14 @@ app.get("/v1/daily-average", function(req, res) {
         }
       },
       {
-        "$group": {
-          "_id": null,
-          "avgTemp": { "$avg": "$temp" },
-          "avgPressure": { "$avg": "$pressure" },
-          "avgHumidity": { "$avg": "$humidity" }
-        }
+        "$group": AVG_GROUP
       }
     ])
     .toArray((err, data) => {
       if (err) {
         handleError(res, err.message, "Failed to get weather daily avg. :/");
       } else {
-        res.status(200).json(data);
+        res.status(200).json(data[0]);
       }
     });
 });
