@@ -1,7 +1,7 @@
 let express = require("express");
 let bodyParser = require("body-parser");
 let mongodb = require("mongodb");
-let { parseSensorData } = require('./utils');
+let { parseSensorData, handleAverage, handleError } = require('./utils');
 
 const WEATHER_COLLECTION = 'weather';
 const WEBHOOK_COLLECTION = 'webhookData';
@@ -41,12 +41,6 @@ mongodb.MongoClient.connect(DB_ADDRESS, { useNewUrlParser: true }, function (err
   });
 });
 
-// Generic error handler used by all endpoints.
-function handleError(res, reason, message, code) {
-  console.log("ERROR: " + reason);
-  res.status(code || 500).json({"error": message});
-}
-
 app.get("/", function(req, res) {
   res.send("I'm 💯");
 });
@@ -85,93 +79,33 @@ app.get("/v1/weather", function(req, res) {
 });
 
 app.get("/v1/ten-min-average", function(req, res) {
-  let currentDate = new Date();
-  let tenMinAgo = new Date();
-
-  tenMinAgo.setMinutes(tenMinAgo.getMinutes() - 10);
-
-  db
-    .collection('weather')
-    .aggregate([
-      {
-        "$match": {
-          "createdAt": {
-            "$gt": tenMinAgo,
-            "$lt": currentDate
-          }
-        }
-      },
-      {
-        "$group": AVG_GROUP
-      }
-    ])
-    .toArray((err, data) => {
-      if (err) {
-        handleError(res, err.message, "Failed to get weather 10 min avg. :/");
-      } else {
-        res.status(200).json(data[0]);
-      }
-    });
+  handleAverage(req.query, (timeAgo) => timeAgo.setMinutes(timeAgo.getMinutes() - 10)).then(data => {
+    if(data.length === 0) {
+      res.status(200).json({ message: 'no records found' });
+    } else {
+      res.status(200).json(data[0]);
+    }
+  });
 });
 
 app.get("/v1/hourly-average", function(req, res) {
-  let currentDate = new Date();
-  let oneHourAgo = new Date();
-
-  oneHourAgo.setHours(oneHourAgo.getHours() - 1);
-
-  db
-    .collection('weather')
-    .aggregate([
-      {
-        "$match": {
-          "createdAt": {
-            "$gt": oneHourAgo,
-            "$lt": currentDate
-          }
-        }
-      },
-      {
-        "$group": AVG_GROUP
-      }
-    ])
-    .toArray((err, data) => {
-      if (err) {
-        handleError(res, err.message, "Failed to get weather 10 min avg. :/");
-      } else {
-        res.status(200).json(data[0]);
-      }
-    });
+  handleAverage(req.query, (timeAgo) => timeAgo.setHours(timeAgo.getHours() - 1)).then(data => {
+    if(data.length === 0) {
+      res.status(200).json({ message: 'no records found' });
+    } else {
+      res.status(200).json(data[0]);
+    }
+  });
 });
 
 app.get("/v1/daily-average", function(req, res) {
-  let currentDate = new Date();
-  let oneDayAgo = new Date();
-
-  oneDayAgo.setDate(oneDayAgo.getDate() - 1);
-
-  db
-    .collection('weather')
-    .aggregate([
-      {
-        "$match": {
-          "createdAt": {
-            "$gt": oneDayAgo,
-            "$lt": currentDate
-          }
-        }
-      },
-      {
-        "$group": AVG_GROUP
-      }
-    ])
-    .toArray((err, data) => {
-      if (err) {
-        handleError(res, err.message, "Failed to get weather daily avg. :/");
-      } else {
-        res.status(200).json(data[0]);
-      }
-    });
+  handleAverage(req.query, (timeAgo) => timeAgo.setDate(timeAgo.getDate() - 1)).then(data => {
+    if(data.length === 0) {
+      res.status(200).json({ message: 'no records found' });
+    } else {
+      res.status(200).json(data[0]);
+    }
+  });
 });
 
 app.get("/temp", function(req, res) {

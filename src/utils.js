@@ -46,7 +46,47 @@ function parseWindDirection(winddir) {
   }
 }
 
+// Generic error handler used by all endpoints.
+function handleError(res, reason, message, code) {
+  console.log("ERROR: " + reason);
+  res.status(code || 500).json({"error": message});
+}
+
+function handleAverage({ startDate }, timeTransform) {
+  let lt = startDate ? new Date(startDate) : new Date();
+  let gt = new Date(lt.getTime());
+
+  timeTransform(gt)
+
+  return new Promise((resolve, reject) => {
+    db
+      .collection('weather')
+      .aggregate([
+        {
+          "$match": {
+            "createdAt": {
+              "$gt": gt,
+              "$lt": lt
+            }
+          }
+        },
+        {
+          "$group": AVG_GROUP
+        }
+      ])
+      .toArray((err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+  });
+}
+
 module.exports = {
+  handleError,
+  handleAverage,
   parseSensorData,
   parseWindDirection
 };
