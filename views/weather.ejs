@@ -25,7 +25,36 @@
       <div id="app"></div>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.7.8/dayjs.min.js" integrity="sha256-uQ0sKs4tHW8ny6pRy18Q3fb3CNgxIv6CPB2cw1Lxj8w=" crossorigin="anonymous"></script>
       <script type="module">
-       import { html, Component, render } from 'https://unpkg.com/htm/preact/standalone.mjs';
+        import { html, Component, render } from 'https://unpkg.com/htm/preact/standalone.mjs';
+
+        class AvgComponent extends Component {
+          componentDidMount() {
+            fetch(`/v1/${this.props.avgType}-average`)
+              .then(res => res.json())
+              .then(data => {
+                this.setState({ data });
+            });
+          }
+
+          render({ avgType }, { data = {} }) {
+            return html`
+              <div class="card">
+                <div class="card-content">
+                  <p class="title">
+                    ${avgType.charAt(0).toUpperCase() + avgType.slice(1)} Averages
+                  </p>
+                  <div class="content">
+                    <p>Temp: ${data.avgTemp}</p>
+                    <p>Barometer Temp: ${data.avgBarometerTemp}</p>
+                    <p>Pressure: ${data.avgPressure}</p>
+                    <p>Humidity: ${data.avgHumidity}</p>
+                    <p>Wind Speed: ${data.avgWindSpeed}</p>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+        }
 
        class WeatherModel {
          constructor(data) {
@@ -77,58 +106,72 @@
          }
        }
 
-       class App extends Component {
-         componentDidMount() {
-           fetch('/v1/weather')
-             .then(resp => resp.json())
-             .then(weather => {
-               let data = weather.map(point => new WeatherModel(point));
+        class App extends Component {
+          componentDidMount() {
+            fetch('/v1/weather?limit=10')
+              .then(resp => resp.json())
+              .then(weather => {
+                let data = weather.map(point => new WeatherModel(point));
 
-               this.setState({ data });
-               this.pollForData();
-             });
-         }
+                this.setState({ data });
+                this.pollForData();
+              });
+          }
 
-         pollForData() {
-           window.setInterval(() => {
-             if(!document.hidden) {
-               fetch('/v1/weather')
-                 .then(resp => resp.json())
-                 .then(weather => {
-                   let data = weather.map(point => new WeatherModel(point));
+          pollForData() {
+            window.setInterval(() => {
+              if(!document.hidden) {
+                fetch('/v1/weather')
+                  .then(resp => resp.json())
+                  .then(weather => {
+                    let data = weather.map(point => new WeatherModel(point));
 
-                   this.setState({ data });
-                 });
-             }
-           }, 3500);
-         }
+                    this.setState({ data });
+                  });
+              }
+            }, 3500);
+          }
 
-         render(props, { data = [] }) {
-           return html`
-             <h1>Weather</h1>
-             <div class="cardWrapper">
-               ${data.map((dataPoint, index) => html`
-                 <div class="${index === 0 ? 'first card' : 'card'}">
-                   <div class="card-content">
-                     <p class="title">
-                       ${dataPoint.displayTime}
-                     </p>
-                     <div class="content">
-                       <p>${dataPoint.temp} F</p>
-                       <p>${dataPoint.humidity}%</p>
-                       <p>${dataPoint.altitude} ft</p>
-                       <p>${dataPoint.pressure} hPa</p>
-                       <p>${dataPoint.currentWindSpeed} mph (${dataPoint.currentWindDirection})</p>
-                       <p>${dataPoint.hourlyRain} in/hr</p>
-                       <p>${dataPoint.dailyRain} in/day</p>
-                       <p>Barometer temp ${dataPoint.barometerTemp} F</p>
-                     </div>
-                   </div>
-                 </div>
-               `)}
-             </div>
-           `;
-         }
+          render(props, { data = [] }) {
+            return html`
+              <div>
+                <div class="container columns">
+                  <div class="column">
+                    <${AvgComponent} avgType="hourly" /> 
+                  </div>
+                  <div class="column">
+                    <${AvgComponent} avgType="daily" /> 
+                  </div>
+                  <div class="column">
+                    <${AvgComponent} avgType="ten-min" /> 
+                  </div>
+                </div>
+                
+                <h1 class="title">Firehose</h1>
+                <div class="cardWrapper">
+                  ${data.map((dataPoint, index) => html`
+                    <div class="${index === 0 ? 'first card' : 'card'}">
+                      <div class="card-content">
+                        <p class="title">
+                          ${dataPoint.displayTime}
+                        </p>
+                        <div class="content">
+                          <p>${dataPoint.temp} F</p>
+                          <p>${dataPoint.humidity}%</p>
+                          <p>${dataPoint.altitude} ft</p>
+                          <p>${dataPoint.pressure} hPa</p>
+                          <p>${dataPoint.currentWindSpeed} mph (${dataPoint.currentWindDirection})</p>
+                          <p>${dataPoint.hourlyRain} in/hr</p>
+                          <p>${dataPoint.dailyRain} in/day</p>
+                          <p>Barometer temp ${dataPoint.barometerTemp} F</p>
+                        </div>
+                      </div>
+                    </div>
+                  `)}
+                </div>
+              </div>
+            `;
+          }
        }
 
        render(html`<${App}/>`, document.getElementById('app'));
