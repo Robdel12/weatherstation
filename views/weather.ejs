@@ -52,6 +52,10 @@
            return parseFloat(this.data.humidity).toFixed(2);
          }
 
+         get altitude() {
+           return parseInt(this.data.altitude, 10);
+         }
+
          get hourlyRain() {
            return parseFloat(this.data.hourlyRain).toFixed(2);
          }
@@ -60,7 +64,6 @@
            return parseFloat(this.data.hourlyRain).toFixed(2);
          }
 
-         // Wind
          get currentWindSpeed() {
            return parseFloat(this.data.currentWindSpeed).toFixed(2);
          }
@@ -113,7 +116,8 @@
                      <div class="content">
                        <p>${dataPoint.temp} F</p>
                        <p>${dataPoint.humidity}%</p>
-                       <p>${dataPoint.pressure} mb</p>
+                       <p>${dataPoint.altitude} ft</p>
+                       <p>${dataPoint.pressure} hPa</p>
                        <p>${dataPoint.currentWindSpeed} mph (${dataPoint.currentWindDirection})</p>
                        <p>${dataPoint.hourlyRain} in/hr</p>
                        <p>${dataPoint.dailyRain} in/day</p>

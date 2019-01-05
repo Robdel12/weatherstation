@@ -69,13 +69,14 @@ float rainin = 0; // [rain inches over the past hour)] -- the accumulated rainfa
 volatile float dailyrainin = 0; // [rain inches so far today in local time]
 float humidity = 0;
 float tempf = 0;
-float pascals = 0;
+float hPa = 0;
 float altf = 0;
 float baroTemp = 0;
 
 
 // volatiles are subject to modification by IRQs
 int count = 0;
+int altCount = 0;
 long lastWindCheck = 0;
 volatile long lastWindIRQ = 0;
 volatile byte windClicks = 0;
@@ -130,7 +131,11 @@ void setup() {
     reading, resulting in data that contains both acurate altitude and barrometric
     readings. For this example, we will only be using the barometer mode. Be sure
     to only uncomment one line at a time. */
-    sensor.setModeBarometer();//Set to Barometer Mode
+
+    // Setting the mode to altimeter outputs what
+    // APPEARS to be hPa adjusted to the the altitude
+    // from the pressure reading
+    sensor.setModeAltimeter();
 
     //These are additional MPL3115A2 functions the MUST be called for the sensor to work.
     sensor.setOversampleRate(7); // Set Oversample rate
@@ -193,7 +198,7 @@ void loop() {
          + "\", \"humidity\": \""
          + String(humidity)
          + "\", \"pressure\": \""
-         + String(pascals/100)
+         + String(hPa)
          + "\", \"altitude\": \""
          + String(altf)
          + "\", \"baroT\": \""
@@ -236,7 +241,7 @@ void printInfo() {
   //More info on conversion can be found here:
   //www.srh.noaa.gov/images/epz/wxcalc/pressureConversion.pdf
   Serial.print("Pressure:");
-  Serial.print(pascals/100);
+  Serial.print(hPa);
   Serial.print("hPa, ");
 
   Serial.print("Altitude:");
@@ -306,35 +311,33 @@ float get_wind_speed() {
 
 //---------------------------------------------------------------
 void getWeather() {
-    // Measure Relative Humidity from the HTU21D or Si7021
-    humidity = sensor.getRH();
+  // Measure Relative Humidity from the HTU21D or Si7021
+  humidity = sensor.getRH();
 
-    // Measure Temperature from the HTU21D or Si7021
-    // Temperature is measured every time RH is requested.
-    // It is faster, therefore, to read it from previous RH
-    // measurement with getTemp() instead with readTemp()
-    tempf = sensor.getTempF();
+  // Measure Temperature from the HTU21D or Si7021
+  // Temperature is measured every time RH is requested.
+  // It is faster, therefore, to read it from previous RH
+  // measurement with getTemp() instead with readTemp()
+  tempf = sensor.getTempF();
 
-    // Measure the Barometer temperature in F from the MPL3115A2
-    sensor.setModeBarometer();
-    baroTemp = sensor.readBaroTempF();
+  // Measure the Barometer temperature in F from the MPL3115A2
+  baroTemp = sensor.readBaroTempF();
 
-    //Measure Pressure from the MPL3115A2
-    pascals = sensor.readPressure();
+  // Measure Pressure from the MPL3115A2 in
+  hPa = sensor.readPressure();
 
-    // Set altimeter mode & measure the Altimeter in feet from the MPL3115A2
-    sensor.setModeAltimeter();
-    altf = sensor.readAltitudeFt();
+  // Measure the Altimeter in feet from the MPL3115A2
+  altf = sensor.readAltitudeFt();
 
-    //Calc winddir
-    winddir = get_wind_direction();
+  //Calc winddir
+  winddir = get_wind_direction();
 
-    //Calc windspeed
-    windspeedmph = get_wind_speed();
+  //Calc windspeed
+  windspeedmph = get_wind_speed();
 
-    //Total rainfall for the day is calculated within the interrupt
-    //Calculate amount of rainfall for the last 60 minutes
-    rainin = 0;
-    for(int i = 0 ; i < 60 ; i++)
-      rainin += rainHour[i];
+  //Total rainfall for the day is calculated within the interrupt
+  //Calculate amount of rainfall for the last 60 minutes
+  rainin = 0;
+  for(int i = 0 ; i < 60 ; i++)
+    rainin += rainHour[i];
 }
