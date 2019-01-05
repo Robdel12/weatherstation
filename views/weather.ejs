@@ -44,11 +44,11 @@
                     ${avgType.charAt(0).toUpperCase() + avgType.slice(1)} Averages
                   </p>
                   <div class="content">
-                    <p>Temp: ${data.avgTemp}</p>
-                    <p>Barometer Temp: ${data.avgBarometerTemp}</p>
-                    <p>Pressure: ${data.avgPressure}</p>
-                    <p>Humidity: ${data.avgHumidity}</p>
-                    <p>Wind Speed: ${data.avgWindSpeed}</p>
+                    <p>Temp: ${parseFloat(data.avgTemp).toFixed(2)} F</p>
+                    <p>Barometer Temp: ${parseFloat(data.avgBarometerTemp).toFixed(2)} F</p>
+                    <p>Pressure: ${parseFloat(data.avgPressure).toFixed(2)} hPa</p>
+                    <p>Humidity: ${parseFloat(data.avgHumidity).toFixed(2)} %</p>
+                    <p>Wind Speed: ${parseFloat(data.avgWindSpeed).toFixed(2)} mph</p>
                   </div>
                 </div>
               </div>
