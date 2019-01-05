@@ -1,3 +1,12 @@
+const AVG_GROUP = {
+  "_id": null,
+  "avgTemp": { "$avg": "$temp" },
+  "avgBarometerTemp": { "$avg": "$barometerTemp" },
+  "avgPressure": { "$avg": "$pressure" },
+  "avgHumidity": { "$avg": "$humidity" },
+  "avgWindSpeed": { "$avg": "$currentWindSpeed" }
+};
+
 // The sensor data we send from the Photon needs to be condesned
 // to fit inside of 64 bytes. This makes those keys readable before
 // storing into the DB.
@@ -52,7 +61,7 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({"error": message});
 }
 
-function handleAverage({ startDate }, timeTransform) {
+function handleAverage({ startDate }, db, timeTransform) {
   let lt = startDate ? new Date(startDate) : new Date();
   let gt = new Date(lt.getTime());
 

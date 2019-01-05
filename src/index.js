@@ -7,14 +7,6 @@ const WEATHER_COLLECTION = 'weather';
 const WEBHOOK_COLLECTION = 'webhookData';
 const LOCAL_DB = 'mongodb://localhost:27017/weatherstation';
 const DB_ADDRESS = process.env.MONGODB_URI || LOCAL_DB;
-const AVG_GROUP = {
-  "_id": null,
-  "avgTemp": { "$avg": "$temp" },
-  "avgBarometerTemp": { "$avg": "$barometerTemp" },
-  "avgPressure": { "$avg": "$pressure" },
-  "avgHumidity": { "$avg": "$humidity" },
-  "avgWindSpeed": { "$avg": "$currentWindSpeed" }
-};
 
 let db;
 let app = express();
@@ -67,7 +59,7 @@ app.post("/v1/collect", function(req, res) {
 
 // TODO this will grow to handle the future front end dashboard params (or will it?)
 app.get("/v1/weather", function(req, res) {
-  let limit = parseInt(req.query.limit, 10);
+  let limit = parseInt(req.query.limit, 10) || 20;
 
   db.collection('weather').find({}).sort({ createdAt: -1 }).limit(limit).toArray(function(err, docs) {
     if (err) {
@@ -79,7 +71,7 @@ app.get("/v1/weather", function(req, res) {
 });
 
 app.get("/v1/ten-min-average", function(req, res) {
-  handleAverage(req.query, (timeAgo) => timeAgo.setMinutes(timeAgo.getMinutes() - 10)).then(data => {
+  handleAverage(req.query, db, (timeAgo) => timeAgo.setMinutes(timeAgo.getMinutes() - 10)).then(data => {
     if(data.length === 0) {
       res.status(200).json({ message: 'no records found' });
     } else {
@@ -89,7 +81,7 @@ app.get("/v1/ten-min-average", function(req, res) {
 });
 
 app.get("/v1/hourly-average", function(req, res) {
-  handleAverage(req.query, (timeAgo) => timeAgo.setHours(timeAgo.getHours() - 1)).then(data => {
+  handleAverage(req.query, db, (timeAgo) => timeAgo.setHours(timeAgo.getHours() - 1)).then(data => {
     if(data.length === 0) {
       res.status(200).json({ message: 'no records found' });
     } else {
@@ -99,7 +91,7 @@ app.get("/v1/hourly-average", function(req, res) {
 });
 
 app.get("/v1/daily-average", function(req, res) {
-  handleAverage(req.query, (timeAgo) => timeAgo.setDate(timeAgo.getDate() - 1)).then(data => {
+  handleAverage(req.query, db, (timeAgo) => timeAgo.setDate(timeAgo.getDate() - 1)).then(data => {
     if(data.length === 0) {
       res.status(200).json({ message: 'no records found' });
     } else {
