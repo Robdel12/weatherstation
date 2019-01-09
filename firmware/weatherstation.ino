@@ -69,7 +69,7 @@ float rainin = 0; // [rain inches over the past hour)] -- the accumulated rainfa
 volatile float dailyrainin = 0; // [rain inches so far today in local time]
 float humidity = 0;
 float tempf = 0;
-float hPa = 0;
+float pascals = 0;
 float altf = 0;
 float baroTemp = 0;
 
@@ -132,10 +132,7 @@ void setup() {
     readings. For this example, we will only be using the barometer mode. Be sure
     to only uncomment one line at a time. */
 
-    // Setting the mode to altimeter outputs what
-    // APPEARS to be hPa adjusted to the the altitude
-    // from the pressure reading
-    sensor.setModeAltimeter();
+    sensor.setModeBarometer();
 
     //These are additional MPL3115A2 functions the MUST be called for the sensor to work.
     sensor.setOversampleRate(7); // Set Oversample rate
@@ -198,7 +195,7 @@ void loop() {
          + "\", \"humidity\": \""
          + String(humidity)
          + "\", \"pressure\": \""
-         + String(hPa)
+         + String(pascals/100)
          + "\", \"altitude\": \""
          + String(altf)
          + "\", \"baroT\": \""
@@ -235,13 +232,13 @@ void printInfo() {
 
   //The MPL3115A2 outputs the pressure in Pascals. However, most weather stations
   //report pressure in hectopascals or millibars. Divide by 100 to get a reading
-  //more closely resembling what online weather reports may say in hPa or mb.
+  //more closely resembling what online weather reports may say in pascals or mb.
   //Another common unit for pressure is Inches of Mercury (in.Hg). To convert
   //from mb to in.Hg, use the following formula. P(inHg) = 0.0295300 * P(mb)
   //More info on conversion can be found here:
   //www.srh.noaa.gov/images/epz/wxcalc/pressureConversion.pdf
   Serial.print("Pressure:");
-  Serial.print(hPa);
+  Serial.print(pascals/100);
   Serial.print("hPa, ");
 
   Serial.print("Altitude:");
@@ -324,10 +321,11 @@ void getWeather() {
   baroTemp = sensor.readBaroTempF();
 
   // Measure Pressure from the MPL3115A2 in
-  hPa = sensor.readPressure();
+  pascals = sensor.readPressure();
 
+  // TODO, this needs to be toggled on, read, and stored properly
   // Measure the Altimeter in feet from the MPL3115A2
-  altf = sensor.readAltitudeFt();
+  // altf = sensor.readAltitudeFt();
 
   //Calc winddir
   winddir = get_wind_direction();
