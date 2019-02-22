@@ -17,6 +17,14 @@
         display: block;
         width: 100%;
       }
+
+      @media only screen and (max-width: 600px) {
+        .card {
+          display: block;
+          flex: none;
+          width: 100%;
+        }
+      }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
@@ -137,16 +145,16 @@
               <div>
                 <div class="container columns">
                   <div class="column">
-                    <${AvgComponent} avgType="hourly" /> 
+                    <${AvgComponent} avgType="hourly" />
                   </div>
                   <div class="column">
-                    <${AvgComponent} avgType="daily" /> 
+                    <${AvgComponent} avgType="daily" />
                   </div>
                   <div class="column">
-                    <${AvgComponent} avgType="ten-min" /> 
+                    <${AvgComponent} avgType="ten-min" />
                   </div>
                 </div>
-                
+
                 <h1 class="title">Firehose</h1>
                 <div class="cardWrapper">
                   ${data.map((dataPoint, index) => html`
