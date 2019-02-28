@@ -1,3 +1,4 @@
+let path = require('path');
 let express = require("express");
 let bodyParser = require("body-parser");
 let mongodb = require("mongodb");
@@ -11,9 +12,9 @@ const DB_ADDRESS = process.env.MONGODB_URI || LOCAL_DB;
 let db;
 let app = express();
 let { ObjectID } = mongodb. ObjectID;
+
 app.use(bodyParser.json());
-// super temp
-app.set('view engine', 'ejs');
+app.use(express.static(path.join(`${__dirname}/../../dist`)));
 
 // Connect to the database before starting the application server.
 mongodb.MongoClient.connect(DB_ADDRESS, { useNewUrlParser: true }, function (err, client) {
@@ -29,16 +30,12 @@ mongodb.MongoClient.connect(DB_ADDRESS, { useNewUrlParser: true }, function (err
   // Initialize the app.
   let server = app.listen(process.env.PORT || 8080, function () {
     let port = server.address().port;
-    console.log("App now running on port", port);
+    console.log(`App now running on http://localhost:${port}`);
   });
 });
 
 app.get("/", function(req, res) {
-  res.send("I'm 💯");
-});
-
-app.get("/v1/", function(req, res) {
-  res.status(200).json({ hi: "there" });
+  res.sendfile(path.join(`${__dirname}/../..dist/index.html'`));
 });
 
 // Start collecting the data sent from the Photon and store it in a mongoDB

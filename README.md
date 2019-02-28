@@ -27,3 +27,8 @@ settings to:
 
 Now go to `[YOUR_SERVER_URL]/temp` with the Photon connected to power
 to see if data is being collected properly.
+
+### TODO
+
+Document how to setup server, run client, etc. Very much WIP right
+now. Check the `package.json` scripts for hints
