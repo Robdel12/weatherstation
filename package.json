@@ -10,7 +10,8 @@
     "start:server:debug": "nodemon --inspect ./src/server/index.js",
     "start:client": "webpack --watch",
     "start:all": "yarn start:client & yarn start:server:debug",
-    "build:client": "webpack --env prod"
+    "build:client": "NODE_ENV=production webpack",
+    "postinstall": "yarn build:client"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
