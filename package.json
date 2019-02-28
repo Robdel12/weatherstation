@@ -1,25 +1,39 @@
 {
-  "name": "weather-station-server",
+  "name": "weather-station",
   "version": "0.1.0",
-  "description": "Node.js server backed by MongoDB to collect weather station data",
-  "main": "src/index.js",
+  "description": "Node.js server backed by MongoDB to collect weather station data & React frontend SPA",
+  "main": "src/server/index.js",
   "author": "Robert DeLuca",
   "license": "MIT",
   "scripts": {
-    "start": "TZ=\"America/Chicago\" node ./src/index.js",
-    "start:dev": "TZ=\"America/Chicago\" nodemon ./src/index.js",
-    "start:debug": "TZ=\"America/Chicago\" nodemon --inspect ./src/index.js"
+    "start:server": "TZ=\"America/Chicago\" node ./src/server/index.js",
+    "start:server:debug": "nodemon --inspect ./src/server/index.js",
+    "start:client": "webpack --watch",
+    "start:all": "yarn start:client & yarn start:server:debug",
+    "build:client": "NODE_ENV=production webpack",
+    "postinstall": "yarn build:client"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
-    "ejs": "^2.6.1",
     "express": "^4.16.4",
     "mongodb": "^3.1.10"
   },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "dayjs": "^1.8.8",
+    "html-webpack-plugin": "^3.2.0",
+    "nodemon": "^1.18.9",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "uglifyjs-webpack-plugin": "^2.1.1",
+    "webpack": "^4.28.4",
+    "webpack-cli": "^3.2.1"
+  },
   "engines": {
     "node": "10"
-  },
-  "devDependencies": {
-    "nodemon": "^1.18.9"
   }
 }
