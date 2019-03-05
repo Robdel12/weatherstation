@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class AvgComponent extends Component {
   state = {
@@ -13,6 +13,18 @@ class AvgComponent extends Component {
       });
   }
 
+  renderHeader() {
+    let { avgType, noHeader } = this.props;
+
+    if (noHeader === true) return null;
+
+    return (
+      <p className="title">
+        {avgType.charAt(0).toUpperCase() + avgType.slice(1)} Averages
+      </p>
+    );
+  }
+
   render() {
     let { avgType } = this.props;
     let { data } = this.state;
@@ -20,9 +32,7 @@ class AvgComponent extends Component {
     return (
       <div className="card">
         <div className="card-content">
-          <p className="title">
-            {avgType.charAt(0).toUpperCase() + avgType.slice(1)} Averages
-          </p>
+          {this.renderHeader()}
           <div className="content">
             <p>Temp: {parseFloat(data.avgTemp).toFixed(2)} F</p>
             <p>

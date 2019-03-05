@@ -1,78 +1,46 @@
 import React, { Component } from "react";
 import AvgComponent from "./components/average";
-import WeatherModel from "./models/weather";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+
+import Home from "./routes/home";
+import LiveFeed from "./routes/live";
+import Averages from "./routes/averages";
 
 class App extends Component {
-  state = {
-    data: []
-  };
-
-  componentDidMount() {
-    fetch("/v1/weather?limit=10")
-      .then(resp => resp.json())
-      .then(weather => {
-        let data = weather.map(point => new WeatherModel(point));
-
-        this.setState({ data });
-        this.pollForData();
-      });
-  }
-
-  pollForData() {
-    window.setInterval(() => {
-      if (!document.hidden) {
-        fetch("/v1/weather")
-          .then(resp => resp.json())
-          .then(weather => {
-            let data = weather.map(point => new WeatherModel(point));
-
-            this.setState({ data });
-          });
-      }
-    }, 3500);
-  }
-
   render() {
-    let { data } = this.state;
-
     return (
-      <div>
-        <div className="container columns">
-          <div className="column">
-            <AvgComponent avgType="hourly" />
-          </div>
-          <div className="column">
-            <AvgComponent avgType="daily" />
-          </div>
-          <div className="column">
-            <AvgComponent avgType="ten-min" />
-          </div>
-        </div>
+      <Router>
+        <div>
+          <nav
+            className="navbar is-dark"
+            role="navigation"
+            aria-label="dropdown navigation"
+            style={{ marginBottom: "20px" }}
+          >
+            <div className="navbar-start">
+              <Link to="/" className="navbar-item">
+                weather.deluca.house
+              </Link>
 
-        <h1 className="title">Firehose</h1>
-        <div className="cardWrapper">
-          {data.map((dataPoint, index) => (
-            <div className={index === 0 ? "first card" : "card"}>
-              <div className="card-content">
-                <p className="title">{dataPoint.displayTime}</p>
-                <div className="content">
-                  <p>{dataPoint.temp} F</p>
-                  <p>{dataPoint.humidity}%</p>
-                  <p>{dataPoint.altitude} ft</p>
-                  <p>{dataPoint.pressure} hPa</p>
-                  <p>
-                    {dataPoint.currentWindSpeed} mph ($
-                    {dataPoint.currentWindDirection})
-                  </p>
-                  <p>{dataPoint.hourlyRain} in/hr</p>
-                  <p>{dataPoint.dailyRain} in/day</p>
-                  <p>Barometer temp {dataPoint.barometerTemp} F</p>
-                </div>
-              </div>
+              <Link to="live" className="navbar-item">
+                Live weather
+              </Link>
+
+              <Link to="averages" className="navbar-item">
+                Averages
+              </Link>
             </div>
-          ))}
+          </nav>
+
+          <div className="container">
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/live" component={LiveFeed} />
+              <Route exact path="/averages" component={Averages} />
+            </Switch>
+          </div>
         </div>
-      </div>
+      </Router>
     );
   }
 }

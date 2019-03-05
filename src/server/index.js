@@ -8,13 +8,14 @@ const WEATHER_COLLECTION = 'weather';
 const WEBHOOK_COLLECTION = 'webhookData';
 const LOCAL_DB = 'mongodb://localhost:27017/weatherstation';
 const DB_ADDRESS = process.env.MONGODB_URI || LOCAL_DB;
+const CLIENT_FILE_PATH = `${__dirname}/../../dist`;
 
 let db;
 let app = express();
 let { ObjectID } = mongodb. ObjectID;
 
 app.use(bodyParser.json());
-app.use(express.static(path.join(`${__dirname}/../../dist`)));
+app.use(express.static(path.join(CLIENT_FILE_PATH)));
 
 // Connect to the database before starting the application server.
 mongodb.MongoClient.connect(DB_ADDRESS, { useNewUrlParser: true }, function (err, client) {
@@ -32,10 +33,6 @@ mongodb.MongoClient.connect(DB_ADDRESS, { useNewUrlParser: true }, function (err
     let port = server.address().port;
     console.log(`App now running on http://localhost:${port}`);
   });
-});
-
-app.get("/", function(req, res) {
-  res.sendfile(path.join(`${__dirname}/../..dist/index.html'`));
 });
 
 // Start collecting the data sent from the Photon and store it in a mongoDB
@@ -97,6 +94,7 @@ app.get("/v1/daily-average", function(req, res) {
   });
 });
 
-app.get("/temp", function(req, res) {
-  res.render('weather.ejs');
+// This must be last i n the file. Is this fragile? Probably
+app.get("/**", function(req, res) {
+  res.sendFile(path.resolve(`${CLIENT_FILE_PATH}/index.html`));
 });
