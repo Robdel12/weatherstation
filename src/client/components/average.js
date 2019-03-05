@@ -2,21 +2,25 @@ import React, { Component } from "react";
 
 class AvgComponent extends Component {
   state = {
-    data: {}
+    data: {},
+    isLoading: true
   };
 
   componentDidMount() {
     fetch(`/v1/${this.props.avgType}-average`)
       .then(res => res.json())
       .then(data => {
-        this.setState({ data });
+        this.setState({
+          data,
+          isLoading: false
+        });
       });
   }
 
   renderHeader() {
     let { avgType, noHeader } = this.props;
 
-    if (noHeader === true) return null;
+    if (noHeader) return null;
 
     return (
       <p className="title">
@@ -27,7 +31,11 @@ class AvgComponent extends Component {
 
   render() {
     let { avgType } = this.props;
-    let { data } = this.state;
+    let { data, isLoading } = this.state;
+
+    if (isLoading) {
+      return <h1>Loading...</h1>;
+    }
 
     return (
       <div className="card">
