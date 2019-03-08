@@ -1,19 +1,26 @@
 import React, { Component } from "react";
 import WeatherModel from "../models/weather";
+import { processResponse } from "../utils";
 
 class LiveFeed extends Component {
   state = {
-    data: []
+    data: [],
+    error: null
   };
 
   componentDidMount() {
     fetch("/v1/weather?limit=3")
-      .then(resp => resp.json())
+      .then(res => processResponse(res))
       .then(weather => {
         let data = weather.map(point => new WeatherModel(point));
 
         this.setState({ data });
         this.pollForData();
+      })
+      .catch(error => {
+        this.setState({
+          error
+        });
       });
   }
 
@@ -21,11 +28,16 @@ class LiveFeed extends Component {
     this.poller = window.setInterval(() => {
       if (!document.hidden) {
         fetch("/v1/weather")
-          .then(resp => resp.json())
+          .then(res => processResponse(res))
           .then(weather => {
             let data = weather.map(point => new WeatherModel(point));
 
             this.setState({ data });
+          })
+          .catch(error => {
+            this.setState({
+              error
+            });
           });
       }
     }, 3500);
@@ -36,7 +48,15 @@ class LiveFeed extends Component {
   }
 
   render() {
-    let { data } = this.state;
+    let { data, error } = this.state;
+
+    if (error) {
+      return (
+        <span>
+          Robert needs to fix this: {error.text} ({error.status})
+        </span>
+      );
+    }
 
     return (
       <>

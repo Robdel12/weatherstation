@@ -1,18 +1,26 @@
 import React, { Component } from "react";
+import { processResponse } from "../utils";
 
 class AvgComponent extends Component {
   state = {
     data: {},
-    isLoading: true
+    isLoading: true,
+    error: null
   };
 
   componentDidMount() {
     fetch(`/v1/${this.props.avgType}-average`)
-      .then(res => res.json())
+      .then(res => processResponse(res))
       .then(data => {
         this.setState({
           data,
           isLoading: false
+        });
+      })
+      .catch(error => {
+        this.setState({
+          isLoading: false,
+          error
         });
       });
   }
@@ -31,10 +39,18 @@ class AvgComponent extends Component {
 
   render() {
     let { avgType } = this.props;
-    let { data, isLoading } = this.state;
+    let { data, isLoading, error } = this.state;
 
     if (isLoading) {
       return <h1>Loading...</h1>;
+    }
+
+    if (error) {
+      return (
+        <span>
+          Robert needs to fix this: {error.text} ({error.status})
+        </span>
+      );
     }
 
     return (
