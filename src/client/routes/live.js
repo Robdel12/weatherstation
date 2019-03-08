@@ -5,6 +5,7 @@ import { processResponse } from "../utils";
 class LiveFeed extends Component {
   state = {
     data: [],
+    isLoading: true,
     error: null
   };
 
@@ -14,7 +15,11 @@ class LiveFeed extends Component {
       .then(weather => {
         let data = weather.map(point => new WeatherModel(point));
 
-        this.setState({ data });
+        this.setState({
+          data,
+          isLoading: false
+        });
+
         this.pollForData();
       })
       .catch(error => {
@@ -48,7 +53,11 @@ class LiveFeed extends Component {
   }
 
   render() {
-    let { data, error } = this.state;
+    let { data, error, isLoading } = this.state;
+
+    if (isLoading) {
+      return <h3>Loading...</h3>;
+    }
 
     if (error) {
       return (
@@ -64,16 +73,18 @@ class LiveFeed extends Component {
 
         <div className="cardWrapper">
           {data.map((dataPoint, index) => (
-            <div className={index === 0 ? "first card" : "card"}>
+            <div
+              className={index === 0 ? "first card" : "card"}
+              key={dataPoint.displayTime}
+            >
               <div className="card-content">
                 <p className="title">{dataPoint.displayTime}</p>
                 <div className="content">
                   <p>{dataPoint.temp} F</p>
                   <p>{dataPoint.humidity}%</p>
-                  <p>{dataPoint.altitude} ft</p>
                   <p>{dataPoint.pressure} hPa</p>
                   <p>
-                    {dataPoint.currentWindSpeed} mph ($
+                    {dataPoint.currentWindSpeed} mph (
                     {dataPoint.currentWindDirection})
                   </p>
                   <p>{dataPoint.hourlyRain} in/hr</p>
