@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import AvgComponent from "./components/average";
+import WeatherAppBar from "./components/app-bar";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 
 import Home from "./routes/home";
@@ -7,30 +9,29 @@ import LiveFeed from "./routes/live";
 import Averages from "./routes/averages";
 
 class App extends Component {
+  state = {
+    drawerIsOpen: false
+  };
+
+  toggleNavMenu = () => {
+    this.setState({
+      drawerIsOpen: !this.state.drawerIsOpen
+    });
+  };
+
   render() {
+    let { drawerIsOpen } = this.state;
+
     return (
       <Router>
         <div>
-          <nav
-            className="navbar is-dark"
-            role="navigation"
-            aria-label="dropdown navigation"
-            style={{ marginBottom: "20px" }}
-          >
-            <div className="navbar-start">
-              <Link to="/" className="navbar-item">
-                weather.deluca.house
-              </Link>
-
-              <Link to="live" className="navbar-item">
-                Live weather
-              </Link>
-
-              <Link to="averages" className="navbar-item">
-                Averages
-              </Link>
-            </div>
-          </nav>
+          <CssBaseline />
+          <WeatherAppBar
+            drawerIsOpen={drawerIsOpen}
+            onMenuTap={this.toggleNavMenu}
+            closeDrawer={this.toggleNavMenu}
+            openDrawer={this.toggleNavMenu}
+          />
 
           <div className="container">
             <Switch>
