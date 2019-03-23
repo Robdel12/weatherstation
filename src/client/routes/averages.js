@@ -1,20 +1,34 @@
 import React, { Component } from "react";
+import Grid from "@material-ui/core/Grid";
 import AvgComponent from "../components/average";
+import { withStyles } from "@material-ui/core/styles";
 
-function Averages() {
+let styles = {
+  container: {
+    marginTop: "20px"
+  },
+  gridItem: {
+    minWidth: "375px",
+    padding: "10px"
+  }
+};
+
+function Averages(props) {
+  let { classes } = props;
+
   return (
-    <div className="container columns">
-      <div className="column">
-        <AvgComponent avgType="hourly" />
-      </div>
-      <div className="column">
-        <AvgComponent avgType="daily" />
-      </div>
-      <div className="column">
+    <Grid container spacing={0} className={classes.container}>
+      <Grid item xs className={classes.gridItem}>
         <AvgComponent avgType="ten-min" />
-      </div>
-    </div>
+      </Grid>
+      <Grid item xs className={classes.gridItem}>
+        <AvgComponent avgType="hourly" />
+      </Grid>
+      <Grid item xs className={classes.gridItem}>
+        <AvgComponent avgType="daily" />
+      </Grid>
+    </Grid>
   );
 }
 
-export default Averages;
+export default withStyles(styles)(Averages);

@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { processResponse } from "../utils";
 
+import Card from "@material-ui/core/Card";
+import Typography from "@material-ui/core/Typography";
+import CardContent from "@material-ui/core/CardContent";
+
 class AvgComponent extends Component {
   state = {
     data: {},
@@ -31,9 +35,9 @@ class AvgComponent extends Component {
     if (noHeader) return null;
 
     return (
-      <p className="title">
+      <Typography variant="h5" component="h2" gutterBottom>
         {avgType.charAt(0).toUpperCase() + avgType.slice(1)} Averages
-      </p>
+      </Typography>
     );
   }
 
@@ -54,20 +58,26 @@ class AvgComponent extends Component {
     }
 
     return (
-      <div className="card">
-        <div className="card-content">
+      <Card>
+        <CardContent>
           {this.renderHeader()}
-          <div className="content">
-            <p>Temp: {parseFloat(data.avgTemp).toFixed(2)} F</p>
-            <p>
-              Barometer Temp: {parseFloat(data.avgBarometerTemp).toFixed(2)} F
-            </p>
-            <p>Pressure: {parseFloat(data.avgPressure).toFixed(2)} hPa</p>
-            <p>Humidity: {parseFloat(data.avgHumidity).toFixed(2)} %</p>
-            <p>Wind Speed: {parseFloat(data.avgWindSpeed).toFixed(2)} mph</p>
-          </div>
-        </div>
-      </div>
+          <Typography variant="body1" gutterBottom>
+            Temp: {parseFloat(data.avgTemp).toFixed(2)} F
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            Barometer Temp: {parseFloat(data.avgBarometerTemp).toFixed(2)} F
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            Pressure: {parseFloat(data.avgPressure).toFixed(2)} hPa
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            Humidity: {parseFloat(data.avgHumidity).toFixed(2)} %
+          </Typography>
+          <Typography variant="body1">
+            Wind Speed: {parseFloat(data.avgWindSpeed).toFixed(2)} mph
+          </Typography>
+        </CardContent>
+      </Card>
     );
   }
 }

@@ -2,6 +2,22 @@ import React, { Component } from "react";
 import WeatherModel from "../models/weather";
 import { processResponse } from "../utils";
 
+import Card from "@material-ui/core/Card";
+import Grid from "@material-ui/core/Grid";
+import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import CardContent from "@material-ui/core/CardContent";
+
+let styles = {
+  container: {
+    margin: "20px"
+  },
+  cardItem: {
+    margin: "10px",
+    minWidth: "375px"
+  }
+};
+
 class LiveFeed extends Component {
   state = {
     data: [],
@@ -54,6 +70,7 @@ class LiveFeed extends Component {
 
   render() {
     let { data, error, isLoading } = this.state;
+    let { classes } = this.props;
 
     if (isLoading) {
       return <h3>Loading...</h3>;
@@ -68,36 +85,49 @@ class LiveFeed extends Component {
     }
 
     return (
-      <>
-        <h1 className="title">Live Feed</h1>
+      <div className={classes.container}>
+        <Typography variant="h3" component="h2" gutterBottom>
+          Live weather
+        </Typography>
 
-        <div className="cardWrapper">
+        <Grid container spacing={0}>
           {data.map((dataPoint, index) => (
-            <div
-              className={index === 0 ? "first card" : "card"}
-              key={dataPoint.displayTime}
-            >
-              <div className="card-content">
-                <p className="title">{dataPoint.displayTime}</p>
-                <div className="content">
-                  <p>{dataPoint.temp} F</p>
-                  <p>{dataPoint.humidity}%</p>
-                  <p>{dataPoint.pressure} hPa</p>
-                  <p>
+            <Grid item xs key={dataPoint.displayTime}>
+              <Card className={classes.cardItem}>
+                <CardContent>
+                  <Typography variant="h5" component="h2" gutterBottom>
+                    {dataPoint.displayTime}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    {dataPoint.temp} F
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    {dataPoint.humidity}%
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    {dataPoint.pressure} hPa
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
                     {dataPoint.currentWindSpeed} mph (
                     {dataPoint.currentWindDirection})
-                  </p>
-                  <p>{dataPoint.hourlyRain} in/hr</p>
-                  <p>{dataPoint.dailyRain} in/day</p>
-                  <p>Barometer temp {dataPoint.barometerTemp} F</p>
-                </div>
-              </div>
-            </div>
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    {dataPoint.hourlyRain} in/hr
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    {dataPoint.dailyRain} in/day
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    Barometer temp {dataPoint.barometerTemp} F
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
           ))}
-        </div>
-      </>
+        </Grid>
+      </div>
     );
   }
 }
 
-export default LiveFeed;
+export default withStyles(styles)(LiveFeed);
