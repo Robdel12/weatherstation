@@ -3,6 +3,7 @@ references:
     working_directory: ~/project
     docker:
       - image: circleci/node:10-browsers
+      - image: circleci/mongo:4.0.4
 
   cache_key: &cache_key
     weather-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
