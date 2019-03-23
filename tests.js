@@ -14,6 +14,14 @@ const pages = [
   {
     title: "Averages",
     path: "averages"
+  },
+  {
+    title: "Highs",
+    path: "highs"
+  },
+  {
+    title: "Lows",
+    path: "lows"
   }
 ];
 
