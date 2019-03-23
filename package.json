@@ -12,7 +12,8 @@
     "start:client": "webpack --watch",
     "start:all": "yarn start:client & yarn start:server:debug",
     "build:client": "NODE_ENV=production webpack",
-    "postinstall": "yarn build:client"
+    "postinstall": "yarn build:client",
+    "tests": "percy exec -- node run-tests.js"
   },
   "dependencies": {
     "@material-ui/core": "^3.9.2",
@@ -26,6 +27,7 @@
     "@babel/plugin-proposal-class-properties": "^7.3.0",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
+    "@percy/puppeteer": "^1.0.5",
     "babel-loader": "^8.0.5",
     "dayjs": "^1.8.8",
     "html-webpack-plugin": "^3.2.0",
