@@ -61,7 +61,7 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({"error": message});
 }
 
-function handleAverage({ startDate }, db, timeTransform) {
+function handleAverage({ startDate }, db, timeTransform, groupType = AVG_GROUP) {
   let lt = startDate ? new Date(startDate) : new Date();
   let gt = new Date(lt.getTime());
 
@@ -80,7 +80,7 @@ function handleAverage({ startDate }, db, timeTransform) {
           }
         },
         {
-          "$group": AVG_GROUP
+          "$group": groupType
         }
       ])
       .toArray((err, data) => {
