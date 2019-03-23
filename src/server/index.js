@@ -2,7 +2,7 @@ let path = require('path');
 let express = require("express");
 let bodyParser = require("body-parser");
 let mongodb = require("mongodb");
-let { parseSensorData, handleAverage, handleError } = require('./utils');
+let { parseSensorData, handleAggregate, handleError } = require('./utils');
 
 const WEATHER_COLLECTION = 'weather';
 const WEBHOOK_COLLECTION = 'webhookData';
@@ -65,7 +65,7 @@ app.get("/v1/weather", function(req, res) {
 });
 
 app.get("/v1/ten-min-average", function(req, res) {
-  handleAverage(req.query, db, (timeAgo) => timeAgo.setMinutes(timeAgo.getMinutes() - 10)).then(data => {
+  handleAggregate(req.query, db, (timeAgo) => timeAgo.setMinutes(timeAgo.getMinutes() - 10)).then(data => {
     if(data.length === 0) {
       res.status(200).json({ message: 'no records found' });
     } else {
@@ -75,7 +75,23 @@ app.get("/v1/ten-min-average", function(req, res) {
 });
 
 app.get("/v1/daily-highs", function(req, res) {
-  handleAverage(req.query, db, (timeAgo) => timeAgo.setDate(timeAgo.getDate() - 1), {
+  handleAggregate(req.query, db, (timeAgo) => timeAgo.setDate(timeAgo.getDate() - 1), {
+  "_id": null,
+  "highTemp": { "$max": "$temp" },
+  "highPressure": { "$max": "$pressure" },
+  "highHumidity": { "$max": "$humidity" },
+  "highWindSpeed": { "$max": "$currentWindSpeed" }
+}).then(data => {
+    if(data.length === 0) {
+      res.status(200).json({ message: 'no records found' });
+    } else {
+      res.status(200).json(data[0]);
+    }
+  });
+});
+
+app.get("/v1/weekly-highs", function(req, res) {
+  handleAggregate(req.query, db, (timeAgo) => timeAgo.setDate(timeAgo.getDate() - 7), {
   "_id": null,
   "highTemp": { "$max": "$temp" },
   "highPressure": { "$max": "$pressure" },
@@ -91,12 +107,26 @@ app.get("/v1/daily-highs", function(req, res) {
 });
 
 app.get("/v1/daily-lows", function(req, res) {
-  handleAverage(req.query, db, (timeAgo) => timeAgo.setDate(timeAgo.getDate() - 1), {
+  handleAggregate(req.query, db, (timeAgo) => timeAgo.setDate(timeAgo.getDate() - 1), {
   "_id": null,
   "lowTemp": { "$min": "$temp" },
   "lowPressure": { "$min": "$pressure" },
   "lowHumidity": { "$min": "$humidity" },
-  "lowWindSpeed": { "$min": "$currentWindSpeed" }
+}).then(data => {
+    if(data.length === 0) {
+      res.status(200).json({ message: 'no records found' });
+    } else {
+      res.status(200).json(data[0]);
+    }
+  });
+});
+
+app.get("/v1/weekly-lows", function(req, res) {
+  handleAggregate(req.query, db, (timeAgo) => timeAgo.setDate(timeAgo.getDate() - 7), {
+  "_id": null,
+  "lowTemp": { "$min": "$temp" },
+  "lowPressure": { "$min": "$pressure" },
+  "lowHumidity": { "$min": "$humidity" },
 }).then(data => {
     if(data.length === 0) {
       res.status(200).json({ message: 'no records found' });
@@ -107,7 +137,7 @@ app.get("/v1/daily-lows", function(req, res) {
 });
 
 app.get("/v1/hourly-average", function(req, res) {
-  handleAverage(req.query, db, (timeAgo) => timeAgo.setHours(timeAgo.getHours() - 1)).then(data => {
+  handleAggregate(req.query, db, (timeAgo) => timeAgo.setHours(timeAgo.getHours() - 1)).then(data => {
     if(data.length === 0) {
       res.status(200).json({ message: 'no records found' });
     } else {
@@ -117,7 +147,7 @@ app.get("/v1/hourly-average", function(req, res) {
 });
 
 app.get("/v1/daily-average", function(req, res) {
-  handleAverage(req.query, db, (timeAgo) => timeAgo.setDate(timeAgo.getDate() - 1)).then(data => {
+  handleAggregate(req.query, db, (timeAgo) => timeAgo.setDate(timeAgo.getDate() - 1)).then(data => {
     if(data.length === 0) {
       res.status(200).json({ message: 'no records found' });
     } else {

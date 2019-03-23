@@ -6,10 +6,14 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
+
 import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
+import TrendingUpIcon from "@material-ui/icons/TrendingUp";
+import TrendingDownIcon from "@material-ui/icons/TrendingDown";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
+
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
@@ -78,6 +82,18 @@ function WeatherAppBar(props) {
               <EqualizerIcon />
             </ListItemIcon>
             <ListItemText primary="Averages" />
+          </ListItem>
+          <ListItem component={Link} to="/highs" button onClick={closeDrawer}>
+            <ListItemIcon>
+              <TrendingUpIcon />
+            </ListItemIcon>
+            <ListItemText primary="Highs" />
+          </ListItem>
+          <ListItem component={Link} to="/lows" button onClick={closeDrawer}>
+            <ListItemIcon>
+              <TrendingDownIcon />
+            </ListItemIcon>
+            <ListItemText primary="Lows" />
           </ListItem>
         </List>
       </SwipeableDrawer>

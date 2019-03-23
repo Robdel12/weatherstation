@@ -61,7 +61,7 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({"error": message});
 }
 
-function handleAverage({ startDate }, db, timeTransform, groupType = AVG_GROUP) {
+function handleAggregate({ startDate }, db, timeTransform, groupType = AVG_GROUP) {
   let lt = startDate ? new Date(startDate) : new Date();
   let gt = new Date(lt.getTime());
 
@@ -95,7 +95,7 @@ function handleAverage({ startDate }, db, timeTransform, groupType = AVG_GROUP) 
 
 module.exports = {
   handleError,
-  handleAverage,
+  handleAggregate,
   parseSensorData,
   parseWindDirection
 };
