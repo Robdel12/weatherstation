@@ -8,8 +8,8 @@ let styles = {
     marginTop: "20px"
   },
   gridItem: {
-    minWidth: "375px",
-    padding: "10px"
+    padding: "10px",
+    minWidth: "375px"
   }
 };
 

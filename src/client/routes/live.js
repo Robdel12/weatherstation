@@ -10,10 +10,13 @@ import CardContent from "@material-ui/core/CardContent";
 
 let styles = {
   container: {
-    margin: "20px"
+    marginTop: "20px"
   },
-  cardItem: {
-    margin: "10px",
+  title: {
+    marginLeft: "10px"
+  },
+  gridItem: {
+    padding: "10px",
     minWidth: "375px"
   }
 };
@@ -86,14 +89,24 @@ class LiveFeed extends Component {
 
     return (
       <div className={classes.container}>
-        <Typography variant="h3" component="h2" gutterBottom>
+        <Typography
+          variant="h3"
+          component="h2"
+          gutterBottom
+          className={classes.title}
+        >
           Live weather
         </Typography>
 
         <Grid container spacing={0}>
           {data.map((dataPoint, index) => (
-            <Grid item xs key={dataPoint.displayTime}>
-              <Card className={classes.cardItem}>
+            <Grid
+              item
+              xs
+              key={dataPoint.displayTime}
+              className={classes.gridItem}
+            >
+              <Card>
                 <CardContent>
                   <Typography variant="h5" component="h2" gutterBottom>
                     {dataPoint.displayTime}
