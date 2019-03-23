@@ -90,6 +90,22 @@ app.get("/v1/daily-highs", function(req, res) {
   });
 });
 
+app.get("/v1/daily-lows", function(req, res) {
+  handleAverage(req.query, db, (timeAgo) => timeAgo.setDate(timeAgo.getDate() - 1), {
+  "_id": null,
+  "lowTemp": { "$min": "$temp" },
+  "lowPressure": { "$min": "$pressure" },
+  "lowHumidity": { "$min": "$humidity" },
+  "lowWindSpeed": { "$min": "$currentWindSpeed" }
+}).then(data => {
+    if(data.length === 0) {
+      res.status(200).json({ message: 'no records found' });
+    } else {
+      res.status(200).json(data[0]);
+    }
+  });
+});
+
 app.get("/v1/hourly-average", function(req, res) {
   handleAverage(req.query, db, (timeAgo) => timeAgo.setHours(timeAgo.getHours() - 1)).then(data => {
     if(data.length === 0) {
