@@ -2,7 +2,7 @@ const spawn = require("child_process").spawn;
 const platform = require("os").platform();
 
 let tests;
-let server = spawn("yarn", ["start:all"], {
+let server = spawn("yarn", ["start:test"], {
   stdio: "inherit"
 });
 

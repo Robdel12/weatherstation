@@ -11,6 +11,7 @@
     "start:server:debug": "nodemon --inspect ./src/server/index.js",
     "start:client": "webpack --watch",
     "start:all": "yarn start:client & yarn start:server:debug",
+    "start:test": "yarn start:client & yarn start:server",
     "build:client": "NODE_ENV=production webpack",
     "postinstall": "yarn build:client",
     "tests": "percy exec -- node run-tests.js"
