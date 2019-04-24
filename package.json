@@ -14,7 +14,7 @@
     "start:test": "yarn start:client & yarn start:server",
     "build:client": "NODE_ENV=production webpack",
     "postinstall": "yarn build:client",
-    "tests": "percy exec -- node run-tests.js"
+    "tests": "NODE_ENV=development percy exec -- node run-tests.js"
   },
   "dependencies": {
     "@material-ui/core": "^3.9.2",

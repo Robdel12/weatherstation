@@ -2,7 +2,7 @@ let path = require('path');
 let express = require("express");
 let bodyParser = require("body-parser");
 let mongodb = require("mongodb");
-let { parseSensorData, handleAggregate, handleError } = require('./utils');
+let { parseSensorData, handleAggregate, handleError, forceHTTPS } = require('./utils');
 
 const WEATHER_COLLECTION = 'weather';
 const WEBHOOK_COLLECTION = 'webhookData';
@@ -14,6 +14,7 @@ let db;
 let app = express();
 let { ObjectID } = mongodb. ObjectID;
 
+app.use(forceHTTPS);
 app.use(bodyParser.json());
 app.use(express.static(path.join(CLIENT_FILE_PATH)));
 
