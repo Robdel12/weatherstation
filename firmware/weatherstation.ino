@@ -52,23 +52,14 @@ int WSPEED = D3;
 //Global Variables
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long lastSecond; //The millis counter to see when a second rolls by
-byte seconds; //When it hits 60, increase the current minute
 byte minutes; //Keeps track of where we are in various arrays of data
-
-//We need to keep track of the following variables:
-//Wind speed/dir each update (no storage)
-//Rain over the past hour (store 1 per minute)
-//Total rain over date (store one per day)
-
-volatile float rainHour[60]; //60 floating numbers to keep track of 60 minutes of rain
 
 //These are all the weather values that our API expects
 int winddir = 0; // [0-360 instantaneous wind direction]
 float windspeedmph = 0; // [mph instantaneous wind speed]
-float rainin = 0; // [rain inches over the past hour)] -- the accumulated rainfall in the past 60 min
-volatile float dailyrainin = 0; // [rain inches so far today in local time]
 float humidity = 0;
 float tempf = 0;
+float rain = 0;
 float pascals = 0;
 float altf = 0;
 float baroTemp = 0;
@@ -78,9 +69,10 @@ float baroTemp = 0;
 int count = 0;
 int altCount = 0;
 long lastWindCheck = 0;
+volatile byte rainClicks = 0;
+volatile long lastRainIRQ = 0;
 volatile long lastWindIRQ = 0;
 volatile byte windClicks = 0;
-volatile unsigned long raintime, rainlast, raininterval, rain;
 
 //Create Instance of HTU21D or SI7021 temp and humidity sensor and MPL3115A2 barrometric sensor
 Weather sensor;
@@ -90,14 +82,11 @@ Weather sensor;
 // Count rain gauge bucket tips as they occur
 // Activated by the magnet and reed switch in the rain gauge, attached to input D2
 void rainIRQ() {
-  raintime = millis(); // grab current time
-  raininterval = raintime - rainlast; // calculate interval between this and last event
+ // ignore switch-bounce glitches
+  if (millis() - lastRainIRQ > 10) {
+    lastRainIRQ = millis();
 
-  // ignore switch-bounce glitches less than 10mS after initial edge
-  if (raininterval > 10) {
-    dailyrainin += 0.011; //Each dump is 0.011" of water
-    rainHour[minutes] += 0.011; //Increase this minute's amount of rain
-    rainlast = raintime; // set up for next event
+    rainClicks++;
   }
 }
 
@@ -143,7 +132,6 @@ void setup() {
 
     sensor.enableEventFlags(); //Necessary register calls to enble temp, baro ansd alt
 
-    seconds = 0;
     lastSecond = millis();
 
     // attach external interrupt pins to IRQ functions
@@ -159,14 +147,6 @@ void loop() {
   //Keep track of which minute it is
   if(millis() - lastSecond >= 1000) {
     lastSecond += 1000;
-
-    if(++seconds > 59) {
-      seconds = 0;
-
-      if(++minutes > 59) minutes = 0;
-
-      rainHour[minutes] = 0; //Zero out this minute's rainfall amount
-    }
 
     //Get readings from all sensors
     getWeather();
@@ -188,10 +168,8 @@ void loop() {
          + "\", \"cWindD\": \""
          + String(winddir)
          + "\", \"windG\": \""
-         + "\", \"dRain\": \""
-         + String(dailyrainin)
-         + "\", \"hRain\": \""
-         + String(rainin)
+         + "\", \"rain\": \""
+         + String(rain)
          + "\", \"humidity\": \""
          + String(humidity)
          + "\", \"pressure\": \""
@@ -215,7 +193,7 @@ void printInfo() {
   Serial.print("mph, ");
 
   Serial.print("Rain:");
-  Serial.print(rainin, 2);
+  Serial.print(rain);
   Serial.print("in., ");
 
   Serial.print("Temp:");
@@ -306,6 +284,17 @@ float get_wind_speed() {
   return(windSpeed);
 }
 
+// Returns the current rain collected
+float get_rain_inches() {
+  // calculate inches of rain from clicks
+  float rainIn = rainClicks * 0.011;
+
+  // reset rain clicks
+  rainClicks = 0;
+
+  return rainIn;
+}
+
 //---------------------------------------------------------------
 void getWeather() {
   // Measure Relative Humidity from the HTU21D or Si7021
@@ -333,9 +322,6 @@ void getWeather() {
   //Calc windspeed
   windspeedmph = get_wind_speed();
 
-  //Total rainfall for the day is calculated within the interrupt
-  //Calculate amount of rainfall for the last 60 minutes
-  rainin = 0;
-  for(int i = 0 ; i < 60 ; i++)
-    rainin += rainHour[i];
+  // Update rain amount
+  rain = get_rain_inches();
 }

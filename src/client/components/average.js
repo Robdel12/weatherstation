@@ -76,6 +76,9 @@ class AvgComponent extends Component {
           <Typography variant="body1">
             Wind Speed: {parseFloat(data.avgWindSpeed).toFixed(2)} mph
           </Typography>
+          <Typography variant="body1">
+            Rain total: {parseFloat(data.totalRain).toFixed(2)} in
+          </Typography>
         </CardContent>
       </Card>
     );

@@ -4,7 +4,8 @@ const AVG_GROUP = {
   "avgBarometerTemp": { "$avg": "$barometerTemp" },
   "avgPressure": { "$avg": "$pressure" },
   "avgHumidity": { "$avg": "$humidity" },
-  "avgWindSpeed": { "$avg": "$currentWindSpeed" }
+  "avgWindSpeed": { "$avg": "$currentWindSpeed" },
+  "totalRain": { "$sum": "$rain" }
 };
 
 // The sensor data we send from the Photon needs to be condesned
@@ -13,19 +14,19 @@ const AVG_GROUP = {
 function parseSensorData(rawData) {
   let data = JSON.parse(rawData);
   let temp = parseFloat(data.temp, 10);
+  let rain = parseFloat(data.rain, 10);
   let pressure = parseFloat(data.pressure, 10);
   let humidity = parseFloat(data.humidity, 10);
   let altitude = parseFloat(data.altitude, 10);
 
   return {
     temp,
+    rain,
     pressure,
     altitude,
     humidity,
     currentWindSpeed: parseFloat(data.cWindS, 10),
     currentWindDirection: parseWindDirection(data.cWindD),
-    dailyRain: parseFloat(data.dRain, 10),
-    hourlyRain: parseFloat(data.hRain, 10),
     barometerTemp: parseFloat(data.baroT, 10)
   };
 }
