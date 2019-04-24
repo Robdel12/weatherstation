@@ -21,6 +21,10 @@ class App extends Component {
     });
   };
 
+  refresh() {
+    window.location.reload();
+  }
+
   render() {
     let { drawerIsOpen } = this.state;
 
@@ -33,6 +37,7 @@ class App extends Component {
             onMenuTap={this.toggleNavMenu}
             closeDrawer={this.toggleNavMenu}
             openDrawer={this.toggleNavMenu}
+            onRefresh={this.refresh}
           />
 
           <div className="container">

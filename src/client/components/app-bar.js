@@ -13,6 +13,7 @@ import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import TrendingDownIcon from "@material-ui/icons/TrendingDown";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
+import RefreshIcon from "@material-ui/icons/Refresh";
 
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -23,7 +24,8 @@ import { Link } from "react-router-dom";
 
 const styles = {
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+    marginBottom: "80px"
   },
   grow: {
     flexGrow: 1
@@ -35,11 +37,18 @@ const styles = {
 };
 
 function WeatherAppBar(props) {
-  let { classes, drawerIsOpen, onMenuTap, closeDrawer, openDrawer } = props;
+  let {
+    classes,
+    drawerIsOpen,
+    onMenuTap,
+    closeDrawer,
+    openDrawer,
+    onRefresh
+  } = props;
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton
             className={classes.menuButton}
@@ -49,9 +58,12 @@ function WeatherAppBar(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" color="inherit">
+          <Typography variant="h6" color="inherit" className={classes.grow}>
             weather.deluca.house
           </Typography>
+          <IconButton color="inherit" onClick={onRefresh}>
+            <RefreshIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <SwipeableDrawer
