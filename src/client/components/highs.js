@@ -69,7 +69,7 @@ class HighComponent extends Component {
           <Typography variant="body1" gutterBottom>
             Humidity: {parseFloat(data.highHumidity).toFixed(2)} %
           </Typography>
-          <Typography variant="body1">
+          <Typography variant="body1" gutterBottom>
             Wind Speed: {parseFloat(data.highWindSpeed).toFixed(2)} mph
           </Typography>
           <Typography variant="body1">

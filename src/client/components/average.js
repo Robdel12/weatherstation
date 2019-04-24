@@ -73,7 +73,7 @@ class AvgComponent extends Component {
           <Typography variant="body1" gutterBottom>
             Humidity: {parseFloat(data.avgHumidity).toFixed(2)} %
           </Typography>
-          <Typography variant="body1">
+          <Typography variant="body1" gutterBottom>
             Wind Speed: {parseFloat(data.avgWindSpeed).toFixed(2)} mph
           </Typography>
           <Typography variant="body1">
