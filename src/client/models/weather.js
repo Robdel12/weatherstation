@@ -29,12 +29,8 @@ export default class WeatherModel {
     return parseInt(this.data.altitude, 10);
   }
 
-  get hourlyRain() {
-    return parseFloat(this.data.hourlyRain).toFixed(2);
-  }
-
-  get dailyRain() {
-    return parseFloat(this.data.hourlyRain).toFixed(2);
+  get rain() {
+    return parseFloat(this.data.rain).toFixed(2);
   }
 
   get currentWindSpeed() {

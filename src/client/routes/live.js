@@ -125,10 +125,7 @@ class LiveFeed extends Component {
                     {dataPoint.currentWindDirection})
                   </Typography>
                   <Typography variant="body1" gutterBottom>
-                    {dataPoint.hourlyRain} in/hr
-                  </Typography>
-                  <Typography variant="body1" gutterBottom>
-                    {dataPoint.dailyRain} in/day
+                    {dataPoint.rain} in
                   </Typography>
                   <Typography variant="body1" gutterBottom>
                     Barometer temp {dataPoint.barometerTemp} F

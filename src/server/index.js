@@ -80,7 +80,8 @@ app.get("/v1/daily-highs", function(req, res) {
   "highTemp": { "$max": "$temp" },
   "highPressure": { "$max": "$pressure" },
   "highHumidity": { "$max": "$humidity" },
-  "highWindSpeed": { "$max": "$currentWindSpeed" }
+  "highWindSpeed": { "$max": "$currentWindSpeed" },
+  "totalRain": { "$sum": "$rain" }
 }).then(data => {
     if(data.length === 0) {
       res.status(200).json({ message: 'no records found' });
@@ -96,7 +97,8 @@ app.get("/v1/weekly-highs", function(req, res) {
   "highTemp": { "$max": "$temp" },
   "highPressure": { "$max": "$pressure" },
   "highHumidity": { "$max": "$humidity" },
-  "highWindSpeed": { "$max": "$currentWindSpeed" }
+  "highWindSpeed": { "$max": "$currentWindSpeed" },
+  "totalRain": { "$sum": "$rain" }
 }).then(data => {
     if(data.length === 0) {
       res.status(200).json({ message: 'no records found' });

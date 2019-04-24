@@ -72,6 +72,9 @@ class HighComponent extends Component {
           <Typography variant="body1">
             Wind Speed: {parseFloat(data.highWindSpeed).toFixed(2)} mph
           </Typography>
+          <Typography variant="body1">
+            Total Rain: {parseFloat(data.totalRain).toFixed(2)} in
+          </Typography>
         </CardContent>
       </Card>
     );
