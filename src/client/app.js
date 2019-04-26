@@ -9,6 +9,7 @@ import LiveFeed from "./routes/live";
 import Averages from "./routes/averages";
 import Highs from "./routes/highs";
 import Lows from "./routes/lows";
+import Issues from "./routes/issues";
 
 class App extends Component {
   state = {
@@ -47,6 +48,7 @@ class App extends Component {
               <Route exact path="/averages" component={Averages} />
               <Route exact path="/highs" component={Highs} />
               <Route exact path="/lows" component={Lows} />
+              <Route exact path="/issues" component={Issues} />
             </Switch>
           </div>
         </div>

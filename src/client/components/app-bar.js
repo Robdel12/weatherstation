@@ -13,6 +13,7 @@ import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import TrendingDownIcon from "@material-ui/icons/TrendingDown";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
+import WarningIcon from "@material-ui/icons/Warning";
 import RefreshIcon from "@material-ui/icons/Refresh";
 
 import Toolbar from "@material-ui/core/Toolbar";
@@ -71,7 +72,7 @@ function WeatherAppBar(props) {
         onClose={closeDrawer}
         onOpen={openDrawer}
       >
-        <List style={{ width: "200px" }}>
+        <List style={{ width: "220px" }}>
           <ListItem component={Link} to="/" button onClick={closeDrawer}>
             <ListItemIcon>
               <HomeIcon />
@@ -106,6 +107,12 @@ function WeatherAppBar(props) {
               <TrendingDownIcon />
             </ListItemIcon>
             <ListItemText primary="Lows" />
+          </ListItem>
+          <ListItem component={Link} to="/issues" button onClick={closeDrawer}>
+            <ListItemIcon>
+              <WarningIcon />
+            </ListItemIcon>
+            <ListItemText primary="Known issues" />
           </ListItem>
         </List>
       </SwipeableDrawer>
