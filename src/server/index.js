@@ -194,7 +194,7 @@ app.get("/v1/issues", function(req, expressRes) {
 
   github.query(query, null, (res, err) => {
     if(err) {
-      res.status(500).json({ message: err });
+      expressRes.status(500).json({ message: err });
     } else {
       let issues = res.data.viewer.repository.issues.edges;
       let sortedIssues = issues.sort((a, b) => new Date(b.node.updatedAt) - new Date(a.node.updatedAt))
