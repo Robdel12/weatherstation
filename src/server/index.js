@@ -2,6 +2,7 @@ let path = require('path');
 let express = require("express");
 let bodyParser = require("body-parser");
 let mongodb = require("mongodb");
+let GithubGraphQLApi = require('node-github-graphql')
 let { parseSensorData, handleAggregate, handleError, forceHTTPS } = require('./utils');
 
 const WEATHER_COLLECTION = 'weather';
@@ -158,6 +159,51 @@ app.get("/v1/daily-average", function(req, res) {
     }
   });
 });
+
+app.get("/v1/issues", function(req, expressRes) {
+  let github = new GithubGraphQLApi({
+    token: process.env.GITHUB_API_TOKEN
+  });
+
+  let query = `{
+  viewer {
+    repository(name: "weatherstation-server") {
+      issues(last: 100, states: [OPEN]) {
+        edges {
+          node {
+            id
+            url
+            number
+            title
+            body
+            updatedAt
+            labels(first: 30) {
+              edges {
+                node {
+                  id
+                  name
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}`;
+
+  github.query(query, null, (res, err) => {
+    if(err) {
+      res.status(500).json({ message: err });
+    } else {
+      let issues = res.data.viewer.repository.issues.edges;
+      let sortedIssues = issues.sort((a, b) => new Date(b.node.updatedAt) - new Date(a.node.updatedAt))
+
+      expressRes.status(200).json({ issues: sortedIssues });
+    }
+  })
+});
+
 
 // This must be last i n the file. Is this fragile? Probably
 app.get("/**", function(req, res) {

@@ -22,6 +22,10 @@ const pages = [
   {
     title: "Lows",
     path: "lows"
+  },
+  {
+    title: "Issues",
+    path: "issues"
   }
 ];
 
