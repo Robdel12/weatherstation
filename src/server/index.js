@@ -176,6 +176,7 @@ app.get("/v1/issues", function(req, expressRes) {
             number
             title
             body
+            bodyHTML
             updatedAt
             labels(first: 30) {
               edges {

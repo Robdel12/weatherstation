@@ -8,10 +8,18 @@ import ListItem from "@material-ui/core/ListItem";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import ListItemText from "@material-ui/core/ListItemText";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+
+import HealingIcon from "@material-ui/icons/Healing";
+import FiberNewIcon from "@material-ui/icons/FiberNew";
+import BugReportIcon from "@material-ui/icons/BugReport";
 
 let styles = {
   container: {
     margin: "20px"
+  },
+  inline: {
+    display: "inline-block"
   },
   gridItem: {
     padding: "10px",
@@ -21,7 +29,8 @@ let styles = {
     fontSize: "1.5rem"
   },
   secondaryText: {
-    color: "#383838"
+    color: "#383838",
+    "word-break": "break-word"
   }
 };
 
@@ -40,6 +49,18 @@ class Issues extends Component {
           isLoading: false
         });
       });
+  }
+
+  renderIcon(labelText) {
+    if (labelText === "enhancement") {
+      return <FiberNewIcon />;
+    } else if (labelText === "bug") {
+      return <BugReportIcon />;
+    } else if (labelText === "chore") {
+      return <HealingIcon />;
+    } else {
+      return <BugReportIcon />;
+    }
   }
 
   render() {
@@ -70,6 +91,7 @@ class Issues extends Component {
         <List>
           {issues.map(data => {
             let issue = data.node;
+            let firstLabel = issue.labels.edges[0].node;
 
             return (
               <ListItem
@@ -81,8 +103,32 @@ class Issues extends Component {
                 disableGutters
               >
                 <ListItemText
-                  primary={`${issue.title} (#${issue.number})`}
-                  secondary={issue.body}
+                  primary={
+                    <>
+                      <Typography
+                        variant="h3"
+                        className={classes.primaryText}
+                        color="textPrimary"
+                      >
+                        <Typography component="span" className={classes.inline}>
+                          {this.renderIcon(firstLabel.name)}
+                        </Typography>
+                        {issue.title} (#
+                        {issue.number})
+                      </Typography>
+                    </>
+                  }
+                  secondary={
+                    <>
+                      <Typography
+                        component="span"
+                        className={classes.secondaryText}
+                        dangerouslySetInnerHTML={{
+                          __html: issue.bodyHTML
+                        }}
+                      />
+                    </>
+                  }
                   classes={{
                     primary: classes.primaryText,
                     secondary: classes.secondaryText
