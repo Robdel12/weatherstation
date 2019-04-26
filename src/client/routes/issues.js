@@ -59,7 +59,10 @@ class Issues extends Component {
         <Typography paragraph gutterBottom>
           These are currently known issues with the weather station. If you
           notice anything and would like to report it, you can{" "}
-          <a href="https://github.com/robdel12/weatherstation-server/issues/new">
+          <a
+            href="https://github.com/robdel12/weatherstation-server/issues/new"
+            target="_blank"
+          >
             open an issue here.
           </a>
         </Typography>
