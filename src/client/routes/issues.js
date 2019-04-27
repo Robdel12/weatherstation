@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import { Link } from "react-router-dom";
 import { processResponse } from "../utils";
 
@@ -23,7 +23,7 @@ let styles = {
   },
   gridItem: {
     padding: "10px",
-    minWidth: "375px"
+    minWidth: "275px"
   },
   primaryText: {
     fontSize: "1.5rem"
@@ -34,21 +34,97 @@ let styles = {
   }
 };
 
+let $heading = createRef();
+
 class Issues extends Component {
+  static defaultProps = {
+    hasLoaded: function() {}
+  };
+
   state = {
     issues: [],
     isLoading: true
   };
 
+  hasLoaded() {
+    if ($heading.current) {
+      $heading.current.focus();
+    }
+  }
+
   componentDidMount() {
     fetch("/v1/issues")
       .then(res => processResponse(res))
       .then(({ issues }) => {
+        this.hasLoaded();
         this.setState({
           issues,
           isLoading: false
         });
+      })
+      .catch(() => {
+        this.hasLoaded();
       });
+  }
+
+  renderList() {
+    let { issues, isLoading } = this.state;
+    let { classes } = this.props;
+
+    return (
+      <List data-test-issues-list="true">
+        {issues.map(data => {
+          let issue = data.node;
+          let firstLabel = issue.labels.edges[0].node;
+
+          return (
+            <ListItem
+              button
+              divider
+              role={null}
+              component="a"
+              key={issue.id}
+              disableGutters
+              tabIndex={null}
+              href={issue.url}
+            >
+              <ListItemText
+                primary={
+                  <>
+                    <Typography
+                      variant="h3"
+                      className={classes.primaryText}
+                      color="textPrimary"
+                    >
+                      <Typography component="span" className={classes.inline}>
+                        {this.renderIcon(firstLabel.name)}
+                      </Typography>
+                      {issue.title} (#
+                      {issue.number})
+                    </Typography>
+                  </>
+                }
+                secondary={
+                  <>
+                    <Typography
+                      component="span"
+                      className={classes.secondaryText}
+                      dangerouslySetInnerHTML={{
+                        __html: issue.bodyHTML
+                      }}
+                    />
+                  </>
+                }
+                classes={{
+                  primary: classes.primaryText,
+                  secondary: classes.secondaryText
+                }}
+              />
+            </ListItem>
+          );
+        })}
+      </List>
+    );
   }
 
   renderIcon(labelText) {
@@ -65,16 +141,14 @@ class Issues extends Component {
 
   render() {
     let { classes } = this.props;
-    let { issues, isLoading } = this.state;
-
-    if (isLoading) {
-      return <h1>Loading...</h1>;
-    }
+    let { isLoading } = this.state;
 
     return (
       <div className={classes.container}>
-        <Typography variant="h3" gutterBottom>
-          Known issues
+        <Typography component="h1" variant="h3" gutterBottom>
+          <span tabIndex={-1} ref={$heading}>
+            Known issues
+          </span>
         </Typography>
 
         <Typography paragraph gutterBottom>
@@ -88,56 +162,7 @@ class Issues extends Component {
           </a>
         </Typography>
 
-        <List>
-          {issues.map(data => {
-            let issue = data.node;
-            let firstLabel = issue.labels.edges[0].node;
-
-            return (
-              <ListItem
-                component="a"
-                key={issue.id}
-                href={issue.url}
-                button
-                divider
-                disableGutters
-              >
-                <ListItemText
-                  primary={
-                    <>
-                      <Typography
-                        variant="h3"
-                        className={classes.primaryText}
-                        color="textPrimary"
-                      >
-                        <Typography component="span" className={classes.inline}>
-                          {this.renderIcon(firstLabel.name)}
-                        </Typography>
-                        {issue.title} (#
-                        {issue.number})
-                      </Typography>
-                    </>
-                  }
-                  secondary={
-                    <>
-                      <Typography
-                        component="span"
-                        className={classes.secondaryText}
-                        dangerouslySetInnerHTML={{
-                          __html: issue.bodyHTML
-                        }}
-                      />
-                    </>
-                  }
-                  classes={{
-                    primary: classes.primaryText,
-                    secondary: classes.secondaryText
-                  }}
-                />
-              </ListItem>
-            );
-          })}
-        </List>
+        {isLoading ? "Loading issues..." : this.renderList()}
       </div>
     );
   }

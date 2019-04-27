@@ -1,0 +1,14 @@
+/*
+ * ONLY because this cannot be tabbed too.
+ *
+ */
+h1:focus,
+h2:focus
+h3:focus,
+h4:focus,
+h1 span:focus,
+h2 span:focus,
+h3 span:focus,
+h4 span:focus {
+  outline: none;
+}

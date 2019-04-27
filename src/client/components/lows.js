@@ -6,6 +6,10 @@ import Typography from "@material-ui/core/Typography";
 import CardContent from "@material-ui/core/CardContent";
 
 class LowComponent extends Component {
+  static defaultProps = {
+    hasLoaded: function() {}
+  };
+
   state = {
     data: {},
     isLoading: true,
@@ -16,12 +20,14 @@ class LowComponent extends Component {
     fetch(`/v1/${this.props.lowType}-lows`)
       .then(res => processResponse(res))
       .then(data => {
+        this.props.hasLoaded();
         this.setState({
           data,
           isLoading: false
         });
       })
       .catch(error => {
+        this.props.hasLoaded();
         this.setState({
           isLoading: false,
           error
@@ -57,7 +63,7 @@ class LowComponent extends Component {
     }
 
     return (
-      <Card>
+      <Card data-test-low-component>
         <CardContent>
           {this.renderHeader()}
           <Typography variant="body1" gutterBottom>

@@ -54,7 +54,7 @@ function WeatherAppBar(props) {
           <IconButton
             className={classes.menuButton}
             color="inherit"
-            aria-label="Menu"
+            aria-label="Navigation"
             onClick={onMenuTap}
           >
             <MenuIcon />
@@ -62,7 +62,11 @@ function WeatherAppBar(props) {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             weather.deluca.house
           </Typography>
-          <IconButton color="inherit" onClick={onRefresh}>
+          <IconButton
+            color="inherit"
+            onClick={onRefresh}
+            aria-label="Refresh page"
+          >
             <RefreshIcon />
           </IconButton>
         </Toolbar>
@@ -72,51 +76,62 @@ function WeatherAppBar(props) {
         onClose={closeDrawer}
         onOpen={openDrawer}
       >
-        <List style={{ width: "220px" }}>
-          <ListItem component={Link} to="/" button onClick={closeDrawer}>
+        <List style={{ width: "215px" }}>
+          <NavListItem to="/" onClick={closeDrawer}>
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
             <ListItemText primary="Home" />
-          </ListItem>
-          <ListItem component={Link} to="/live" button onClick={closeDrawer}>
+          </NavListItem>
+          <NavListItem to="/live" onClick={closeDrawer}>
             <ListItemIcon>
               <WhatshotIcon />
             </ListItemIcon>
             <ListItemText primary="Live" />
-          </ListItem>
-          <ListItem
-            component={Link}
-            to="/averages"
-            button
-            onClick={closeDrawer}
-          >
+          </NavListItem>
+          <NavListItem to="/averages" onClick={closeDrawer}>
             <ListItemIcon>
               <EqualizerIcon />
             </ListItemIcon>
             <ListItemText primary="Averages" />
-          </ListItem>
-          <ListItem component={Link} to="/highs" button onClick={closeDrawer}>
+          </NavListItem>
+          <NavListItem to="/highs" onClick={closeDrawer}>
             <ListItemIcon>
               <TrendingUpIcon />
             </ListItemIcon>
             <ListItemText primary="Highs" />
-          </ListItem>
-          <ListItem component={Link} to="/lows" button onClick={closeDrawer}>
+          </NavListItem>
+          <NavListItem to="/lows" onClick={closeDrawer}>
             <ListItemIcon>
               <TrendingDownIcon />
             </ListItemIcon>
             <ListItemText primary="Lows" />
-          </ListItem>
-          <ListItem component={Link} to="/issues" button onClick={closeDrawer}>
+          </NavListItem>
+          <NavListItem to="/issues" onClick={closeDrawer}>
             <ListItemIcon>
               <WarningIcon />
             </ListItemIcon>
             <ListItemText primary="Known issues" />
-          </ListItem>
+          </NavListItem>
         </List>
       </SwipeableDrawer>
     </div>
+  );
+}
+
+function NavListItem(props) {
+  let { children, ...restOfProps } = props;
+
+  return (
+    <ListItem
+      button
+      role={null}
+      tabIndex={null}
+      component={Link}
+      {...restOfProps}
+    >
+      {children}
+    </ListItem>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import WeatherModel from "../models/weather";
 import { processResponse } from "../utils";
 
@@ -17,9 +17,11 @@ let styles = {
   },
   gridItem: {
     padding: "10px",
-    minWidth: "375px"
+    minWidth: "275px"
   }
 };
+
+let $heading = createRef();
 
 class LiveFeed extends Component {
   state = {
@@ -27,6 +29,12 @@ class LiveFeed extends Component {
     isLoading: true,
     error: null
   };
+
+  hasLoaded() {
+    if ($heading.current) {
+      $heading.current.focus();
+    }
+  }
 
   componentDidMount() {
     fetch("/v1/weather?limit=3")
@@ -39,6 +47,7 @@ class LiveFeed extends Component {
           isLoading: false
         });
 
+        this.hasLoaded();
         this.pollForData();
       })
       .catch(error => {
@@ -88,14 +97,16 @@ class LiveFeed extends Component {
     }
 
     return (
-      <div className={classes.container}>
+      <div className={classes.container} data-test-live-route>
         <Typography
           variant="h3"
-          component="h2"
+          component="h1"
           gutterBottom
           className={classes.title}
         >
-          Live weather
+          <span tabIndex={-1} ref={$heading}>
+            Live weather
+          </span>
         </Typography>
 
         <Grid container spacing={0}>
