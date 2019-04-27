@@ -14,11 +14,14 @@ import Highs from "./routes/highs";
 import Lows from "./routes/lows";
 import Issues from "./routes/issues";
 
-let styles = {
+let styles = theme => ({
   container: {
+    [theme.breakpoints.down("sm")]: {
+      margin: "8px"
+    },
     margin: "20px"
   }
-};
+});
 
 class App extends Component {
   state = {
