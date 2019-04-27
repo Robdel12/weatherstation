@@ -6,6 +6,10 @@ import Typography from "@material-ui/core/Typography";
 import CardContent from "@material-ui/core/CardContent";
 
 class HighComponent extends Component {
+  static defaultProps = {
+    hasLoaded: function() {}
+  };
+
   state = {
     data: {},
     isLoading: true,
@@ -16,12 +20,14 @@ class HighComponent extends Component {
     fetch(`/v1/${this.props.highType}-highs`)
       .then(res => processResponse(res))
       .then(data => {
+        this.props.hasLoaded();
         this.setState({
           data,
           isLoading: false
         });
       })
       .catch(error => {
+        this.props.hasLoaded();
         this.setState({
           isLoading: false,
           error
