@@ -63,7 +63,7 @@ class HighComponent extends Component {
     }
 
     return (
-      <Card>
+      <Card data-test-high-component>
         <CardContent>
           {this.renderHeader()}
           <Typography variant="body1" gutterBottom>

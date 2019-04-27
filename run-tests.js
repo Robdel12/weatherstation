@@ -15,7 +15,7 @@ setTimeout(() => {
   tests.on("close", () => {
     server.kill();
   });
-}, 3000);
+}, 6000);
 
 server.on("error", () => {
   // error

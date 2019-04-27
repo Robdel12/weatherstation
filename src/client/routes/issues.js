@@ -23,7 +23,7 @@ let styles = {
   },
   gridItem: {
     padding: "10px",
-    minWidth: "375px"
+    minWidth: "275px"
   },
   primaryText: {
     fontSize: "1.5rem"
@@ -72,7 +72,7 @@ class Issues extends Component {
     let { classes } = this.props;
 
     return (
-      <List>
+      <List data-test-issues-list="true">
         {issues.map(data => {
           let issue = data.node;
           let firstLabel = issue.labels.edges[0].node;

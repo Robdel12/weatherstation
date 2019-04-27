@@ -5,27 +5,46 @@ const ROOT_URL = `http://localhost:8080`;
 const pages = [
   {
     title: "Home",
-    path: ""
+    path: "",
+    async interaction(page) {
+      await page.waitFor("[data-test-avg-component]");
+    }
   },
   {
     title: "Live",
-    path: "live"
+    path: "live",
+    async interaction(page) {
+      await page.waitFor("[data-test-live-route]");
+    }
   },
   {
     title: "Averages",
-    path: "averages"
+    path: "averages",
+    async interaction(page) {
+      await page.waitFor("[data-test-avg-component]");
+    }
   },
   {
     title: "Highs",
-    path: "highs"
+    path: "highs",
+    async interaction(page) {
+      await page.waitFor("[data-test-high-component]");
+    }
   },
   {
     title: "Lows",
-    path: "lows"
+    path: "lows",
+    async interaction(page) {
+      await page.waitFor("[data-test-low-component]");
+    }
   },
   {
     title: "Issues",
-    path: "issues"
+    path: "issues",
+    async interaction(page) {
+      await page.waitFor("[data-test-issues-list]");
+      await page.waitFor(400);
+    }
   }
 ];
 
@@ -43,6 +62,10 @@ const pages = [
       console.log(`Taking snapshot of ${url} ...`);
 
       await page.goto(url);
+
+      if (route.interaction) {
+        await route.interaction(page);
+      }
 
       await percySnapshot(page, route.title);
       console.log("Snapshot complete.");

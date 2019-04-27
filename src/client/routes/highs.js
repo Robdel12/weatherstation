@@ -10,7 +10,7 @@ let styles = {
   },
   gridItem: {
     padding: "10px",
-    minWidth: "375px"
+    minWidth: "275px"
   },
   heading: {
     marginLeft: "10px"

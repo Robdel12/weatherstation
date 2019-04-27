@@ -63,7 +63,7 @@ class LowComponent extends Component {
     }
 
     return (
-      <Card>
+      <Card data-test-low-component>
         <CardContent>
           {this.renderHeader()}
           <Typography variant="body1" gutterBottom>

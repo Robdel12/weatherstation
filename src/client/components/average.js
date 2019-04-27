@@ -64,7 +64,7 @@ class AvgComponent extends Component {
     }
 
     return (
-      <Card>
+      <Card data-test-avg-component>
         <CardContent>
           {this.renderHeader()}
           <Typography variant="body1" gutterBottom>

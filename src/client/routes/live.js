@@ -17,7 +17,7 @@ let styles = {
   },
   gridItem: {
     padding: "10px",
-    minWidth: "375px"
+    minWidth: "275px"
   }
 };
 
@@ -97,7 +97,7 @@ class LiveFeed extends Component {
     }
 
     return (
-      <div className={classes.container}>
+      <div className={classes.container} data-test-live-route>
         <Typography
           variant="h3"
           component="h1"
