@@ -167,7 +167,7 @@ app.get("/v1/issues", function(req, expressRes) {
 
   let query = `{
   viewer {
-    repository(name: "weatherstation-server") {
+    repository(name: "weatherstation") {
       issues(last: 100, states: [OPEN]) {
         edges {
           node {

@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import CardContent from "@material-ui/core/CardContent";
+import Loading from "../components/loading";
 
 let styles = {
   container: {
@@ -85,7 +86,7 @@ class LiveFeed extends Component {
     let { classes } = this.props;
 
     if (isLoading) {
-      return <h3>Loading...</h3>;
+      return <Loading />;
     }
 
     if (error) {
