@@ -40,7 +40,7 @@ jobs:
       - *attach_workspace
       - run:
           name: Visual Regression
-          command: yarn tests
+          command: yarn test
 workflows:
   version: 2.1
   default:
