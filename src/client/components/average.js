@@ -4,6 +4,7 @@ import { processResponse } from "../utils";
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import CardContent from "@material-ui/core/CardContent";
+import Loading from "./loading";
 
 class AvgComponent extends Component {
   static defaultProps = {
@@ -52,7 +53,7 @@ class AvgComponent extends Component {
     let { data, isLoading, error } = this.state;
 
     if (isLoading) {
-      return <h1>Loading...</h1>;
+      return <Loading />;
     }
 
     if (error) {

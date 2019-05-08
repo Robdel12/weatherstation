@@ -13,6 +13,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import HealingIcon from "@material-ui/icons/Healing";
 import FiberNewIcon from "@material-ui/icons/FiberNew";
 import BugReportIcon from "@material-ui/icons/BugReport";
+import Loading from "../components/loading";
 
 let styles = {
   container: {
@@ -162,7 +163,7 @@ class Issues extends Component {
           </a>
         </Typography>
 
-        {isLoading ? "Loading issues..." : this.renderList()}
+        {isLoading ? <Loading /> : this.renderList()}
       </div>
     );
   }
