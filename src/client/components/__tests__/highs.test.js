@@ -47,6 +47,9 @@ describe("Highs Component", () => {
         },
         100
       );
+
+      this.get("http://localhost:5338/percy/healthcheck", this.passthrough);
+      this.post("http://localhost:5338/percy/snapshot", this.passthrough);
     });
   });
 
@@ -57,7 +60,7 @@ describe("Highs Component", () => {
   it("renders", async () => {
     await mount(<Highs highType="daily" />);
 
-    await card.assert.exists();
+    await card.assert.heading.exists();
   });
 
   it("renders with mock data", async () => {
