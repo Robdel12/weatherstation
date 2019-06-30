@@ -10,7 +10,7 @@ let styles = {
 };
 
 function Loading({ classes }) {
-  return <CircularProgress className={classes.container} />;
+  return <CircularProgress className={classes.container} data-test-loading-spinner />;
 }
 
 export default withStyles(styles)(Loading);

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { mount } from "testing-hooks/react-dom";
 import { MemoryRouter } from "react-router";
 import AppBar from "../app-bar";
