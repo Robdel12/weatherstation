@@ -1,14 +1,8 @@
 import React, { Component } from "react";
 import { mount } from "testing-hooks/react-dom";
-import { Interactor, scoped, click, press, collection, text } from "interactor.js";
 import { MemoryRouter } from "react-router";
 import AppBar from "../app-bar";
-
-let AppBarInteractor = Interactor.from({
-  links: collection("[data-test-app-drawer] a", {
-    label: text("[data-test-list-item-text] span")
-  })
-});
+import AppBarInteractor from "./app-bar.interactor.js";
 
 describe("AppBar Component", () => {
   let navBar = new AppBarInteractor();
@@ -16,7 +10,7 @@ describe("AppBar Component", () => {
   it("renders", async () => {
     await mount(<AppBar drawerIsOpen={false} closeDrawer={() => {}} openDrawer={() => {}} />);
 
-    await scoped("header").assert.exists();
+    await navBar.assert.header.exists().snapshot("closed");
   });
 
   it("fires the onMenuTap action onClick", async () => {
@@ -35,7 +29,7 @@ describe("AppBar Component", () => {
       />
     );
 
-    await click('button[aria-label="Navigation"]').assert(() => isOpen === true);
+    await navBar.hamburgerMenu.click().assert(() => isOpen === true);
   });
 
   it("renders the list open", async () => {
@@ -45,7 +39,7 @@ describe("AppBar Component", () => {
       </MemoryRouter>
     );
 
-    await scoped("[data-test-app-drawer]").assert.exists();
+    await navBar.assert.drawer.exists();
   });
 
   it("fires the close action with the escape key", async () => {
@@ -65,7 +59,7 @@ describe("AppBar Component", () => {
     );
 
     // Material UI attaches the key event to the modal outer wrapper
-    await press('div[role="presentation"]', "Escape").assert(() => isOpen === false);
+    await navBar.modalWrapper.press("Escape").assert(() => isOpen === false);
   });
 
   it("fires the close action with an outside click", async () => {
@@ -85,7 +79,7 @@ describe("AppBar Component", () => {
     );
 
     // Material UI attaches the click event to the modal backdrop
-    await click('div[role="presentation"] div').assert(() => isOpen === false);
+    await navBar.modalBackdrop.click().assert(() => isOpen === false);
   });
 
   it("fires the onRefresh action when clicking the refresh button", async () => {
@@ -100,7 +94,7 @@ describe("AppBar Component", () => {
       />
     );
 
-    await click('button[aria-label="Refresh page"]').assert(() => isRefreshing === true);
+    await navBar.refreshButton.click().assert(() => isRefreshing === true);
   });
 
   it("has 6 links with the correct label", async () => {
@@ -117,12 +111,15 @@ describe("AppBar Component", () => {
       </MemoryRouter>
     );
 
-    await navBar.assert.links().count(6);
-    await navBar.assert.links(0).label("Home");
-    await navBar.assert.links(1).label("Live");
-    await navBar.assert.links(2).label("Avgerages");
-    await navBar.assert.links(3).label("Highs");
-    await navBar.assert.links(4).label("Lows");
-    await navBar.assert.links(5).label("Known issues");
+    // prettier-ignore
+    await navBar.assert.links().count(6)
+      .assert.links(0).text("Home")
+      .assert.links(1).text('Live')
+      .assert.links(1).text("Live")
+      .assert.links(2).text("Averages")
+      .assert.links(3).text("Highs")
+      .assert.links(4).text("Lows")
+      .assert.links(5).text("Known issues")
+      .snapshot('open');
   });
 });

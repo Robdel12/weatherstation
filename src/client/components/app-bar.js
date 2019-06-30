@@ -58,7 +58,7 @@ function WeatherAppBar({ classes, drawerIsOpen, onMenuTap, closeDrawer, openDraw
           </IconButton>
         </Toolbar>
       </AppBar>
-      <SwipeableDrawer open={drawerIsOpen} onClose={closeDrawer} onOpen={openDrawer}>
+      <SwipeableDrawer open={drawerIsOpen} onClose={closeDrawer} onOpen={openDrawer} data-test-modal-wrapper>
         <List style={{ width: "215px" }} data-test-app-drawer>
           <NavListItem to="/" onClick={closeDrawer}>
             <ListItemIcon>
