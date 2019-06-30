@@ -42,7 +42,7 @@ class LowComponent extends Component {
     if (noHeader) return null;
 
     return (
-      <Typography variant="h5" component="h2" gutterBottom>
+      <Typography variant="h5" component="h2" gutterBottom data-test-heading>
         {lowType.charAt(0).toUpperCase() + lowType.slice(1)} Low
       </Typography>
     );
@@ -52,13 +52,19 @@ class LowComponent extends Component {
     let { data, isLoading, error } = this.state;
 
     if (isLoading) {
-      return <Loading />;
+      return (
+        <span data-test-low-component>
+          <Loading />
+        </span>
+      );
     }
 
     if (error) {
       return (
-        <span>
-          Robert needs to fix this: {error.text} ({error.status})
+        <span data-test-low-component>
+          <span data-test-error>
+            Robert needs to fix this: {error.text} ({error.status})
+          </span>
         </span>
       );
     }
@@ -67,13 +73,13 @@ class LowComponent extends Component {
       <Card data-test-low-component>
         <CardContent>
           {this.renderHeader()}
-          <Typography variant="body1" gutterBottom>
+          <Typography variant="body1" gutterBottom data-test-temp>
             Temp: {parseFloat(data.lowTemp).toFixed(2)} F
           </Typography>
-          <Typography variant="body1" gutterBottom>
+          <Typography variant="body1" gutterBottom data-test-pressure>
             Pressure: {parseFloat(data.lowPressure).toFixed(2)} hPa
           </Typography>
-          <Typography variant="body1" gutterBottom>
+          <Typography variant="body1" gutterBottom data-test-humidity>
             Humidity: {parseFloat(data.lowHumidity).toFixed(2)} %
           </Typography>
         </CardContent>
