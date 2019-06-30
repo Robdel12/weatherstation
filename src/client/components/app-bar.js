@@ -88,7 +88,7 @@ function WeatherAppBar({ classes, drawerIsOpen, onMenuTap, closeDrawer, openDraw
             <ListItemIcon>
               <TrendingDownIcon />
             </ListItemIcon>
-            <ListItemText primary="Lows" />
+            <ListItemText primary="Lows" data-test-list-item-text />
           </NavListItem>
           <NavListItem to="/issues" onClick={closeDrawer}>
             <ListItemIcon>
