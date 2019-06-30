@@ -39,8 +39,8 @@ jobs:
     steps:
       - *attach_workspace
       - run:
-          name: Visual Regression
-          command: yarn test
+          name: Tests
+          command: yarn test:percy
 workflows:
   version: 2.1
   default:
