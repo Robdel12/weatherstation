@@ -37,16 +37,7 @@ const styles = {
   }
 };
 
-function WeatherAppBar(props) {
-  let {
-    classes,
-    drawerIsOpen,
-    onMenuTap,
-    closeDrawer,
-    openDrawer,
-    onRefresh
-  } = props;
-
+function WeatherAppBar({ classes, drawerIsOpen, onMenuTap, closeDrawer, openDrawer, onRefresh }) {
   return (
     <div className={classes.root}>
       <AppBar position="fixed">
@@ -62,44 +53,36 @@ function WeatherAppBar(props) {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             weather.deluca.house
           </Typography>
-          <IconButton
-            color="inherit"
-            onClick={onRefresh}
-            aria-label="Refresh page"
-          >
+          <IconButton color="inherit" onClick={onRefresh} aria-label="Refresh page">
             <RefreshIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
-      <SwipeableDrawer
-        open={drawerIsOpen}
-        onClose={closeDrawer}
-        onOpen={openDrawer}
-      >
-        <List style={{ width: "215px" }}>
+      <SwipeableDrawer open={drawerIsOpen} onClose={closeDrawer} onOpen={openDrawer}>
+        <List style={{ width: "215px" }} data-test-app-drawer>
           <NavListItem to="/" onClick={closeDrawer}>
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
-            <ListItemText primary="Home" />
+            <ListItemText primary="Home" data-test-list-item-text />
           </NavListItem>
           <NavListItem to="/live" onClick={closeDrawer}>
             <ListItemIcon>
               <WhatshotIcon />
             </ListItemIcon>
-            <ListItemText primary="Live" />
+            <ListItemText primary="Live" data-test-list-item-text />
           </NavListItem>
           <NavListItem to="/averages" onClick={closeDrawer}>
             <ListItemIcon>
               <EqualizerIcon />
             </ListItemIcon>
-            <ListItemText primary="Averages" />
+            <ListItemText primary="Averages" data-test-list-item-text />
           </NavListItem>
           <NavListItem to="/highs" onClick={closeDrawer}>
             <ListItemIcon>
               <TrendingUpIcon />
             </ListItemIcon>
-            <ListItemText primary="Highs" />
+            <ListItemText primary="Highs" data-test-list-item-text />
           </NavListItem>
           <NavListItem to="/lows" onClick={closeDrawer}>
             <ListItemIcon>
@@ -111,7 +94,7 @@ function WeatherAppBar(props) {
             <ListItemIcon>
               <WarningIcon />
             </ListItemIcon>
-            <ListItemText primary="Known issues" />
+            <ListItemText primary="Known issues" data-test-list-item-text />
           </NavListItem>
         </List>
       </SwipeableDrawer>
@@ -123,13 +106,7 @@ function NavListItem(props) {
   let { children, ...restOfProps } = props;
 
   return (
-    <ListItem
-      button
-      role={null}
-      tabIndex={null}
-      component={Link}
-      {...restOfProps}
-    >
+    <ListItem button role={null} tabIndex={null} component={Link} {...restOfProps}>
       {children}
     </ListItem>
   );
