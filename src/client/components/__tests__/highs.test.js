@@ -10,43 +10,17 @@ describe("Highs Component", () => {
 
   before(() => {
     server = new Pretender(function() {
-      this.get(
-        "/v1/daily-highs",
-        request => {
-          return [
-            200,
-            { "content-type": "application/javascript" },
-            JSON.stringify({
-              _id: null,
-              highTemp: 109.080574,
-              highPressure: 985.804993,
-              highHumidity: 115.376038,
-              highWindSpeed: 16.412001,
-              totalRain: 0.21999999999999997
-            })
-          ];
-        },
-        100
-      );
+      let contentType = { "content-type": "application/javascript" };
+      let mockedResponse = {
+        highTemp: 109.080574,
+        highPressure: 985.804993,
+        highHumidity: 115.376038,
+        highWindSpeed: 16.412001,
+        totalRain: 0.21999999999999997
+      };
 
-      this.get(
-        "/v1/weekly-highs",
-        request => {
-          return [
-            200,
-            { "content-type": "application/javascript" },
-            JSON.stringify({
-              _id: null,
-              highTemp: 109.080574,
-              highPressure: 985.804993,
-              highHumidity: 115.376038,
-              highWindSpeed: 16.412001,
-              totalRain: 0.21999999999999997
-            })
-          ];
-        },
-        100
-      );
+      this.get("/v1/daily-highs", request => [200, contentType, JSON.stringify(mockedResponse)], 100);
+      this.get("/v1/weekly-highs", request => [200, contentType, JSON.stringify(mockedResponse)], 100);
 
       this.get("http://localhost:5338/percy/healthcheck", this.passthrough);
       this.post("http://localhost:5338/percy/snapshot", this.passthrough);
@@ -83,11 +57,7 @@ describe("Highs Component", () => {
   });
 
   it("shows the loading spinner", async () => {
-    server.get(
-      "/v1/weekly-highs",
-      request => [200, { "content-type": "application/javascript" }, JSON.stringify({})],
-      2000
-    );
+    server.get("/v1/weekly-highs", request => [200, { "content-type": "application/javascript" }, "{}"], 300);
 
     await mount(<Highs highType="weekly" />);
 

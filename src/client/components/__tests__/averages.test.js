@@ -10,62 +10,18 @@ describe("Averages Component", () => {
 
   before(() => {
     server = new Pretender(function() {
-      this.get(
-        "/v1/daily-average",
-        request => {
-          return [
-            200,
-            { "content-type": "application/javascript" },
-            JSON.stringify({
-              _id: null,
-              avgTemp: 109.080574,
-              avgPressure: 985.804993,
-              avgHumidity: 115.376038,
-              avgWindSpeed: 16.412001,
-              totalRain: 0.21999999999999997
-            })
-          ];
-        },
-        100
-      );
+      let contentType = { "content-type": "application/javascript" };
+      let mockedResponse = {
+        avgTemp: 109.080574,
+        avgPressure: 985.804993,
+        avgHumidity: 115.376038,
+        avgWindSpeed: 16.412001,
+        totalRain: 0.21999999999999997
+      };
 
-      this.get(
-        "/v1/weekly-average",
-        request => {
-          return [
-            200,
-            { "content-type": "application/javascript" },
-            JSON.stringify({
-              _id: null,
-              avgTemp: 109.080574,
-              avgPressure: 985.804993,
-              avgHumidity: 115.376038,
-              avgWindSpeed: 16.412001,
-              totalRain: 0.21999999999999997
-            })
-          ];
-        },
-        100
-      );
-
-      this.get(
-        "/v1/hourly-average",
-        request => {
-          return [
-            200,
-            { "content-type": "application/javascript" },
-            JSON.stringify({
-              _id: null,
-              avgTemp: 109.080574,
-              avgPressure: 985.804993,
-              avgHumidity: 115.376038,
-              avgWindSpeed: 16.412001,
-              totalRain: 0.21999999999999997
-            })
-          ];
-        },
-        100
-      );
+      this.get("/v1/daily-average", request => [200, contentType, JSON.stringify(mockedResponse)], 100);
+      this.get("/v1/weekly-average", request => [200, contentType, JSON.stringify(mockedResponse)], 100);
+      this.get("/v1/hourly-average", request => [200, contentType, JSON.stringify(mockedResponse)], 100);
 
       this.get("http://localhost:5338/percy/healthcheck", this.passthrough);
       this.post("http://localhost:5338/percy/snapshot", this.passthrough);
@@ -102,11 +58,7 @@ describe("Averages Component", () => {
   });
 
   it("shows the loading spinner", async () => {
-    server.get(
-      "/v1/weekly-avgs",
-      request => [200, { "content-type": "application/javascript" }, JSON.stringify({})],
-      2000
-    );
+    server.get("/v1/weekly-avgs", request => [200, contentType, JSON.stringify({})], 2000);
 
     await mount(<Averages avgType="weekly" />);
 

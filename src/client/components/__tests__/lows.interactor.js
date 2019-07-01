@@ -1,7 +1,7 @@
 import { Interactor, scoped } from "interactor.js";
 import percySnapshot from "@interactor/percy";
 
-let HighsInteractor = Interactor.from({
+let LowsInteractor = Interactor.from({
   static: {
     defaultScope: "[data-test-low-component]"
   },
@@ -17,4 +17,4 @@ let HighsInteractor = Interactor.from({
   }
 });
 
-export default HighsInteractor;
+export default LowsInteractor;

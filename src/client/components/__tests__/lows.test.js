@@ -10,39 +10,15 @@ describe("Lows Component", () => {
 
   before(() => {
     server = new Pretender(function() {
-      this.get(
-        "/v1/daily-lows",
-        request => {
-          return [
-            200,
-            { "content-type": "application/javascript" },
-            JSON.stringify({
-              _id: null,
-              lowTemp: 80.23232,
-              lowPressure: 945.804993,
-              lowHumidity: 23.376038
-            })
-          ];
-        },
-        100
-      );
+      let contentType = { "content-type": "application/javascript" };
+      let mockedResponse = {
+        lowTemp: 23.23232,
+        lowPressure: 945.804993,
+        lowHumidity: 23.376038
+      };
 
-      this.get(
-        "/v1/weekly-lows",
-        request => {
-          return [
-            200,
-            { "content-type": "application/javascript" },
-            JSON.stringify({
-              _id: null,
-              lowTemp: 80.23232,
-              lowPressure: 945.804993,
-              lowHumidity: 23.376038
-            })
-          ];
-        },
-        100
-      );
+      this.get("/v1/daily-lows", request => [200, contentType, JSON.stringify(mockedResponse)], 100);
+      this.get("/v1/weekly-lows", request => [200, contentType, JSON.stringify(mockedResponse)], 100);
 
       this.get("http://localhost:5338/percy/healthcheck", this.passthrough);
       this.post("http://localhost:5338/percy/snapshot", this.passthrough);
@@ -64,7 +40,7 @@ describe("Lows Component", () => {
 
     // prettier-ignore
     await card
-      .assert.temp.text("Temp: 80.23 F")
+      .assert.temp.text("Temp: 23.23 F")
       .assert.humidity.text("Humidity: 23.38 %")
       .assert.pressure.text("Pressure: 945.80 hPa")
       .snapshot('Daily')
@@ -77,11 +53,7 @@ describe("Lows Component", () => {
   });
 
   it("shows the loading spinner", async () => {
-    server.get(
-      "/v1/weekly-lows",
-      request => [200, { "content-type": "application/javascript" }, JSON.stringify({})],
-      1500
-    );
+    server.get("/v1/weekly-lows", request => [200, { "content-type": "application/javascript" }, "{}"], 300);
 
     await mount(<Lows lowType="weekly" />);
 

@@ -1,7 +1,7 @@
 import { Interactor, scoped } from "interactor.js";
 import percySnapshot from "@interactor/percy";
 
-let HighsInteractor = Interactor.from({
+let AveragesInteractor = Interactor.from({
   static: {
     defaultScope: "[data-test-avg-component]"
   },
@@ -20,4 +20,4 @@ let HighsInteractor = Interactor.from({
   }
 });
 
-export default HighsInteractor;
+export default AveragesInteractor;
