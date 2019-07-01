@@ -1,5 +1,6 @@
-# Weather-station [![This project is using Percy.io for visual regression
-testing.](https://percy.io/static/images/percy-badge.svg)](https://percy.io/robdel12/weather-station) [![CircleCI](https://circleci.com/gh/Robdel12/weatherstation/tree/master.svg?style=svg)](https://circleci.com/gh/Robdel12/weatherstation/tree/master)
+# Weather-station
+[![This project is using Percy.io for visual regression testing.](https://percy.io/static/images/percy-badge.svg)](https://percy.io/robdel12/weather-station)
+[![CircleCI](https://circleci.com/gh/Robdel12/weatherstation/tree/master.svg?style=svg)](https://circleci.com/gh/Robdel12/weatherstation/tree/master)
 
 This is my project weather station built with a Particle Photon and
 Sparkfun weather shield (and meters). That `POST`s data a Node /
