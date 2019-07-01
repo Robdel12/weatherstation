@@ -22,6 +22,8 @@ describe("Acceptance - Lows route", () => {
 
       this.get("/v1/daily-lows", response => [200, contentType, JSON.stringify(mockedData)], 100);
       this.get("/v1/weekly-lows", response => [200, contentType, JSON.stringify(mockedData)], 100);
+      this.get("http://localhost:5338/percy/healthcheck", this.passthrough);
+      this.post("http://localhost:5338/percy/snapshot", this.passthrough);
     });
   });
 

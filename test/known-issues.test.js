@@ -16,6 +16,8 @@ describe("Acceptance - Known Issues route", () => {
       let contentType = { "content-type": "application/javascript" };
 
       this.get("/v1/issues", response => [200, contentType, JSON.stringify(mockedIssues)], 100);
+      this.get("http://localhost:5338/percy/healthcheck", this.passthrough);
+      this.post("http://localhost:5338/percy/snapshot", this.passthrough);
     });
   });
 
