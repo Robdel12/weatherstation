@@ -73,7 +73,7 @@ class Issues extends Component {
     let { classes } = this.props;
 
     return (
-      <List data-test-issues-list="true">
+      <List data-test-issues-list>
         {issues.map(data => {
           let issue = data.node;
           let firstLabel = issue.labels.edges[0].node;
@@ -88,6 +88,7 @@ class Issues extends Component {
               disableGutters
               tabIndex={null}
               href={issue.url}
+              data-test-issue
             >
               <ListItemText
                 primary={
@@ -96,8 +97,13 @@ class Issues extends Component {
                       variant="h3"
                       className={classes.primaryText}
                       color="textPrimary"
+                      data-test-issue-title
                     >
-                      <Typography component="span" className={classes.inline}>
+                      <Typography
+                        component="span"
+                        className={classes.inline}
+                        data-test-issue-icon={firstLabel.name}
+                      >
                         {this.renderIcon(firstLabel.name)}
                       </Typography>
                       {issue.title} (#
@@ -113,6 +119,7 @@ class Issues extends Component {
                       dangerouslySetInnerHTML={{
                         __html: issue.bodyHTML
                       }}
+                      data-test-issue-body
                     />
                   </>
                 }
@@ -146,19 +153,16 @@ class Issues extends Component {
 
     return (
       <div className={classes.container}>
-        <Typography component="h1" variant="h3" gutterBottom>
+        <Typography component="h1" variant="h3" gutterBottom data-test-heading>
           <span tabIndex={-1} ref={$heading}>
             Known issues
           </span>
         </Typography>
 
         <Typography paragraph gutterBottom>
-          These are currently known issues with the weather station. If you
-          notice anything and would like to report it, you can{" "}
-          <a
-            href="https://github.com/robdel12/weatherstation-server/issues/new"
-            target="_blank"
-          >
+          These are currently known issues with the weather station. If you notice anything and would like to
+          report it, you can{" "}
+          <a href="https://github.com/robdel12/weatherstation-server/issues/new" target="_blank">
             open an issue here.
           </a>
         </Typography>

@@ -39,7 +39,7 @@ const styles = {
 
 function WeatherAppBar({ classes, drawerIsOpen, onMenuTap, closeDrawer, openDrawer, onRefresh }) {
   return (
-    <div className={classes.root}>
+    <div className={classes.root} data-test-app-bar>
       <AppBar position="fixed">
         <Toolbar>
           <IconButton
