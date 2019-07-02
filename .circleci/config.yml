@@ -40,7 +40,11 @@ jobs:
       - *attach_workspace
       - run:
           name: Tests
-          command: yarn test:percy
+          command: yarn test:percy --coverage --junit
+      - store_test_results:
+          path: ./junit
+      - store_artifacts:
+          path: ./junit
 workflows:
   version: 2.1
   default:

@@ -3,21 +3,14 @@ import { click } from "interactor.js";
 import { mount } from "testing-hooks/react-dom";
 import App from "../src/client/app.js";
 import KnownIssuesInteractor from "./interactors/known-issues";
-import { mockedIssues } from "./mocks";
-import Pretender from "pretender";
+import { setupServer } from "./utils/server";
 
 describe("Acceptance - Known Issues route", () => {
   let page = new KnownIssuesInteractor();
   let server;
 
   before(() => {
-    server = new Pretender(function() {
-      let contentType = { "content-type": "application/javascript" };
-
-      this.get("/v1/issues", response => [200, contentType, JSON.stringify(mockedIssues)], 100);
-      this.get("http://localhost:5338/percy/healthcheck", this.passthrough);
-      this.post("http://localhost:5338/percy/snapshot", this.passthrough);
-    });
+    server = setupServer();
   });
 
   after(() => {
