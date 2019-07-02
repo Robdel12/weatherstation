@@ -1,7 +1,6 @@
 import React from "react";
 import { click } from "interactor.js";
 import { mount } from "testing-hooks/react-dom";
-import { MemoryRouter } from "react-router";
 import App from "../src/client/app.js";
 import KnownIssuesInteractor from "./interactors/known-issues";
 import { mockedIssues } from "./mocks";
