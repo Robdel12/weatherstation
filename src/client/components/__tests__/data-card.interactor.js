@@ -1,22 +1,23 @@
 import { Interactor, scoped } from "interactor.js";
 import percySnapshot from "@interactor/percy";
 
-let HighsInteractor = Interactor.from({
+let DataCardInteractor = Interactor.from({
   static: {
-    defaultScope: "[data-test-high-component]"
+    defaultScope: "[data-test-data-card]"
   },
   temp: scoped("[data-test-temp]"),
   wind: scoped("[data-test-wind]"),
   rain: scoped("[data-test-rain]"),
-  error: scoped("[data-test-error]"),
   heading: scoped("[data-test-heading]"),
   humidity: scoped("[data-test-humidity]"),
   pressure: scoped("[data-test-pressure]"),
-  loading: scoped("[data-test-loading-spinner]"),
+  baroTemp: scoped("[data-test-baro-temp]"),
+  error: scoped("[data-test-data-card-error]"),
+  loading: scoped("[data-test-data-card-loading]"),
 
   snapshot(title, options) {
-    return percySnapshot(`Highs - ${title}`, options);
+    return percySnapshot(`Data card - ${title}`, options);
   }
 });
 
-export default HighsInteractor;
+export default DataCardInteractor;

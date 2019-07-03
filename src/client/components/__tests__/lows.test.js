@@ -1,14 +1,14 @@
 import React from "react";
 import { mount } from "testing-hooks/react-dom";
 import Lows from "../lows";
-import LowsInteractor from "./lows.interactor.js";
+import DataCardInteractor from "./data-card.interactor.js";
 import Pretender from "pretender";
 
 describe("Lows Component", () => {
-  let card = new LowsInteractor();
+  let card = new DataCardInteractor();
   let server;
 
-  before(() => {
+  beforeEach(() => {
     server = new Pretender(function() {
       let contentType = { "content-type": "application/javascript" };
       let mockedResponse = {
@@ -25,7 +25,7 @@ describe("Lows Component", () => {
     });
   });
 
-  after(() => {
+  afterEach(() => {
     server.shutdown();
   });
 

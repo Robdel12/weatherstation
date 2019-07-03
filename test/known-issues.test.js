@@ -9,11 +9,11 @@ describe("Acceptance - Known Issues route", () => {
   let page = new KnownIssuesInteractor();
   let server;
 
-  before(() => {
+  beforeEach(() => {
     server = setupServer();
   });
 
-  after(() => {
+  afterEach(() => {
     server.shutdown();
   });
 

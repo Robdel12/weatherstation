@@ -1,14 +1,14 @@
 import React from "react";
 import { mount } from "testing-hooks/react-dom";
 import Highs from "../highs";
-import HighsInteractor from "./highs.interactor.js";
+import DataCardInteractor from "./data-card.interactor.js";
 import Pretender from "pretender";
 
 describe("Highs Component", () => {
-  let card = new HighsInteractor();
+  let card = new DataCardInteractor();
   let server;
 
-  before(() => {
+  beforeEach(() => {
     server = new Pretender(function() {
       let contentType = { "content-type": "application/javascript" };
       let mockedResponse = {
@@ -27,7 +27,7 @@ describe("Highs Component", () => {
     });
   });
 
-  after(() => {
+  afterEach(() => {
     server.shutdown();
   });
 
@@ -57,7 +57,11 @@ describe("Highs Component", () => {
   });
 
   it("shows the loading spinner", async () => {
-    server.get("/v1/weekly-highs", request => [200, { "content-type": "application/javascript" }, "{}"], 300);
+    server.get(
+      "/v1/weekly-highs",
+      request => [200, { "content-type": "application/javascript" }, "{}"],
+      1000
+    );
 
     await mount(<Highs highType="weekly" />);
 

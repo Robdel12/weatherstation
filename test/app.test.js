@@ -10,11 +10,11 @@ describe("Acceptance - App", () => {
   let app = new AppInteractor();
   let server;
 
-  before(() => {
+  beforeEach(() => {
     server = setupServer();
   });
 
-  after(() => {
+  afterEach(() => {
     server.shutdown();
   });
 

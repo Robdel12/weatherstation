@@ -1,14 +1,14 @@
 import React from "react";
 import { mount } from "testing-hooks/react-dom";
 import Averages from "../average";
-import AveragesInteractor from "./averages.interactor.js";
+import DataCardInteractor from "./data-card.interactor.js";
 import Pretender from "pretender";
 
 describe("Averages Component", () => {
-  let card = new AveragesInteractor();
+  let card = new DataCardInteractor();
   let server;
 
-  before(() => {
+  beforeEach(() => {
     server = new Pretender(function() {
       let contentType = { "content-type": "application/javascript" };
       let mockedResponse = {
@@ -28,8 +28,9 @@ describe("Averages Component", () => {
     });
   });
 
-  after(() => {
+  afterEach(() => {
     server.shutdown();
+    server = null;
   });
 
   it("renders", async () => {
@@ -58,11 +59,19 @@ describe("Averages Component", () => {
   });
 
   it("shows the loading spinner", async () => {
-    server.get("/v1/weekly-avgs", request => [200, contentType, JSON.stringify({})], 2000);
+    server.get(
+      "/v1/weekly-average",
+      request => [200, { "content-type": "application/javascript" }, JSON.stringify({})],
+      1000
+    );
 
     await mount(<Averages avgType="weekly" />);
 
-    await card.assert.loading.exists().snapshot("loading");
+    // prettier-ignore
+    await card
+        .assert.loading.exists()
+        .snapshot("loading")
+    // .assert.temp.text('Temp: 109.08 F');
   });
 
   it("shows an error for network errors", async () => {
