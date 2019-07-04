@@ -37,7 +37,7 @@ export function setupServer() {
         currentWindSpeed: 0,
         currentWindDirection: "West",
         barometerTemp: 81.162498,
-        createdAt: new Date()
+        createdAt: new Date("2018-06-22T17:00:00")
       };
     };
 
