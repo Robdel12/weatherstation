@@ -54,9 +54,11 @@ class Issues extends Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     fetch("/v1/issues")
       .then(res => processResponse(res))
       .then(({ issues }) => {
+        if (!this._isMounted) return;
         this.hasLoaded();
         this.setState({
           issues,
@@ -66,6 +68,10 @@ class Issues extends Component {
       .catch(() => {
         this.hasLoaded();
       });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   renderList() {

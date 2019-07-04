@@ -1,6 +1,8 @@
 import Pretender from "pretender";
 import { mockedIssues } from "./mocks";
 
+let liveWeatherData = [];
+
 export function setupServer() {
   let server = new Pretender(function() {
     let contentType = { "content-type": "application/javascript" };
@@ -24,7 +26,29 @@ export function setupServer() {
       highWindSpeed: 16.412001,
       totalRain: 0.21999999999999997
     };
+    let liveWeatherDataFactory = () => {
+      return {
+        _id: `kbjvasdwefb-${Math.random()}`,
+        temp: 81.010849,
+        rain: 0,
+        pressure: 978.147522,
+        altitude: 0,
+        humidity: 100.636047,
+        currentWindSpeed: 0,
+        currentWindDirection: "West",
+        barometerTemp: 81.162498,
+        createdAt: new Date()
+      };
+    };
 
+    this.get(
+      "/v1/weather",
+      request => {
+        liveWeatherData.push(liveWeatherDataFactory());
+        return [200, contentType, JSON.stringify(liveWeatherData)];
+      },
+      100
+    );
     this.get("/v1/daily-highs", request => [200, contentType, JSON.stringify(highs)], 100);
     this.get("/v1/weekly-highs", request => [200, contentType, JSON.stringify(highs)], 100);
     this.get("/v1/ten-min-average", response => [200, contentType, JSON.stringify(averages)], 100);

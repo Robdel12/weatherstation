@@ -99,12 +99,7 @@ class LiveFeed extends Component {
 
     return (
       <div className={classes.container} data-test-live-route>
-        <Typography
-          variant="h3"
-          component="h1"
-          gutterBottom
-          className={classes.title}
-        >
+        <Typography variant="h3" component="h1" gutterBottom className={classes.title}>
           <span tabIndex={-1} ref={$heading}>
             Live weather
           </span>
@@ -112,34 +107,28 @@ class LiveFeed extends Component {
 
         <Grid container spacing={0}>
           {data.map((dataPoint, index) => (
-            <Grid
-              item
-              xs
-              key={dataPoint.displayTime}
-              className={classes.gridItem}
-            >
-              <Card>
+            <Grid item xs key={dataPoint.data._id} className={classes.gridItem}>
+              <Card data-test-live-card>
                 <CardContent>
-                  <Typography variant="h5" component="h2" gutterBottom>
+                  <Typography variant="h5" component="h2" gutterBottom data-test-time>
                     {dataPoint.displayTime}
                   </Typography>
-                  <Typography variant="body1" gutterBottom>
+                  <Typography variant="body1" gutterBottom data-test-temp>
                     {dataPoint.temp} F
                   </Typography>
-                  <Typography variant="body1" gutterBottom>
+                  <Typography variant="body1" gutterBottom data-test-humidity>
                     {dataPoint.humidity}%
                   </Typography>
-                  <Typography variant="body1" gutterBottom>
+                  <Typography variant="body1" gutterBottom data-test-pressure>
                     {dataPoint.pressure} hPa
                   </Typography>
-                  <Typography variant="body1" gutterBottom>
-                    {dataPoint.currentWindSpeed} mph (
-                    {dataPoint.currentWindDirection})
+                  <Typography variant="body1" gutterBottom data-test-wind>
+                    {dataPoint.currentWindSpeed} mph ({dataPoint.currentWindDirection})
                   </Typography>
-                  <Typography variant="body1" gutterBottom>
+                  <Typography variant="body1" gutterBottom data-test-rain>
                     {dataPoint.rain} in
                   </Typography>
-                  <Typography variant="body1" gutterBottom>
+                  <Typography variant="body1" gutterBottom data-test-baro-temp>
                     Barometer temp {dataPoint.barometerTemp} F
                   </Typography>
                 </CardContent>
