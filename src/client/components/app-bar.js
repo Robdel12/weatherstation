@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component, createRef } from "react";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
@@ -58,9 +58,9 @@ function WeatherAppBar({ classes, drawerIsOpen, onMenuTap, closeDrawer, openDraw
           </IconButton>
         </Toolbar>
       </AppBar>
-      <SwipeableDrawer open={drawerIsOpen} onClose={closeDrawer} onOpen={openDrawer} data-test-modal-wrapper>
+      <SwipeableDrawer open={drawerIsOpen} onClose={closeDrawer} onOpen={event => {}} data-test-modal-wrapper>
         <List style={{ width: "215px" }} data-test-app-drawer>
-          <NavListItem to="/" onClick={closeDrawer}>
+          <NavListItem to="/" onClick={closeDrawer} focusOnMount={true}>
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
@@ -102,14 +102,33 @@ function WeatherAppBar({ classes, drawerIsOpen, onMenuTap, closeDrawer, openDraw
   );
 }
 
-function NavListItem(props) {
-  let { children, ...restOfProps } = props;
+class NavListItem extends Component {
+  static defaultProps = {
+    focusOnMount: false
+  };
 
-  return (
-    <ListItem button role={null} tabIndex={null} component={Link} {...restOfProps}>
-      {children}
-    </ListItem>
-  );
+  constructor(props) {
+    super(props);
+    this.link = createRef();
+  }
+
+  componentDidMount() {
+    if (this.props.focusOnMount && this.link.current) {
+      // ugh
+      this.link.current.firstChild.focus();
+    }
+  }
+  render() {
+    let { children, focusOnMount, ...restOfProps } = this.props;
+
+    return (
+      <span tabIndex="-1" ref={this.link}>
+        <ListItem button role={null} tabIndex={null} component={Link} {...restOfProps}>
+          {children}
+        </ListItem>
+      </span>
+    );
+  }
 }
 
 export default withStyles(styles)(WeatherAppBar);

@@ -42,6 +42,21 @@ describe("AppBar Component", () => {
     await navBar.assert.drawer.exists();
   });
 
+  it("focuses the list when open", async () => {
+    await mount(
+      <MemoryRouter>
+        <AppBar drawerIsOpen={true} closeDrawer={() => {}} openDrawer={() => {}} onMenuTap={() => {}} />
+      </MemoryRouter>
+    );
+
+    // prettier-ignore
+    await navBar.assert.drawer
+      .exists()
+      .assert.links(0)
+      .focused()
+      .snapshot('Focused');
+  });
+
   it("fires the close action with the escape key", async () => {
     let isOpen = true;
 
