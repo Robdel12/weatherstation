@@ -49,13 +49,13 @@ describe("Averages Component", () => {
       .assert.rain.text("Rain total: 0.22 in")
       .assert.humidity.text("Humidity: 115.38 %")
       .assert.pressure.text("Pressure: 985.80 hPa")
-      .snapshot('Daily')
+      .snapshot("Averages - daily")
   });
 
   it("changes the heading based on type", async () => {
     await mount(<Averages avgType="weekly" />);
 
-    await card.assert.heading.text("Weekly Averages").snapshot("Weekly");
+    await card.assert.heading.text("Weekly Averages").snapshot("Averages - weekly");
   });
 
   it("shows the loading spinner", async () => {
@@ -69,9 +69,8 @@ describe("Averages Component", () => {
 
     // prettier-ignore
     await card
-        .assert.loading.exists()
-        .snapshot("loading")
-    // .assert.temp.text('Temp: 109.08 F');
+      .assert.loading.exists()
+      .snapshot("Averages - loading")
   });
 
   it("shows an error for network errors", async () => {
@@ -79,7 +78,9 @@ describe("Averages Component", () => {
 
     await mount(<Averages avgType="weekly" />);
 
-    await card.assert.error.text("Robert needs to fix this: Internal Server Error (500)").snapshot("error");
+    await card.assert.error
+      .text("Robert needs to fix this: Internal Server Error (500)")
+      .snapshot("Averages - error");
   });
 
   it("fires the hasLoaded event", async () => {

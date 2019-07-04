@@ -43,13 +43,13 @@ describe("Lows Component", () => {
       .assert.temp.text("Temp: 23.23 F")
       .assert.humidity.text("Humidity: 23.38 %")
       .assert.pressure.text("Pressure: 945.80 hPa")
-      .snapshot('Daily')
+      .snapshot("Lows - Daily")
   });
 
   it("changes the heading based on type", async () => {
     await mount(<Lows lowType="weekly" />);
 
-    await card.assert.heading.text("Weekly Low").snapshot("Weekly");
+    await card.assert.heading.text("Weekly Low").snapshot("Lows - weekly");
   });
 
   it("shows the loading spinner", async () => {
@@ -57,7 +57,7 @@ describe("Lows Component", () => {
 
     await mount(<Lows lowType="weekly" />);
 
-    await card.assert.loading.exists().snapshot("loading");
+    await card.assert.loading.exists().snapshot("Lows - loading");
   });
 
   it("shows an error for network errors", async () => {
@@ -65,7 +65,9 @@ describe("Lows Component", () => {
 
     await mount(<Lows lowType="weekly" />);
 
-    await card.assert.error.text("Robert needs to fix this: Internal Server Error (500)").snapshot("error");
+    await card.assert.error
+      .text("Robert needs to fix this: Internal Server Error (500)")
+      .snapshot("Lows - error");
   });
 
   it("fires the hasLoaded event", async () => {

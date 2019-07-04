@@ -47,13 +47,13 @@ describe("Highs Component", () => {
       .assert.rain.text("Total Rain: 0.22 in")
       .assert.humidity.text("Humidity: 115.38 %")
       .assert.pressure.text("Pressure: 985.80 hPa")
-      .snapshot('Daily')
+      .snapshot('Highs - daily')
   });
 
   it("changes the heading based on type", async () => {
     await mount(<Highs highType="weekly" />);
 
-    await card.assert.heading.text("Weekly High").snapshot("Weekly");
+    await card.assert.heading.text("Weekly High").snapshot("Highs - weekly");
   });
 
   it("shows the loading spinner", async () => {
@@ -65,7 +65,7 @@ describe("Highs Component", () => {
 
     await mount(<Highs highType="weekly" />);
 
-    await card.assert.loading.exists().snapshot("loading");
+    await card.assert.loading.exists().snapshot("Highs - loading");
   });
 
   it("shows an error for network errors", async () => {
@@ -73,7 +73,9 @@ describe("Highs Component", () => {
 
     await mount(<Highs highType="weekly" />);
 
-    await card.assert.error.text("Robert needs to fix this: Internal Server Error (500)").snapshot("error");
+    await card.assert.error
+      .text("Robert needs to fix this: Internal Server Error (500)")
+      .snapshot("Highs  -  error");
   });
 
   it("fires the hasLoaded event", async () => {
