@@ -33,6 +33,10 @@ describe("Acceptance - Live", () => {
       .snapshot('Live')
   });
 
+  it("focuses the heading on navigation", async () => {
+    await app.assert.pageHeading.nested.focused();
+  });
+
   // This will be purposefully slow.
   it("polls", async function() {
     this.timeout(8000);

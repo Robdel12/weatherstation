@@ -6,6 +6,9 @@ import DataCardInteractor from "../../src/client/components/__tests__/data-card.
 @interactor
 class AppInteractor {
   navBar = new AppBar();
+  pageHeading = scoped("h1", {
+    nested: scoped("span")
+  });
   tenMinAvg = new DataCardInteractor();
   lows = collection("[data-test-low-component]", DataCardInteractor);
   highs = collection("[data-test-high-component]", DataCardInteractor);

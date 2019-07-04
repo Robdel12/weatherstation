@@ -27,6 +27,10 @@ describe("Acceptance - App", () => {
         .navBar.links(0).click();
     });
 
+    it("focuses the heading on navigation", async () => {
+      await app.assert.pageHeading.nested.focused();
+    });
+
     it("renders the page", async () => {
       // prettier-ignore
       await app
@@ -54,6 +58,10 @@ describe("Acceptance - App", () => {
       await app
         .navBar.hamburgerMenu.click()
         .navBar.links(4).click();
+    });
+
+    it("focuses the heading on navigation", async () => {
+      await app.assert.pageHeading.nested.focused();
     });
 
     it("renders the daily lows", async () => {
@@ -85,6 +93,10 @@ describe("Acceptance - App", () => {
         .navBar.links(3).click();
     });
 
+    it("focuses the heading on navigation", async () => {
+      await app.assert.pageHeading.nested.focused();
+    });
+
     it("renders the daily highs", async () => {
       // prettier-ignore
       await app
@@ -112,6 +124,10 @@ describe("Acceptance - App", () => {
       await app
         .navBar.hamburgerMenu.click()
         .navBar.links(2).click();
+    });
+
+    it("focuses the heading on navigation", async () => {
+      await app.assert.pageHeading.nested.focused();
     });
 
     it("renders the ten min average", async () => {
