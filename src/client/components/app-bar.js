@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component, createRef } from "react";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
@@ -37,18 +37,9 @@ const styles = {
   }
 };
 
-function WeatherAppBar(props) {
-  let {
-    classes,
-    drawerIsOpen,
-    onMenuTap,
-    closeDrawer,
-    openDrawer,
-    onRefresh
-  } = props;
-
+function WeatherAppBar({ classes, drawerIsOpen, onMenuTap, closeDrawer, openDrawer, onRefresh }) {
   return (
-    <div className={classes.root}>
+    <div className={classes.root} data-test-app-bar>
       <AppBar position="fixed">
         <Toolbar>
           <IconButton
@@ -62,56 +53,48 @@ function WeatherAppBar(props) {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             weather.deluca.house
           </Typography>
-          <IconButton
-            color="inherit"
-            onClick={onRefresh}
-            aria-label="Refresh page"
-          >
+          <IconButton color="inherit" onClick={onRefresh} aria-label="Refresh page">
             <RefreshIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
-      <SwipeableDrawer
-        open={drawerIsOpen}
-        onClose={closeDrawer}
-        onOpen={openDrawer}
-      >
-        <List style={{ width: "215px" }}>
-          <NavListItem to="/" onClick={closeDrawer}>
+      <SwipeableDrawer open={drawerIsOpen} onClose={closeDrawer} onOpen={event => {}} data-test-modal-wrapper>
+        <List style={{ width: "215px" }} data-test-app-drawer>
+          <NavListItem to="/" onClick={closeDrawer} focusOnMount={true}>
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
-            <ListItemText primary="Home" />
+            <ListItemText primary="Home" data-test-list-item-text />
           </NavListItem>
           <NavListItem to="/live" onClick={closeDrawer}>
             <ListItemIcon>
               <WhatshotIcon />
             </ListItemIcon>
-            <ListItemText primary="Live" />
+            <ListItemText primary="Live" data-test-list-item-text />
           </NavListItem>
           <NavListItem to="/averages" onClick={closeDrawer}>
             <ListItemIcon>
               <EqualizerIcon />
             </ListItemIcon>
-            <ListItemText primary="Averages" />
+            <ListItemText primary="Averages" data-test-list-item-text />
           </NavListItem>
           <NavListItem to="/highs" onClick={closeDrawer}>
             <ListItemIcon>
               <TrendingUpIcon />
             </ListItemIcon>
-            <ListItemText primary="Highs" />
+            <ListItemText primary="Highs" data-test-list-item-text />
           </NavListItem>
           <NavListItem to="/lows" onClick={closeDrawer}>
             <ListItemIcon>
               <TrendingDownIcon />
             </ListItemIcon>
-            <ListItemText primary="Lows" />
+            <ListItemText primary="Lows" data-test-list-item-text />
           </NavListItem>
           <NavListItem to="/issues" onClick={closeDrawer}>
             <ListItemIcon>
               <WarningIcon />
             </ListItemIcon>
-            <ListItemText primary="Known issues" />
+            <ListItemText primary="Known issues" data-test-list-item-text />
           </NavListItem>
         </List>
       </SwipeableDrawer>
@@ -119,20 +102,33 @@ function WeatherAppBar(props) {
   );
 }
 
-function NavListItem(props) {
-  let { children, ...restOfProps } = props;
+class NavListItem extends Component {
+  static defaultProps = {
+    focusOnMount: false
+  };
 
-  return (
-    <ListItem
-      button
-      role={null}
-      tabIndex={null}
-      component={Link}
-      {...restOfProps}
-    >
-      {children}
-    </ListItem>
-  );
+  constructor(props) {
+    super(props);
+    this.link = createRef();
+  }
+
+  componentDidMount() {
+    if (this.props.focusOnMount && this.link.current) {
+      // ugh
+      this.link.current.firstChild.focus();
+    }
+  }
+  render() {
+    let { children, focusOnMount, ...restOfProps } = this.props;
+
+    return (
+      <span tabIndex="-1" ref={this.link}>
+        <ListItem button role={null} tabIndex={null} component={Link} {...restOfProps}>
+          {children}
+        </ListItem>
+      </span>
+    );
+  }
 }
 
 export default withStyles(styles)(WeatherAppBar);
