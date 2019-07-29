@@ -48,7 +48,7 @@
     "karma-mocha-reporter": "^2.2.5",
     "karma-webpack": "^4.0.2",
     "mocha": "^6.1.4",
-    "nodemon": "^1.18.9",
+    "nodemon": "^1.19.1",
     "pretender": "^3.0.1",
     "react": "^16.7.0",
     "react-router-dom": "^4.3.1",
