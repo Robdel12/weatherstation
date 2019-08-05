@@ -55,7 +55,7 @@
     "style-loader": "^0.23.1",
     "testing-hooks": "^0.1.0",
     "uglifyjs-webpack-plugin": "^2.1.1",
-    "webpack": "^4.38.0",
+    "webpack": "^4.39.1",
     "webpack-cli": "^3.2.1"
   },
   "engines": {
