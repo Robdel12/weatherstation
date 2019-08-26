@@ -35,7 +35,7 @@
     "@babel/preset-react": "^7.0.0",
     "@interactor/percy": "^0.2.0",
     "babel-loader": "^8.0.6",
-    "copy-webpack-plugin": "^5.0.3",
+    "copy-webpack-plugin": "^5.0.4",
     "css-loader": "^3.1.0",
     "dayjs": "^1.8.15",
     "html-webpack-plugin": "^3.2.0",
