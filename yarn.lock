@@ -4026,10 +4026,10 @@ ini@^1.3.4, ini@~1.3.0:
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
   integrity sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
 
-interactor.js@^1.4.4:
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/interactor.js/-/interactor.js-1.4.4.tgz#2dc92f336d6cdb9d31b5dacd8f6dd3df9bef0eb1"
-  integrity sha512-XA+HQX5+dJPvte48Tq1BI4R5ZKLpIFWQwRw4mEycDhk1Xq8VFNqt3mJfWQyHMmcgP9x1yUO2+eRQWC/TG6GAoQ==
+interactor.js@^1.4.6:
+  version "1.4.6"
+  resolved "https://registry.yarnpkg.com/interactor.js/-/interactor.js-1.4.6.tgz#d1a1fe22acee7cb0f8a7fec0fa85457409807aad"
+  integrity sha512-2mLmBrFQxAQK1DmoBSyD/hv4rBUf1/aVUZ2zY/tTk23/BAWHpKzGe4QzPoek8O3CjnpjHW5eD9azBTcB5u3pmQ==
 
 interpret@^1.1.0:
   version "1.2.0"
