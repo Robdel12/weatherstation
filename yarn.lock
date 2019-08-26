@@ -7063,10 +7063,10 @@ terser@^4.1.2:
     source-map "~0.6.1"
     source-map-support "~0.5.12"
 
-testing-hooks@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/testing-hooks/-/testing-hooks-0.1.0.tgz#2402137f2840c1bb601572fadbe6d3a019168706"
-  integrity sha512-OeBHmmlVkjssJtf8JZgAsbFnrK4eJFRSKEcuIg9yuq+AKzH3StGqsZTqF7xv41VEVxWVZmmzqMH1jNUx+cxHqQ==
+testing-hooks@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/testing-hooks/-/testing-hooks-0.2.0.tgz#c48e056a575329c6f5538ae85b4f2fcaf47f896f"
+  integrity sha512-4H6nVYFcFGuCHBVsmkIY5KJqf+aEkP5tpNm5BCOnqlfy7kdsSloelFio6ht10GWAD02Z/3AKM5BE32hL0L7MeA==
 
 through2@^2.0.0:
   version "2.0.5"
