@@ -24,7 +24,7 @@
     "express": "^4.17.1",
     "mongodb": "^3.3.3",
     "node-github-graphql": "^0.2.7",
-    "react-dom": "^16.10.2"
+    "react-dom": "^16.11.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
