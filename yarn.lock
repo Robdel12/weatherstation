@@ -5916,10 +5916,10 @@ prepend-http@^1.0.1:
   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-1.0.4.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
   integrity sha1-1PRWKwzjaW5BrFLQ4ALlemNdxtw=
 
-pretender@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/pretender/-/pretender-3.0.2.tgz#1e9123914c4e4bd1b553ca78a401120d300d265f"
-  integrity sha512-6gIDHUaJKRZv7ZgP3CsKicvxtBB3brBr2LWKvJYvEyZRicG9JV2SKokK2TIK0b4Zz9+4C79y57MZHpqUjvJqDg==
+pretender@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/pretender/-/pretender-3.0.4.tgz#e99fb39ae2b67ec7c1a2d0fc8f0cc63d4a8e9aff"
+  integrity sha512-l8geJ6tbBAe9Dl7a5aMKi5nYTabTci/wYBGA1MVVYfq1wLpBe+KYZM3YW+IvXuH4L/Vt1+zudmyigzFAuoWdDg==
   dependencies:
     fake-xml-http-request "^2.0.0"
     route-recognizer "^0.3.3"
