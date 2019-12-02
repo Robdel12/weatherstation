@@ -18,7 +18,7 @@
     "test:percy": "NODE_ENV=test percy exec -- karma start --single-run"
   },
   "dependencies": {
-    "@material-ui/core": "^3.9.3",
+    "@material-ui/core": "^3.9.4",
     "@material-ui/icons": "^3.0.2",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
