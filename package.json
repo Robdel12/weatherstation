@@ -32,7 +32,7 @@
     "@babel/plugin-proposal-decorators": "^7.7.4",
     "@babel/polyfill": "^7.8.0",
     "@babel/preset-env": "^7.7.7",
-    "@babel/preset-react": "^7.7.4",
+    "@babel/preset-react": "^7.8.0",
     "@interactor/percy": "^0.2.2",
     "babel-loader": "^8.0.6",
     "copy-webpack-plugin": "^5.1.1",
