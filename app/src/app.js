@@ -1,25 +1,24 @@
-import React, { Component } from "react";
-import AvgComponent from "./components/average";
-import WeatherAppBar from "./components/app-bar";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { withStyles } from "@material-ui/core/styles";
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import React, { Component } from 'react';
+import WeatherAppBar from './components/app-bar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { withStyles } from '@material-ui/core/styles';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import "./global-styles.css";
+import './global-styles.css';
 
-import Home from "./routes/home";
-import LiveFeed from "./routes/live";
-import Averages from "./routes/averages";
-import Highs from "./routes/highs";
-import Lows from "./routes/lows";
-import Issues from "./routes/issues";
+import Home from './routes/home';
+import LiveFeed from './routes/live';
+import Averages from './routes/averages';
+import Highs from './routes/highs';
+import Lows from './routes/lows';
+import Issues from './routes/issues';
 
 let styles = theme => ({
   container: {
-    [theme.breakpoints.down("sm")]: {
-      margin: "8px"
+    [theme.breakpoints.down('sm')]: {
+      margin: '8px'
     },
-    margin: "20px"
+    margin: '20px'
   }
 });
 

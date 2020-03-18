@@ -1,19 +1,19 @@
-import React from "react";
-import { mount } from "testing-hooks/react-dom";
-import { MemoryRouter } from "react-router";
-import AppBar from "../app-bar";
-import AppBarInteractor from "./app-bar.interactor.js";
+import React from 'react';
+import { mount } from 'testing-hooks/react-dom';
+import { MemoryRouter } from 'react-router';
+import AppBar from '../app-bar';
+import AppBarInteractor from './app-bar.interactor.js';
 
-describe("AppBar Component", () => {
+describe('AppBar Component', () => {
   let navBar = new AppBarInteractor();
 
-  it("renders", async () => {
+  it('renders', async () => {
     await mount(<AppBar drawerIsOpen={false} closeDrawer={() => {}} openDrawer={() => {}} />);
 
-    await navBar.assert.header.exists().snapshot("closed");
+    await navBar.assert.header.exists().snapshot('closed');
   });
 
-  it("fires the onMenuTap action onClick", async () => {
+  it('fires the onMenuTap action onClick', async () => {
     let isOpen = false;
 
     await mount(
@@ -32,7 +32,7 @@ describe("AppBar Component", () => {
     await navBar.hamburgerMenu.click().assert(() => isOpen === true);
   });
 
-  it("renders the list open", async () => {
+  it('renders the list open', async () => {
     await mount(
       <MemoryRouter>
         <AppBar drawerIsOpen={true} closeDrawer={() => {}} openDrawer={() => {}} onMenuTap={() => {}} />
@@ -42,7 +42,7 @@ describe("AppBar Component", () => {
     await navBar.assert.drawer.exists();
   });
 
-  it("focuses the list when open", async () => {
+  it('focuses the list when open', async () => {
     await mount(
       <MemoryRouter>
         <AppBar drawerIsOpen={true} closeDrawer={() => {}} openDrawer={() => {}} onMenuTap={() => {}} />
@@ -57,7 +57,7 @@ describe("AppBar Component", () => {
       .snapshot('Focused');
   });
 
-  it("fires the close action with the escape key", async () => {
+  it('fires the close action with the escape key', async () => {
     let isOpen = true;
 
     await mount(
@@ -74,10 +74,10 @@ describe("AppBar Component", () => {
     );
 
     // Material UI attaches the key event to the modal outer wrapper
-    await navBar.modalWrapper.press("Escape").assert(() => isOpen === false);
+    await navBar.modalWrapper.press('Escape').assert(() => isOpen === false);
   });
 
-  it("fires the close action with an outside click", async () => {
+  it('fires the close action with an outside click', async () => {
     let isOpen = true;
 
     await mount(
@@ -97,7 +97,7 @@ describe("AppBar Component", () => {
     await navBar.modalBackdrop.click().assert(() => isOpen === false);
   });
 
-  it("fires the onRefresh action when clicking the refresh button", async () => {
+  it('fires the onRefresh action when clicking the refresh button', async () => {
     let isRefreshing = false;
 
     await mount(
@@ -112,29 +112,27 @@ describe("AppBar Component", () => {
     await navBar.refreshButton.click().assert(() => isRefreshing === true);
   });
 
-  it("has 6 links with the correct label", async () => {
-    let isRefreshing = false;
-
+  it('has 6 links with the correct label', async () => {
     await mount(
       <MemoryRouter>
         <AppBar
           drawerIsOpen={true}
           openDrawer={() => {}}
           closeDrawer={() => {}}
-          onRefresh={() => (isRefreshing = true)}
+          onRefresh={() => {}}
         />
       </MemoryRouter>
     );
 
     // prettier-ignore
     await navBar.assert.links().count(6)
-      .assert.links(0).text("Home")
+      .assert.links(0).text('Home')
       .assert.links(1).text('Live')
-      .assert.links(1).text("Live")
-      .assert.links(2).text("Averages")
-      .assert.links(3).text("Highs")
-      .assert.links(4).text("Lows")
-      .assert.links(5).text("Known issues")
+      .assert.links(1).text('Live')
+      .assert.links(2).text('Averages')
+      .assert.links(3).text('Highs')
+      .assert.links(4).text('Lows')
+      .assert.links(5).text('Known issues')
       .snapshot('open');
   });
 });

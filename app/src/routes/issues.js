@@ -1,37 +1,34 @@
-import React, { Component, createRef } from "react";
-import { Link } from "react-router-dom";
-import { processResponse } from "../utils";
+import React, { Component, createRef } from 'react';
+import { processResponse } from '../utils';
 
-import List from "@material-ui/core/List";
-import Grid from "@material-ui/core/Grid";
-import ListItem from "@material-ui/core/ListItem";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
+import ListItemText from '@material-ui/core/ListItemText';
 
-import HealingIcon from "@material-ui/icons/Healing";
-import FiberNewIcon from "@material-ui/icons/FiberNew";
-import BugReportIcon from "@material-ui/icons/BugReport";
-import Loading from "../components/loading";
+import HealingIcon from '@material-ui/icons/Healing';
+import FiberNewIcon from '@material-ui/icons/FiberNew';
+import BugReportIcon from '@material-ui/icons/BugReport';
+import Loading from '../components/loading';
 
 let styles = {
   container: {
-    margin: "20px"
+    margin: '20px'
   },
   inline: {
-    display: "inline-block"
+    display: 'inline-block'
   },
   gridItem: {
-    padding: "10px",
-    minWidth: "275px"
+    padding: '10px',
+    minWidth: '275px'
   },
   primaryText: {
-    fontSize: "1.5rem"
+    fontSize: '1.5rem'
   },
   secondaryText: {
-    color: "#383838",
-    "word-break": "break-word"
+    color: '#383838',
+    'word-break': 'break-word'
   }
 };
 
@@ -55,7 +52,7 @@ class Issues extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    fetch("/v1/issues")
+    fetch('/v1/issues')
       .then(res => processResponse(res))
       .then(({ issues }) => {
         if (!this._isMounted) return;
@@ -75,7 +72,7 @@ class Issues extends Component {
   }
 
   renderList() {
-    let { issues, isLoading } = this.state;
+    let { issues } = this.state;
     let { classes } = this.props;
 
     return (
@@ -142,11 +139,11 @@ class Issues extends Component {
   }
 
   renderIcon(labelText) {
-    if (labelText === "enhancement") {
+    if (labelText === 'enhancement') {
       return <FiberNewIcon />;
-    } else if (labelText === "bug") {
+    } else if (labelText === 'bug') {
       return <BugReportIcon />;
-    } else if (labelText === "chore") {
+    } else if (labelText === 'chore') {
       return <HealingIcon />;
     } else {
       return <BugReportIcon />;
@@ -167,8 +164,12 @@ class Issues extends Component {
 
         <Typography paragraph gutterBottom>
           These are currently known issues with the weather station. If you notice anything and would like to
-          report it, you can{" "}
-          <a href="https://github.com/robdel12/weatherstation-server/issues/new" target="_blank">
+          report it, you can{' '}
+          <a
+            href="https://github.com/robdel12/weatherstation-server/issues/new"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             open an issue here.
           </a>
         </Typography>

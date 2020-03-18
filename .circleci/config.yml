@@ -36,30 +36,50 @@ jobs:
           paths:
             - project
             - .ssh
+  app-lint:
+    <<: *defaults
+    steps:
+      - *attach_workspace
+      - run:
+          name: Lint App
+          command: yarn app lint
   app-test:
     <<: *defaults
     steps:
       - *attach_workspace
       - run:
-          name: App Tests
+          name: Test App
           command: yarn app test:percy --coverage --junit
       - store_test_results:
           path: ./app/junit
       - store_artifacts:
           path: ./app/junit
+  server-lint:
+    <<: *defaults
+    steps:
+      - *attach_workspace
+      - run:
+          name: Lint Server
+          command: yarn server lint
   server-test:
     <<: *defaults
     steps:
       - *attach_workspace
       - run:
-          name: Server Tests
+          name: Test Server
           command: yarn server test
 workflows:
   version: 2.1
   default:
     jobs:
       - install
+      - app-lint:
+          requires:
+            - install
       - app-test:
+          requires:
+            - install
+      - server-lint:
           requires:
             - install
       - server-test:

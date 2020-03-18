@@ -1,19 +1,19 @@
-import React, { Component, createRef } from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import HighComponent from "../components/highs";
-import { withStyles } from "@material-ui/core/styles";
+import React, { createRef } from 'react';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import HighComponent from '../components/highs';
+import { withStyles } from '@material-ui/core/styles';
 
 let styles = {
   container: {
-    marginTop: "20px"
+    marginTop: '20px'
   },
   gridItem: {
-    padding: "10px",
-    minWidth: "275px"
+    padding: '10px',
+    minWidth: '275px'
   },
   heading: {
-    marginLeft: "10px"
+    marginLeft: '10px'
   }
 };
 

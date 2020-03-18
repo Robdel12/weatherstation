@@ -5,6 +5,7 @@
   "description": "Node server backed by MongoDB to collect weather station data",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint --ignore-path ../.gitignore .",
     "start": "node index.js",
     "start:debug": "nodemon --inspect index.js",
     "test": "echo 'test me bby uwu'"

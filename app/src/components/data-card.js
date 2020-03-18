@@ -1,10 +1,7 @@
-import React, { Component, createContext } from "react";
-import { processResponse } from "../utils";
+import React, { Component, createContext } from 'react';
+import { processResponse } from '../utils';
 
-import Card from "@material-ui/core/Card";
-import Typography from "@material-ui/core/Typography";
-import CardContent from "@material-ui/core/CardContent";
-import Loading from "./loading";
+import Loading from './loading';
 
 let DataContext = createContext({});
 

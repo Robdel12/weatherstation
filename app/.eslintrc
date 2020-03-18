@@ -1,0 +1,13 @@
+parser: babel-eslint
+extends:
+  - ../.eslintrc
+  - plugin:react/recommended
+plugins:
+  - react
+settings:
+  react:
+    version: detect
+env:
+  browser: true
+rules:
+  react/prop-types: off

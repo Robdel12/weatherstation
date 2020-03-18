@@ -1,24 +1,24 @@
-import React, { Component, createRef } from "react";
-import WeatherModel from "../models/weather";
-import { processResponse } from "../utils";
+import React, { Component, createRef } from 'react';
+import WeatherModel from '../models/weather';
+import { processResponse } from '../utils';
 
-import Card from "@material-ui/core/Card";
-import Grid from "@material-ui/core/Grid";
-import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import CardContent from "@material-ui/core/CardContent";
-import Loading from "../components/loading";
+import Card from '@material-ui/core/Card';
+import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import CardContent from '@material-ui/core/CardContent';
+import Loading from '../components/loading';
 
 let styles = {
   container: {
-    marginTop: "20px"
+    marginTop: '20px'
   },
   title: {
-    marginLeft: "10px"
+    marginLeft: '10px'
   },
   gridItem: {
-    padding: "10px",
-    minWidth: "275px"
+    padding: '10px',
+    minWidth: '275px'
   }
 };
 
@@ -38,7 +38,7 @@ class LiveFeed extends Component {
   }
 
   componentDidMount() {
-    fetch("/v1/weather?limit=3")
+    fetch('/v1/weather?limit=3')
       .then(res => processResponse(res))
       .then(weather => {
         let data = weather.map(point => new WeatherModel(point));
@@ -61,7 +61,7 @@ class LiveFeed extends Component {
   pollForData() {
     this.poller = window.setInterval(() => {
       if (!document.hidden) {
-        fetch("/v1/weather")
+        fetch('/v1/weather')
           .then(res => processResponse(res))
           .then(weather => {
             let data = weather.map(point => new WeatherModel(point));
