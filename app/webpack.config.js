@@ -5,13 +5,13 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const isProduction = process.env.NODE_ENV === "production";
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
-  template: "./src/client/index.html",
+  template: "./src/index.html",
   filename: "index.html",
   inject: "body"
 });
 
 const CopyImages = new CopyWebpackPlugin([
-  { from: "src/client/images", to: "images" }
+  { from: "src/images", to: "images" }
 ]);
 
 let plugins = [HtmlWebpackPluginConfig, CopyImages];
@@ -22,7 +22,7 @@ if (isProduction) {
 
 module.exports = {
   mode: "development",
-  entry: "./src/client/index.js",
+  entry: "./src/index.js",
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist")
