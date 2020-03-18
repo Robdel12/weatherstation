@@ -1,2 +1,2 @@
 // @todo - proper server versioning
-require('./v1')
+require('./v1');

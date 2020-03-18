@@ -1,11 +1,11 @@
 const AVG_GROUP = {
-  "_id": null,
-  "avgTemp": { "$avg": "$temp" },
-  "avgBarometerTemp": { "$avg": "$barometerTemp" },
-  "avgPressure": { "$avg": "$pressure" },
-  "avgHumidity": { "$avg": "$humidity" },
-  "avgWindSpeed": { "$avg": "$currentWindSpeed" },
-  "totalRain": { "$sum": "$rain" }
+  _id: null,
+  avgTemp: { $avg: '$temp' },
+  avgBarometerTemp: { $avg: '$barometerTemp' },
+  avgPressure: { $avg: '$pressure' },
+  avgHumidity: { $avg: '$humidity' },
+  avgWindSpeed: { $avg: '$currentWindSpeed' },
+  totalRain: { $sum: '$rain' }
 };
 
 // The sensor data we send from the Photon needs to be condesned
@@ -33,55 +33,55 @@ function parseSensorData(rawData) {
 
 function parseWindDirection(winddir) {
   switch (parseInt(winddir, 10)) {
-  case 0:
-    return "North";
-  case 1:
-    return "North East";
-  case 2:
-    return "East";
-  case 3:
-    return "South East";
-  case 4:
-    return "South";
-  case 5:
-    return "South West";
-  case 6:
-    return "West";
-  case 7:
-    return "North West";
-  default:
+    case 0:
+      return 'North';
+    case 1:
+      return 'North East';
+    case 2:
+      return 'East';
+    case 3:
+      return 'South East';
+    case 4:
+      return 'South';
+    case 5:
+      return 'South West';
+    case 6:
+      return 'West';
+    case 7:
+      return 'North West';
+    default:
     // if nothing else matches, do the
     // default (which is optional)
-    return "None";
+      return 'None';
   }
 }
 
 // Generic error handler used by all endpoints.
 function handleError(res, reason, message, code) {
-  console.log("ERROR: " + reason);
-  res.status(code || 500).json({"error": message});
+  console.log('ERROR: ' + reason);
+  res.status(code || 500).json({ error: message });
 }
 
 function handleAggregate({ startDate }, db, timeTransform, groupType = AVG_GROUP) {
   let lt = startDate ? new Date(startDate) : new Date();
   let gt = new Date(lt.getTime());
 
-  timeTransform(gt)
+  timeTransform(gt);
 
   return new Promise((resolve, reject) => {
     db
       .collection('weather')
       .aggregate([
         {
-          "$match": {
-            "createdAt": {
-              "$gt": gt,
-              "$lt": lt
+          $match: {
+            createdAt: {
+              $gt: gt,
+              $lt: lt
             }
           }
         },
         {
-          "$group": groupType
+          $group: groupType
         }
       ])
       .toArray((err, data) => {
@@ -96,7 +96,7 @@ function handleAggregate({ startDate }, db, timeTransform, groupType = AVG_GROUP
 
 function forceHTTPS(req, res, next) {
   // The 'x-forwarded-proto' check is for Heroku
-  if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== "development") {
+  if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== 'development') {
     return res.redirect('https://' + req.get('host') + req.url);
   }
   next();

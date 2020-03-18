@@ -1,10 +1,9 @@
-import React, { Component } from "react";
-import { processResponse } from "../utils";
+import React, { Component } from 'react';
 
-import Card from "@material-ui/core/Card";
-import Typography from "@material-ui/core/Typography";
-import CardContent from "@material-ui/core/CardContent";
-import DataCard, { DataConsumer } from "./data-card";
+import Card from '@material-ui/core/Card';
+import Typography from '@material-ui/core/Typography';
+import CardContent from '@material-ui/core/CardContent';
+import DataCard, { DataConsumer } from './data-card';
 
 class AvgComponent extends Component {
   renderHeader() {

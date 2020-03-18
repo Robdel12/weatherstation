@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 export default class WeatherModel {
   constructor(data) {
@@ -42,6 +42,6 @@ export default class WeatherModel {
   }
 
   get displayTime() {
-    return dayjs(this.data.createdAt).format("h:mm:ss a (MM/DD)");
+    return dayjs(this.data.createdAt).format('h:mm:ss a (MM/DD)');
   }
 }

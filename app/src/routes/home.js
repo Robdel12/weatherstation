@@ -1,11 +1,11 @@
-import React, { Component, createRef } from "react";
-import AvgComponent from "../components/average";
-import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
+import React, { createRef } from 'react';
+import AvgComponent from '../components/average';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 let styles = {
   heading: {
-    marginLeft: "10px"
+    marginLeft: '10px'
   }
 };
 

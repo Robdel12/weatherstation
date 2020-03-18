@@ -1,23 +1,21 @@
-const path = require("path");
-
 module.exports = function(config) {
   config.set({
-    frameworks: ["mocha"],
-    reporters: ["mocha", "coverage", config.junit && "junit"].filter(Boolean),
-    browsers: ["Firefox"],
+    frameworks: ['mocha'],
+    reporters: ['mocha', 'coverage', config.junit && 'junit'].filter(Boolean),
+    browsers: ['Firefox'],
 
-    files: [{ pattern: "test/index.js", watched: false }],
+    files: [{ pattern: 'test/index.js', watched: false }],
     coverageReporter: {
-      type: config.coverage === true ? "text-summary" : config.coverage || "none",
+      type: config.coverage === true ? 'text-summary' : config.coverage || 'none',
       check: config.converage
         ? {
-            global: {
-              statements: 100,
-              lines: 100,
-              functions: 100,
-              branches: 100
-            }
+          global: {
+            statements: 100,
+            lines: 100,
+            functions: 100,
+            branches: 100
           }
+        }
         : undefined,
       watermarks: {
         statements: [100, 100],
@@ -28,27 +26,27 @@ module.exports = function(config) {
     },
 
     junitReporter: {
-      outputDir: "./junit",
-      outputFile: "test-results.xml",
+      outputDir: './junit',
+      outputFile: 'test-results.xml',
       useBrowserName: false
     },
 
     preprocessors: {
-      "test/index.js": ["webpack"]
+      'test/index.js': ['webpack']
     },
 
-    webpack: require("./webpack.config"),
+    webpack: require('./webpack.config'),
     webpackMiddleware: {
-      stats: "errors-only"
+      stats: 'errors-only'
     },
 
     plugins: [
-      "karma-firefox-launcher",
-      "karma-mocha",
-      "karma-junit-reporter",
-      "karma-mocha-reporter",
-      "karma-webpack",
-      "karma-coverage"
+      'karma-firefox-launcher',
+      'karma-mocha',
+      'karma-junit-reporter',
+      'karma-mocha-reporter',
+      'karma-webpack',
+      'karma-coverage'
     ]
   });
 };

@@ -1,32 +1,30 @@
-import React, { Component, createRef } from "react";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
+import React, { Component, createRef } from 'react';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import AppBar from '@material-ui/core/AppBar';
 
-import MenuIcon from "@material-ui/icons/Menu";
-import HomeIcon from "@material-ui/icons/Home";
-import TrendingUpIcon from "@material-ui/icons/TrendingUp";
-import TrendingDownIcon from "@material-ui/icons/TrendingDown";
-import EqualizerIcon from "@material-ui/icons/Equalizer";
-import WhatshotIcon from "@material-ui/icons/Whatshot";
-import WarningIcon from "@material-ui/icons/Warning";
-import RefreshIcon from "@material-ui/icons/Refresh";
+import MenuIcon from '@material-ui/icons/Menu';
+import HomeIcon from '@material-ui/icons/Home';
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
+import TrendingDownIcon from '@material-ui/icons/TrendingDown';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
+import WhatshotIcon from '@material-ui/icons/Whatshot';
+import WarningIcon from '@material-ui/icons/Warning';
+import RefreshIcon from '@material-ui/icons/Refresh';
 
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import { withStyles } from "@material-ui/core/styles";
-import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import { Link } from "react-router-dom";
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import { withStyles } from '@material-ui/core/styles';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import { Link } from 'react-router-dom';
 
 const styles = {
   root: {
     flexGrow: 1,
-    marginBottom: "80px"
+    marginBottom: '80px'
   },
   grow: {
     flexGrow: 1
@@ -59,7 +57,7 @@ function WeatherAppBar({ classes, drawerIsOpen, onMenuTap, closeDrawer, openDraw
         </Toolbar>
       </AppBar>
       <SwipeableDrawer open={drawerIsOpen} onClose={closeDrawer} onOpen={event => {}} data-test-modal-wrapper>
-        <List style={{ width: "215px" }} data-test-app-drawer>
+        <List style={{ width: '215px' }} data-test-app-drawer>
           <NavListItem to="/" onClick={closeDrawer} focusOnMount={true}>
             <ListItemIcon>
               <HomeIcon />
@@ -118,6 +116,7 @@ class NavListItem extends Component {
       this.link.current.firstChild.focus();
     }
   }
+
   render() {
     let { children, focusOnMount, ...restOfProps } = this.props;
 
