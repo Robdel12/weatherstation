@@ -1,7 +1,7 @@
 import React from "react";
 import { click } from "interactor.js";
 import { mount } from "testing-hooks/react-dom";
-import App from "../src/client/app.js";
+import App from "../src/app.js";
 import { scoped } from "interactor.js";
 import AppInteractor from "./interactors/app";
 import { setupServer } from "./utils/server";

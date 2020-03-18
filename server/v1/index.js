@@ -9,7 +9,7 @@ const WEATHER_COLLECTION = 'weather';
 const WEBHOOK_COLLECTION = 'webhookData';
 const LOCAL_DB = 'mongodb://localhost:27017/weatherstation';
 const DB_ADDRESS = process.env.MONGODB_URI || LOCAL_DB;
-const CLIENT_FILE_PATH = `${__dirname}/../../dist`;
+const CLIENT_FILE_PATH = `${__dirname}/../../app/dist`;
 
 let db;
 let app = express();

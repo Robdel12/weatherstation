@@ -1,5 +1,5 @@
 import interactor, { scoped, collection } from "interactor.js";
-import AppBar from "../../src/client/components/__tests__/app-bar.interactor";
+import AppBar from "../../src/components/__tests__/app-bar.interactor";
 import percySnapshot from "@interactor/percy";
 
 @interactor

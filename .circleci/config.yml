@@ -2,7 +2,7 @@ references:
   defaults: &defaults
     working_directory: ~/project
     docker:
-      - image: circleci/node:10-browsers
+      - image: circleci/node:12-browsers
       - image: circleci/mongo:4.0.4
 
   cache_key: &cache_key
@@ -29,27 +29,39 @@ jobs:
           key: *cache_key
           paths:
             - node_modules
+            - app/node_modules
+            - server/node_modules
       - persist_to_workspace:
           root: ~/
           paths:
             - project
             - .ssh
-  test:
+  app-test:
     <<: *defaults
     steps:
       - *attach_workspace
       - run:
-          name: Tests
-          command: yarn test:percy --coverage --junit
+          name: App Tests
+          command: yarn app test:percy --coverage --junit
       - store_test_results:
-          path: ./junit
+          path: ./app/junit
       - store_artifacts:
-          path: ./junit
+          path: ./app/junit
+  server-test:
+    <<: *defaults
+    steps:
+      - *attach_workspace
+      - run:
+          name: Server Tests
+          command: yarn server test
 workflows:
   version: 2.1
   default:
     jobs:
       - install
-      - test:
+      - app-test:
+          requires:
+            - install
+      - server-test:
           requires:
             - install
