@@ -7,7 +7,7 @@ const WEATHER_COLLECTION = 'weather';
 let router = express.Router();
 
 // Start collecting the data sent from the Photon and store it in a mongoDB
-router.post('/v1/collect', function(req, res) {
+router.post('/collect', function(req, res) {
   let data = parseSensorData(req.body.data);
 
   // Record when the server has saved this data
