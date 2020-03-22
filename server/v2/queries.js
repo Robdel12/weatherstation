@@ -1,2 +1,154 @@
+const timeframe = require('./timeframe');
+
+const PROJECT_V1_TO_V2 = {
+  temperature: '$temp',
+  windSpeed: '$currentWindSpeed',
+  windDirection: '$currentWindDirection',
+  pressure: 1,
+  humidity: 1,
+  rain: 1,
+  createdAt: 1
+};
+
+const GROUP = {
+  TOTAL: {
+    rain: { $sum: '$rain' }
+  },
+  AVERAGE: {
+    temperature: { $avg: '$temperature' },
+    pressure: { $avg: '$pressure' },
+    humidity: { $avg: '$humidity' },
+    windSpeed: { $avg: '$windSpeed' },
+    windDirection: { $avg: '$windDirection' }
+  },
+  HIGH: {
+    temperature: { $max: '$temperature' },
+    pressure: { $max: '$pressure' },
+    humidity: { $max: '$humidity' },
+    windSpeed: { $max: '$windSpeed' },
+    rain: { $max: '$rain' }
+  },
+  LOW: {
+    temperature: { $min: '$temperature' },
+    pressure: { $min: '$pressure' },
+    humidity: { $min: '$humidity' },
+    windSpeed: { $min: '$windSpeed' },
+    rain: { $min: '$rain' }
+  }
+};
+
+function groupBy(by, params, optimize) {
+  let expression = by && { $dateToString: { date: '$createdAt' } };
+
+  if (by === 'second') {
+    expression.$dateToString.format = '%Y-%m-%dT%H:%M:%S';
+  } else if (by === 'minute') {
+    expression.$dateToString.format = '%Y-%m-%dT%H:%M';
+  } else if (by === 'hour') {
+    expression.$dateToString.format = '%Y-%m-%dT%H';
+  } else if (by === 'day') {
+    expression.$dateToString.format = '%Y-%m-%d';
+  } else if (by === 'week') {
+    // @todo
+  } else if (by === 'month') {
+    expression.$dateToString.format = '%Y-%m';
+  } else if (by === 'year') {
+    expression.$dateToString.format = '%Y';
+  }
+
+  if (optimize) {
+    params = optimize.fieldNodes[0].selectionSet.selections
+      .reduce((q, { name: { value: property } }) => !params[property] ? q : (
+        Object.assign(q, { [property]: params[property] })
+      ), {});
+  }
+
+  return [
+    { $group: { _id: expression || null, ...params } },
+    { $addFields: { date: '$_id' } }
+  ];
+}
+
+function aggregate(collection, stages, params) {
+  let { from, to, many, sort, order, limit } = params;
+  let [$gt, $lt] = timeframe.range(from, to);
+
+  return new Promise((resolve, reject) => {
+    collection.aggregate([
+      { $match: { createdAt: { $gt, $lt } } },
+      { $project: PROJECT_V1_TO_V2 },
+      ...[].concat(stages),
+      { $sort: { [sort || 'date']: order || -1 } },
+      (!many || limit) && { $limit: limit || 1 }
+    ].filter(Boolean)).toArray((err, data) => {
+      if (err) reject(err);
+      else resolve(many ? data : data[0]);
+    });
+  });
+}
+
 module.exports = {
+  total({ from, to }, { app }, info) {
+    return aggregate(
+      app.locals.db.collection('weather'),
+      groupBy(null, GROUP.TOTAL, info),
+      { from, to }
+    );
+  },
+
+  totals({ by, from, to, sort, order, limit }, { app }, info) {
+    return aggregate(
+      app.locals.db.collection('weather'),
+      groupBy(by, GROUP.TOTAL, info),
+      { from, to, sort, order, limit, many: true }
+    );
+  },
+
+  average({ from, to }, { app }, info) {
+    return aggregate(
+      app.locals.db.collection('weather'),
+      groupBy(null, GROUP.AVERAGE, info),
+      { from, to }
+    );
+  },
+
+  averages({ by, from, to, sort, order, limit }, { app }, info) {
+    return aggregate(
+      app.locals.db.collection('weather'),
+      groupBy(by, GROUP.AVERAGE, info),
+      { from, to, sort, order, limit, many: true }
+    );
+  },
+
+  highest({ from, to }, { app }, info) {
+    return aggregate(
+      app.locals.db.collection('weather'),
+      groupBy(null, GROUP.HIGH, info),
+      { from, to }
+    );
+  },
+
+  highs({ by, from, to, sort, order, limit }, { app }, info) {
+    return aggregate(
+      app.locals.db.collection('weather'),
+      groupBy(by, GROUP.HIGH, info),
+      { from, to, sort, order, limit, many: true }
+    );
+  },
+
+  lowest({ from, to }, { app }, info) {
+    return aggregate(
+      app.locals.db.collection('weather'),
+      groupBy(null, GROUP.LOW, info),
+      { from, to }
+    );
+  },
+
+  lows({ by, from, to, sort, order, limit }, { app }, info) {
+    return aggregate(
+      app.locals.db.collection('weather'),
+      groupBy(by, GROUP.LOW, info),
+      { from, to, sort, order, limit, many: true }
+    );
+  }
 };
