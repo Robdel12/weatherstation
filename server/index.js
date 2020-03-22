@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
+const WebSocket = require('ws');
 
 const {
   NODE_ENV: ENV = 'development',
@@ -49,4 +50,12 @@ MongoClient.connect(MONGODB_URI, {
   let server = app.listen(PORT, () => {
     console.log(`App now running on http://localhost:${server.address().port}`);
   });
+
+  // Initialize websockets.
+  let wss = app.locals.wss = {};
+  wss.v1 = new WebSocket.Server({ server, path: '/v1' });
+  wss.send = (v, data) => {
+    let message = JSON.stringify(data);
+    wss[v].clients.forEach(ws => ws.send(message));
+  };
 });

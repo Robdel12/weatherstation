@@ -17,6 +17,7 @@ router.post('/collect', function(req, res) {
     if (err) {
       handleError(res, err.message, 'Failed to create new weather data point.');
     } else {
+      req.app.locals.wss.send('v1', doc.ops[0]);
       res.status(201).json(doc.ops[0]);
     }
   });
