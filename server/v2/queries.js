@@ -1,9 +1,26 @@
 const timeframe = require('./timeframe');
 
 const PROJECT_V1_TO_V2 = {
-  temperature: '$temp',
+  temperature: { $avg: ['$temp', '$barometerTemp'] },
   windSpeed: '$currentWindSpeed',
-  windDirection: '$currentWindDirection',
+  windDirection: {
+    $switch: {
+      default: null,
+      branches: [
+        ['South', 0],
+        ['South West', 45],
+        ['West', 90],
+        ['North West', 135],
+        ['North', 180],
+        ['North East', 225],
+        ['East', 270],
+        ['South East', 315]
+      ].map(([dir, deg]) => ({
+        case: { $eq: ['$currentWindDirection', dir] },
+        then: deg
+      }))
+    }
+  },
   pressure: 1,
   humidity: 1,
   rain: 1,
