@@ -1,7 +1,9 @@
 const path = require('path');
+const { URL } = require('url');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
+const WebSocket = require('ws');
 
 const {
   NODE_ENV: ENV = 'development',
@@ -48,5 +50,26 @@ MongoClient.connect(MONGODB_URI, {
   // Initialize the app.
   let server = app.listen(PORT, () => {
     console.log(`App now running on http://localhost:${server.address().port}`);
+  });
+
+  // Initialize websockets.
+  let wss = app.locals.wss = {};
+  wss.v1 = new WebSocket.Server({ noServer: true });
+  wss.send = (v, data) => {
+    let message = JSON.stringify(data);
+    wss[v].clients.forEach(ws => ws.send(message));
+  };
+
+  // Handle websocket versioning.
+  server.on('upgrade', (request, socket, head) => {
+    let v = new URL(request.url).pathname.substr(1);
+
+    if (wss[v]) {
+      wss[v].handleUpgrade(request, socket, head, (ws) => {
+        wss[v].emit('connection', ws, request);
+      });
+    } else {
+      socket.destroy();
+    }
   });
 });
