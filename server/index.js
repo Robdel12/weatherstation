@@ -1,4 +1,5 @@
 const path = require('path');
+const { URL } = require('url');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
@@ -53,9 +54,22 @@ MongoClient.connect(MONGODB_URI, {
 
   // Initialize websockets.
   let wss = app.locals.wss = {};
-  wss.v1 = new WebSocket.Server({ server, path: '/v1' });
+  wss.v1 = new WebSocket.Server({ noServer: true });
   wss.send = (v, data) => {
     let message = JSON.stringify(data);
     wss[v].clients.forEach(ws => ws.send(message));
   };
+
+  // Handle websocket versioning.
+  server.on('upgrade', (request, socket, head) => {
+    let v = new URL(request.url).pathname.substr(1);
+
+    if (wss[v]) {
+      wss[v].handleUpgrade(request, socket, head, (ws) => {
+        wss[v].emit('connection', ws, request);
+      });
+    } else {
+      socket.destroy();
+    }
+  });
 });
