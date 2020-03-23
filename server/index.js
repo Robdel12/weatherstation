@@ -1,5 +1,4 @@
 const path = require('path');
-const { URL } = require('url');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
@@ -62,7 +61,7 @@ MongoClient.connect(MONGODB_URI, {
 
   // Handle websocket versioning.
   server.on('upgrade', (request, socket, head) => {
-    let v = new URL(request.url).pathname.substr(1);
+    let v = request.url.substr(1);
 
     if (wss[v]) {
       wss[v].handleUpgrade(request, socket, head, (ws) => {
