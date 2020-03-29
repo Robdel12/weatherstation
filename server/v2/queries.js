@@ -66,7 +66,7 @@ function groupBy(by, params, optimize) {
   } else if (by === 'day') {
     expression.$dateToString.format = '%Y-%m-%d';
   } else if (by === 'week') {
-    // @todo
+    expression.$dateToString.format = '%YW%V';
   } else if (by === 'month') {
     expression.$dateToString.format = '%Y-%m';
   } else if (by === 'year') {

@@ -1,6 +1,6 @@
 const FRAME_REG = /^(?:last\s)?(?:(\d+|a)\s)?((?<!^)[a-z]+?)s?(?:\sago)?$/i;
 const DATE_REG = /^([a-z]+?)?(?:\s(\d{1,2})(?:st|nd|rd|th))?\s?(\d{4})?$/i;
-const ISO_REG = /^(\d{4})-(\d{1,2})(?:-(\d{1,2})(?:T(\d{2})(?::(\d{2})(?::(\d{2}))?)?)?)?$/i;
+const ISO_REG = /^(\d{4})(?:-(\d{1,2})(?:-(\d{1,2})(?:T(\d{2})(?::(\d{2})(?::(\d{2}))?)?)?)?|-?W(\d{2})(\d)?)$/i;
 
 /* there is a lot of similar but different date stuff here and these rules make
  * it more verbose than it already is; disable them */
@@ -41,7 +41,8 @@ const tf = {
   week: {
     start: (d = tf.now()) => tf.day.start(tf.day.ago(d.getUTCDay(), d)),
     end: (d = tf.now()) => tf.day.end(tf.day.ago(d.getUTCDay() - 6, d)),
-    ago: (n = 1, d = tf.now()) => tf.day.ago(n * 7, d)
+    ago: (n = 1, d = tf.now()) => tf.day.ago(n * 7, d),
+    of: (w, d = tf.now()) => tf.week.ago(-w, tf.day.of(4, tf.year.start(d)))
   },
   month: {
     start: (d = tf.now()) => (d.setUTCDate(1), tf.day.start(d)),
@@ -87,7 +88,7 @@ const tf = {
     return d;
   },
 
-  // @todo - time of day?
+  // @todo - time of day? what hour corresponds to each time?
   // "this morning"
   // "this afternoon"
   // "yesterday morning"
@@ -122,8 +123,10 @@ const tf = {
         d = tf.set(tf.now(), m[3], m[1] ? tf.month.index[m[1]] : 0, m[2] || 1);
         u = m[2] ? 'day' : m[1] ? 'month' : 'year';
       } else if ((m = f.match(ISO_REG))) {
-        d = tf.set(tf.now(), m[1], m[2] - 1, m[3], m[4], m[5], m[6]);
-        u = m[6] ? 'second' : m[5] ? 'minute' : m[4] ? 'hour' : m[3] ? 'day' : 'month';
+        d = m[7] && tf.day.of(m[8] || 0, tf.week.of(m[7]));
+        d = d || tf.set(tf.now(), m[1], m[2] - 1, m[3], m[4], m[5], m[6]);
+        u = m[6] ? 'second' : m[5] ? 'minute' : m[4] ? 'hour'
+          : (m[3] || m[8]) ? 'day' : m[7] ? 'week' : 'month';
       } else if ((m = f.match(FRAME_REG))) {
         n = (m[1] && m[1] !== 'a') ? m[1] : undefined;
 
