@@ -27,6 +27,44 @@ const PROJECT_V1_TO_V2 = {
   createdAt: 1
 };
 
+// calulate avg wind direction
+// x = sin(rad(dir)) * m/s
+// y = cos(rad(dir)) * m/s
+// avg = atan2(sum(x),sum(y))
+// avg < 0 ? +360
+const AVG_WIND_DIR = {
+  GROUP: {
+    $mergeObjects: {
+      $let: {
+        vars: {
+          dir: { $degreesToRadians: '$windDirection' },
+          mps: { $divide: ['$windSpeed', 2.237] }
+        },
+        in: {
+          x: { $sum: { $multiply: [{ $sin: '$$dir' }, '$$mps'] } },
+          y: { $sum: { $multiply: [{ $cos: '$$dir' }, '$$mps'] } }
+        }
+      }
+    }
+  },
+  STAGE: {
+    $addFields: {
+      windDirection: {
+        $cond: [{ $ne: ['$windDirection', null] }, {
+          $let: {
+            vars: {
+              dir: { $radiansToDegrees: { $atan2: ['$windDirection.x', '$windDirection.y'] } }
+            },
+            in: {
+              $add: ['$$dir', { $cond: [{ $lt: ['$$dir', 0] }, 360, 0] }]
+            }
+          }
+        }, null]
+      }
+    }
+  }
+};
+
 const GROUP = {
   TOTAL: {
     rain: { $sum: '$rain' }
@@ -36,7 +74,7 @@ const GROUP = {
     pressure: { $avg: '$pressure' },
     humidity: { $avg: '$humidity' },
     windSpeed: { $avg: '$windSpeed' },
-    windDirection: { $avg: '$windDirection' }
+    windDirection: AVG_WIND_DIR.GROUP
   },
   HIGH: {
     temperature: { $max: '$temperature' },
@@ -97,10 +135,9 @@ function aggregate(collection, stages, params) {
       ...[].concat(stages),
       { $sort: { [sort || 'date']: order || -1 } },
       (!many || limit) && { $limit: limit || 1 }
-    ].filter(Boolean)).toArray((err, data) => {
-      if (err) reject(err);
-      else resolve(many ? data : data[0]);
-    });
+    ].filter(Boolean)).toArray((err, data) => (
+      err ? reject(err) : resolve(many ? data : data[0])
+    ));
   });
 }
 
@@ -124,7 +161,7 @@ module.exports = {
   average({ from, to }, { app }, info) {
     return aggregate(
       app.locals.db.collection('weather'),
-      groupBy(null, GROUP.AVERAGE, info),
+      groupBy(null, GROUP.AVERAGE, info).concat(AVG_WIND_DIR.STAGE),
       { from, to }
     );
   },
@@ -132,7 +169,7 @@ module.exports = {
   averages({ by, from, to, sort, order, limit }, { app }, info) {
     return aggregate(
       app.locals.db.collection('weather'),
-      groupBy(by, GROUP.AVERAGE, info),
+      groupBy(by, GROUP.AVERAGE, info).concat(AVG_WIND_DIR.STAGE),
       { from, to, sort, order, limit, many: true }
     );
   },
