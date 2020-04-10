@@ -1,36 +1,12 @@
 const timeframe = require('./timeframe');
+const { PROJECT_V1_TO_V2 } = require('./migrate');
 
-const PROJECT_V1_TO_V2 = {
-  temperature: { $avg: ['$temp', '$barometerTemp'] },
-  windSpeed: '$currentWindSpeed',
-  windDirection: {
-    $switch: {
-      default: null,
-      branches: [
-        ['South', 0],
-        ['South West', 45],
-        ['West', 90],
-        ['North West', 135],
-        ['North', 180],
-        ['North East', 225],
-        ['East', 270],
-        ['South East', 315]
-      ].map(([dir, deg]) => ({
-        case: { $eq: ['$currentWindDirection', dir] },
-        then: deg
-      }))
-    }
-  },
-  pressure: 1,
-  humidity: 1,
-  rain: 1,
-  createdAt: 1
-};
-
-// calulate avg wind direction
+// Calulate average wind direction via a MongoDB query. Sum of x & y is
+// accumulated to preserve memory.
+//
 // x = sin(rad(dir)) * m/s
 // y = cos(rad(dir)) * m/s
-// avg = atan2(sum(x),sum(y))
+// avg = atan2(sum(x), sum(y))
 // avg < 0 ? +360
 const AVG_WIND_DIR = {
   GROUP: {
@@ -41,7 +17,9 @@ const AVG_WIND_DIR = {
           mps: { $divide: ['$windSpeed', 2.237] }
         },
         in: {
+          // sum(x = sin(rad(dir)) * m/s)
           x: { $sum: { $multiply: [{ $sin: '$$dir' }, '$$mps'] } },
+          // sum(y = cos(rad(dir)) * m/s)
           y: { $sum: { $multiply: [{ $cos: '$$dir' }, '$$mps'] } }
         }
       }
@@ -53,10 +31,12 @@ const AVG_WIND_DIR = {
         $cond: [{ $ne: ['$windDirection', null] }, {
           $let: {
             vars: {
-              dir: { $radiansToDegrees: { $atan2: ['$windDirection.x', '$windDirection.y'] } }
+              // avg = atan2(sum(x), sum(y))
+              avg: { $radiansToDegrees: { $atan2: ['$windDirection.x', '$windDirection.y'] } }
             },
             in: {
-              $add: ['$$dir', { $cond: [{ $lt: ['$$dir', 0] }, 360, 0] }]
+              // avg < 0 ? +360
+              $add: ['$$avg', { $cond: [{ $lt: ['$$avg', 0] }, 360, 0] }]
             }
           }
         }, null]
@@ -65,6 +45,7 @@ const AVG_WIND_DIR = {
   }
 };
 
+// Aggregate groups for each data type
 const GROUP = {
   TOTAL: {
     rain: { $sum: '$rain' }
@@ -92,6 +73,8 @@ const GROUP = {
   }
 };
 
+// Group params by a time period, optionally optimized by reducing provided
+// params to only those that have been requested via GraphQL.
 function groupBy(by, params, optimize) {
   let expression = by && { $dateToString: { date: '$createdAt' } };
 
@@ -124,6 +107,8 @@ function groupBy(by, params, optimize) {
   ];
 }
 
+// Common aggregate helper to query data by a timeframe, migrate V1 data to V2,
+// and sort that data. Queries without "many" will always return a single entry.
 function aggregate(collection, stages, params) {
   let { from, to, many, sort, order, limit } = params;
   let [$gt, $lt] = timeframe.range(from, to);
@@ -141,6 +126,7 @@ function aggregate(collection, stages, params) {
   });
 }
 
+// Export GraphQL schema resolvers, sometimes referred to as "rootValue"
 module.exports = {
   total({ from, to }, { app }, info) {
     return aggregate(
