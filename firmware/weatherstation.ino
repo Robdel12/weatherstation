@@ -1,12 +1,12 @@
-#include <SparkFun_Photon_Weather_Shield_Library.h>
-//#include "Sparkfun_APDS9301_Library.h"
+#include "SparkFun_Photon_Weather_Shield_Library.h"
+#include "Sparkfun_APDS9301_Library.h"
 
 // interrupt pins
 const int WDIR_PIN = A0;
 const int WSPEED_PIN = D3;
 const int RAIN_PIN = D2;
 // i2c address
-//const uint8_t LUX_ADDR = 0x39;
+const uint8_t LUX_ADDR = 0x39;
 
 // local data
 float humidity = 0;
@@ -15,7 +15,7 @@ float pascals = 0;
 float windD = 0;
 float windS = 0;
 float rain = 0;
-//float lux = 0;
+float lux = 0;
 
 // tracks update interval
 long lastUpdate = 0;
@@ -23,7 +23,7 @@ long lastUpdate = 0;
 // weather sheild sensor
 Weather weather;
 // ambient light sensor
-//APDS9301 light;
+APDS9301 light;
 
 // updates local weather data
 void updateWeatherData() {
@@ -41,7 +41,7 @@ void updateWeatherData() {
   // rain
   rain = getRainInches();
   // light
-  //lux = light.readLuxLevel();
+  lux = light.readLuxLevel();
 }
 
 // rain functions
@@ -154,9 +154,9 @@ void setup() {
   // turn on interrupts
   interrupts();
   // initialize i2c bus for light sensor
-  //Wire.begin();
+  Wire.begin();
   // light sensor setup
-  //light.begin(LUX_ADDR);
+  light.begin(LUX_ADDR);
 }
 
 void loop() {
@@ -212,8 +212,8 @@ String getWeatherData() {
     String(windS, 3) +
     ", \"rain\": " +
     String(rain, 3) +
-    //", \"lux\": " +
-    //String(lux, 3) +
+    ", \"lux\": " +
+    String(lux, 3) +
     " }"
   );
 }
