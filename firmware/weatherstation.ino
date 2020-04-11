@@ -200,15 +200,15 @@ void publishWeatherData() {
 // returns weather data as a JSON string
 String getWeatherData() {
   return (
-    "{ \"temp\": " +
+    "{ \"temperature\": " +
     String(temp, 3) +
     ", \"humidity\": " +
     String(humidity, 3) +
-    ", \"hPa\": " +
+    ", \"pressure\": " +
     String(pascals / 100, 3) +
-    ", \"windD\": " +
+    ", \"windDirection\": " +
     String(windD, 1) +
-    ", \"windS\": " +
+    ", \"windSpeed\": " +
     String(windS, 3) +
     ", \"rain\": " +
     String(rain, 3) +
