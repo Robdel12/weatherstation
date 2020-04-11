@@ -7,7 +7,7 @@
     "server"
   ],
   "engines": {
-    "node": "12"
+    "node": ">=12"
   },
   "scripts": {
     "app": "yarn workspace app",
