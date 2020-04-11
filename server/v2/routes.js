@@ -28,7 +28,8 @@ router.post('/collect', (req, res) => {
 });
 
 router.use('/graphql', graphqlHTTP({
-  graphiql: process.env.NODE_ENV !== 'production',
+  // current queries are read-only, so no security concerns around enabling this
+  graphiql: true,
   rootValue,
   schema
 }));
