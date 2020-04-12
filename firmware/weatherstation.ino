@@ -1,327 +1,219 @@
-/******************************************************************************
-  SparkFun Photon Weather Shield basic example with weather meter readings including wind speed, wind direction and rain.
-  Joel Bartlett @ SparkFun Electronics
-  Original Creation Date: May 18, 2015
-
-  Based on the Wimp Weather Station sketch by: Nathan Seidle
-  https://github.com/sparkfun/Wimp_Weather_Station
-
-  This sketch prints the temperature, humidity, barometric pressure to the Seril port.
-  This sketch also incorporates the Weather Meters avaialbe from SparkFun (SEN-08942),
-  which allow you to measure Wind Speed, Wind Direction, and Rainfall.
-
-  Hardware Connections:
-  This sketch was written specifically for the Photon Weather Shield,
-  which connects the HTU21D and MPL3115A2 to the I2C bus by default.
-  If you have an HTU21D and/or an MPL3115A2 breakout, use the following
-  hardware setup:
-      HTU21D ------------- Photon
-      (-) ------------------- GND
-      (+) ------------------- 3.3V (VCC)
-       CL ------------------- D1/SCL
-       DA ------------------- D0/SDA
-
-    MPL3115A2 ------------- Photon
-      GND ------------------- GND
-      VCC ------------------- 3.3V (VCC)
-      SCL ------------------ D1/SCL
-      SDA ------------------ D0/SDA
-
-    DS18B20 Temp Sensor ------ Photon
-        VCC (Red) ------------- 3.3V (VCC)
-        GND (Black) ----------- GND
-        SIG (White) ----------- D4
-
-
-  Development environment specifics:
-    IDE: Particle Dev
-    Hardware Platform: Particle Photon
-                       Particle Core
-
-  This code is beerware; if you see me (or any other SparkFun
-  employee) at the local, and you've found our code helpful,
-  please buy us a round!
-  Distributed as-is; no warranty is given.
-*******************************************************************************/
 #include "SparkFun_Photon_Weather_Shield_Library.h"
+#include "Sparkfun_APDS9301_Library.h"
 
-int WDIR = A0;
-int RAIN = D2;
-int WSPEED = D3;
+// interrupt pins
+const int WDIR_PIN = A0;
+const int WSPEED_PIN = D3;
+const int RAIN_PIN = D2;
+// i2c address
+const uint8_t LUX_ADDR = 0x39;
 
-//Global Variables
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-long lastSecond; //The millis counter to see when a second rolls by
-byte minutes; //Keeps track of where we are in various arrays of data
-
-//These are all the weather values that our API expects
-int winddir = 0; // [0-360 instantaneous wind direction]
-float windspeedmph = 0; // [mph instantaneous wind speed]
+// local data
 float humidity = 0;
-float tempf = 0;
-float rain = 0;
+float temp = 0;
 float pascals = 0;
-float altf = 0;
-float baroTemp = 0;
+float windD = 0;
+float windS = 0;
+float rain = 0;
+float lux = 0;
 
+// tracks update interval
+long lastUpdate = 0;
 
-// volatiles are subject to modification by IRQs
-int count = 0;
-int altCount = 0;
-long lastWindCheck = 0;
-volatile byte rainClicks = 0;
+// weather sheild sensor
+Weather weather;
+// ambient light sensor
+APDS9301 light;
+
+// updates local weather data
+void updateWeatherData() {
+  // relative humidity
+  humidity = weather.getRH();
+  // tempurature (getRH makes this faster than readTemp)
+  temp = weather.getTempF();
+  // barometer
+  pascals = weather.readPressure();
+  // average temp between both sensors
+  temp = (temp + weather.readBaroTempF()) / 2;
+  // wind
+  windS = getWindSpeed();
+  windD = getWindDirection();
+  // rain
+  rain = getRainInches();
+  // light
+  lux = light.readLuxLevel();
+}
+
+// rain functions
 volatile long lastRainIRQ = 0;
-volatile long lastWindIRQ = 0;
-volatile byte windClicks = 0;
+volatile byte rainClicks = 0;
 
-//Create Instance of HTU21D or SI7021 temp and humidity sensor and MPL3115A2 barrometric sensor
-Weather sensor;
-
-//Interrupt routines (these are called by the hardware interrupts, not by the main code)
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Count rain gauge bucket tips as they occur
-// Activated by the magnet and reed switch in the rain gauge, attached to input D2
 void rainIRQ() {
- // ignore switch-bounce glitches
+  // ignore switch-bounce glitches
   if (millis() - lastRainIRQ > 10) {
     lastRainIRQ = millis();
-
     rainClicks++;
   }
 }
 
-// Activated by the magnet in the anemometer (2 ticks per rotation), attached to input D3
-void wspeedIRQ() {
-  // Ignore switch-bounce glitches less than 10ms (142MPH max reading) after the reed switch closes
-  if (millis() - lastWindIRQ > 10)  {
-    lastWindIRQ = millis(); //Grab the current time
-    windClicks++; //There is 1.492MPH for each click per second.
-  }
-}
-
-//---------------------------------------------------------------
-void setup() {
-    pinMode(WSPEED, INPUT_PULLUP); // input from wind meters windspeed sensor
-    pinMode(RAIN, INPUT_PULLUP); // input from wind meters rain gauge sensor
-
-    Serial.begin(9600); // open serial over USB
-
-    // This line pauses the Serial port until a key is pressed
-    // Serial.println("Press any key to begin");
-    // while(!Serial.available()) Spark.process();
-
-    //Initialize the I2C sensors and ping them
-    sensor.begin();
-
-    /* You can only receive acurate barrometric readings or acurate altitiude
-    readings at a given time, not both at the same time. The following two lines
-    tell the sensor what mode to use. You could easily write a function that
-    takes a reading in one made and then switches to the other mode to grab that
-    reading, resulting in data that contains both acurate altitude and barrometric
-    readings. For this example, we will only be using the barometer mode. Be sure
-    to only uncomment one line at a time. */
-
-    sensor.setModeBarometer();
-
-    //These are additional MPL3115A2 functions the MUST be called for the sensor to work.
-    sensor.setOversampleRate(7); // Set Oversample rate
-    //Call with a rate from 0 to 7. See page 33 for table of ratios.
-    //Sets the over sample rate. Datasheet calls for 128 but you can set it
-    //from 1 to 128 samples. The higher the oversample rate the greater
-    //the time between data samples.
-
-    sensor.enableEventFlags(); //Necessary register calls to enble temp, baro ansd alt
-
-    lastSecond = millis();
-
-    // attach external interrupt pins to IRQ functions
-    attachInterrupt(RAIN, rainIRQ, FALLING);
-    attachInterrupt(WSPEED, wspeedIRQ, FALLING);
-
-    // turn on interrupts
-    interrupts();
-}
-
-//---------------------------------------------------------------
-void loop() {
-  //Keep track of which minute it is
-  if(millis() - lastSecond >= 1000) {
-    lastSecond += 1000;
-
-    //Get readings from all sensors
-    getWeather();
-
-    //Rather than use a delay, keeping track of a counter allows the photon to
-    //still take readings and do work in between printing out data.
-    count++;
-
-    // Every two seconds
-    if(count == 2) {
-       printInfo();
-       // These key names are shrunk to fit within 63 bytes that `Particle.publish` limits to.
-       // The keys are transformed into human readable names where the POST is handled in the API.
-       Particle.publish("weather",
-         "{ \"temp\": \""
-         + String(tempf)
-         + "\", \"cWindS\": \""
-         + String(windspeedmph)
-         + "\", \"cWindD\": \""
-         + String(winddir)
-         + "\", \"windG\": \""
-         + "\", \"rain\": \""
-         + String(rain)
-         + "\", \"humidity\": \""
-         + String(humidity)
-         + "\", \"pressure\": \""
-         + String(pascals/100)
-         + "\", \"altitude\": \""
-         + String(altf)
-         + "\", \"baroT\": \""
-         + String(baroTemp)
-         + "\" }"
-       );
-       count = 0;
-    }
-  }
-}
-
-//---------------------------------------------------------------
-void printInfo() {
-  //This function prints the weather data out to the default Serial Port
-  Serial.print(" Wind_Speed:");
-  Serial.print(windspeedmph, 1);
-  Serial.print("mph, ");
-
-  Serial.print("Rain:");
-  Serial.print(rain);
-  Serial.print("in., ");
-
-  Serial.print("Temp:");
-  Serial.print(tempf);
-  Serial.print("F, ");
-
-  Serial.print("Humidity:");
-  Serial.print(humidity);
-  Serial.print("%, ");
-
-  Serial.print("Baro_Temp:");
-  Serial.print(baroTemp);
-  Serial.print("F, ");
-
-  //The MPL3115A2 outputs the pressure in Pascals. However, most weather stations
-  //report pressure in hectopascals or millibars. Divide by 100 to get a reading
-  //more closely resembling what online weather reports may say in pascals or mb.
-  //Another common unit for pressure is Inches of Mercury (in.Hg). To convert
-  //from mb to in.Hg, use the following formula. P(inHg) = 0.0295300 * P(mb)
-  //More info on conversion can be found here:
-  //www.srh.noaa.gov/images/epz/wxcalc/pressureConversion.pdf
-  Serial.print("Pressure:");
-  Serial.print(pascals/100);
-  Serial.print("hPa, ");
-
-  Serial.print("Altitude:");
-  Serial.print(altf);
-  Serial.println("ft.");
-}
-
-//---------------------------------------------------------------
-//Read the wind direction sensor, return heading in degrees
-int get_wind_direction() {
-  unsigned int adc;
-
-  adc = analogRead(WDIR); // get the current reading from the sensor
-
-  // The following table is ADC readings for the wind direction sensor output, sorted from low to high.
-  // Each threshold is the midpoint between adjacent headings. The output is degrees for that ADC reading.
-  // Note that these are not in compass degree order! See Weather Meters datasheet for more information.
-
-  //Wind Vains may vary in the values they return. To get exact wind direction,
-  //it is recomended that you AnalogRead the Wind Vain to make sure the values
-  //your wind vain output fall within the values listed below.
-  if(adc > 2270 && adc < 2290) return (0);//North
-  if(adc > 3220 && adc < 3299) return (1);//NE
-  if(adc > 3890 && adc < 3999) return (2);//East
-  if(adc > 3780 && adc < 3850) return (3);//SE
-
-  if(adc > 3570 && adc < 3650) return (4);//South
-  if(adc > 2790 && adc < 2850) return (5);//SW
-  if(adc > 1580 && adc < 1610) return (6);//West
-  if(adc > 1930 && adc < 1950) return (7);//NW
-
-  return (-1); // error, disconnected?
-}
-
-//---------------------------------------------------------------
-//Returns the instataneous wind speed
-float get_wind_speed() {
-  float deltaTime = millis() - lastWindCheck; //750ms
-
-  deltaTime /= 1000.0; //Covert to seconds
-
-  // Serial.println();
-  // Serial.print("deltaTime");
-  // Serial.println(deltaTime);
-
-  float windSpeed = (float)windClicks / deltaTime; //3 / 0.750s = 4
-
-  // Serial.println();
-  // Serial.print("windSpeed:");
-  // Serial.println(windSpeed);
-
-  // Serial.println();
-  // Serial.print("windClicks before reset:");
-  // Serial.println(windClicks);
-
-  windClicks = 0; //Reset and start watching for new wind
-  lastWindCheck = millis();
-
-  windSpeed *= 1.492; //4 * 1.492 = 5.968MPH
-
-  // Serial.println();
-  // Serial.print("Windspeed:");
-  // Serial.println(windSpeed);
-
-  return(windSpeed);
-}
-
-// Returns the current rain collected
-float get_rain_inches() {
+float getRainInches() {
   // calculate inches of rain from clicks
   float rainIn = rainClicks * 0.011;
-
   // reset rain clicks
   rainClicks = 0;
-
   return rainIn;
 }
 
-//---------------------------------------------------------------
-void getWeather() {
-  // Measure Relative Humidity from the HTU21D or Si7021
-  humidity = sensor.getRH();
+// wind functions
+volatile long lastWindIRQ = 0;
+volatile byte windClicks = 0;
 
-  // Measure Temperature from the HTU21D or Si7021
-  // Temperature is measured every time RH is requested.
-  // It is faster, therefore, to read it from previous RH
-  // measurement with getTemp() instead with readTemp()
-  tempf = sensor.getTempF();
+void windIRQ() {
+  // ignore switch-bounce glitches
+  if (millis() - lastWindIRQ > 10) {
+    lastWindIRQ = millis();
+    windClicks++;
+  }
+}
 
-  // Measure the Barometer temperature in F from the MPL3115A2
-  baroTemp = sensor.readBaroTempF();
+long lastWindCheck = 0;
 
-  // Measure Pressure from the MPL3115A2 in
-  pascals = sensor.readPressure();
+float getWindSpeed() {
+  // calculate clicks per second
+  float deltaTime = (millis() - lastWindCheck) / 1000.0;
+  float windSpeed = (float) windClicks / deltaTime;
+  // reset wind clicks
+  lastWindCheck = millis();
+  windClicks = 0;
+  // multiply clicks per second by mph per click
+  windSpeed *= 1.492;
+  return windSpeed;
+}
 
-  // TODO, this needs to be toggled on, read, and stored properly
-  // Measure the Altimeter in feet from the MPL3115A2
-  // altf = sensor.readAltitudeFt();
+float getWindDirection() {
+  // get the current reading from the sensor
+  int adc = analogRead(WDIR);
 
-  //Calc winddir
-  winddir = get_wind_direction();
+  // adc -> dir
 
-  //Calc windspeed
-  windspeedmph = get_wind_speed();
+  // manual testing results:
+  // ~1485 -> 112.5
+  // ~1556 -> 67.5
+  // ~1592 -> 90
+  // ~1716 -> 157.5
+  // ~1928 -> 135
+  // ~2135 -> 202.5
+  // ~2276 -> 180
+  // ~2646 -> 22.5
+  // ~2808 -> 45
+  // ~3170 -> 247.5
+  // ~3248 -> 225
+  // ~3421 -> 337.5
+  // ~3610 -> 0
+  // ~3702 -> 292.5
+  // ~3828 -> 315
+  // ~3944 -> 270
 
-  // Update rain amount
-  rain = get_rain_inches();
+  // rounded values account for fluctuation
+  if (adc < 1500) return 112.5;
+  if (adc < 1570) return 67.5;
+  if (adc < 1600) return 90;
+  if (adc < 1800) return 157.5;
+  if (adc < 2000) return 135;
+  if (adc < 2200) return 202.5;
+  if (adc < 2400) return 180;
+  if (adc < 2700) return 22.5;
+  if (adc < 3000) return 45;
+  if (adc < 3200) return 247.5;
+  if (adc < 3300) return 225;
+  if (adc < 3500) return 337.5;
+  if (adc < 3650) return 0;
+  if (adc < 3750) return 292.5;
+  if (adc < 3850) return 315;
+  if (adc < 4000) return 270;
+
+  return -1; // error, disconnected?
+}
+
+//----------------------------------------------
+
+void setup() {
+  // open serial over USB at 9600 baud
+  Serial.begin(9600);
+  // initialize the weather sensors
+  weather.begin();
+  weather.setModeBarometer();
+  weather.setOversampleRate(7);
+  weather.enableEventFlags();
+  // set windspeed and rain pin modes
+  pinMode(WSPEED_PIN, INPUT_PULLUP);
+  pinMode(RAIN_PIN, INPUT_PULLUP);
+  // attach external interrupt pins to IRQ functions
+  attachInterrupt(WSPEED_PIN, windIRQ, FALLING);
+  attachInterrupt(RAIN_PIN, rainIRQ, FALLING);
+  // turn on interrupts
+  interrupts();
+  // initialize i2c bus for light sensor
+  Wire.begin();
+  // light sensor setup
+  light.begin(LUX_ADDR);
+}
+
+void loop() {
+  // every 2 seconds
+  if (millis() - lastUpdate >= 2000) {
+    lastUpdate = millis();
+    // update local data from all sensors
+    updateWeatherData();
+    // and publish local data
+    publishWeatherData();
+  }
+}
+
+//----------------------------------------------
+
+// publish to server
+TCPClient client;
+const char* domain = "weather.deluca.house";
+const char* path = "/v2/collect";
+const int port = 443;
+
+void publishWeatherData() {
+  String data = getWeatherData();
+
+  if (client.connect(domain, port)) {
+    client.printlnf("POST %s HTTP/1.1", path);
+    client.printlnf("Host: %s", address);
+    client.printlnf("Content-Length: %d", data.length());
+    client.println("Content-Type: application/json");
+    client.println();
+    client.println(data);
+    client.flush();
+  } else {
+    Serial.printlnf("CONNECTION FAILED: %s:%d", address, port);
+  }
+
+  // always publish to serial
+  Serial.println(data);
+}
+
+// returns weather data as a JSON string
+String getWeatherData() {
+  return (
+    "{ \"temperature\": " +
+    String(temp, 3) +
+    ", \"humidity\": " +
+    String(humidity, 3) +
+    ", \"pressure\": " +
+    String(pascals / 100, 3) +
+    ", \"windDirection\": " +
+    String(windD, 1) +
+    ", \"windSpeed\": " +
+    String(windS, 3) +
+    ", \"rain\": " +
+    String(rain, 3) +
+    ", \"lux\": " +
+    String(lux, 3) +
+    " }"
+  );
 }
