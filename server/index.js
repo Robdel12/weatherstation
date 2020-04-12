@@ -27,6 +27,7 @@ if (ENV === 'production') {
 
 app.use(bodyParser.json());
 app.use('/v1', require('./v1/routes'));
+app.use('/v2', require('./v2/routes'));
 app.use(express.static(path.resolve('../app/dist')));
 
 app.get(/\/[^.]*$/, (req, res) => {
@@ -55,6 +56,7 @@ MongoClient.connect(MONGODB_URI, {
   // Initialize websockets.
   let wss = app.locals.wss = {};
   wss.v1 = new WebSocket.Server({ noServer: true });
+  wss.v2 = new WebSocket.Server({ noServer: true });
   wss.send = (v, data) => {
     let message = JSON.stringify(data);
     wss[v].clients.forEach(ws => ws.send(message));
