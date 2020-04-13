@@ -44,6 +44,7 @@ let styles = {
 };
 
 function focusRef(node) {
+  // eslint-disable-next-line no-unused-expressions
   node?.focus();
 }
 
@@ -72,7 +73,7 @@ function Live({ classes }) {
 
   useEffect(() => {
     let protocol = window.location.protocol === 'https' ? 'wss://' : 'ws://';
-    let hasPort = !!window.location.port ? `:${window.location.port}` : '';
+    let hasPort = window.location.port ? `:${window.location.port}` : '';
     let hostname = `${window.location.hostname}${hasPort}`;
     // let socket = new WebSocket(`ws://weather.deluca.house/v1`);
     let socket = new WebSocket(`${protocol}${hostname}/v1`);
