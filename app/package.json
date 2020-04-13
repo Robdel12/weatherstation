@@ -25,7 +25,7 @@
     "babel-loader": "^8.1.0",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.4.2",
-    "dayjs": "^1.8.23",
+    "dayjs": "^1.8.24",
     "eslint-plugin-react": "^7.19.0",
     "html-webpack-plugin": "^4.0.4",
     "interactor.js": "^1.6.1",
