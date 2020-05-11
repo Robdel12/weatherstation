@@ -4182,12 +4182,7 @@ got@^9.6.0:
     to-readable-stream "^1.0.0"
     url-parse-lax "^3.0.0"
 
-graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.3.tgz#4a12ff1b60376ef09862c2093edd908328be8423"
-  integrity sha512-a30VEBm4PEdx1dRB7MFK7BejejvCvBronbLjht+sHuGYj8PHs7M/5Z+rt5lw551vZ7yfTCj4Vuyy3mSJytDWRQ==
-
-graceful-fs@^4.2.4:
+graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.4:
   version "4.2.4"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.4.tgz#2256bde14d3632958c465ebc96dc467ca07a29fb"
   integrity sha512-WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==
@@ -5270,10 +5265,10 @@ karma-webpack@^4.0.2:
     source-map "^0.7.3"
     webpack-dev-middleware "^3.7.0"
 
-karma@^5.0.4:
-  version "5.0.4"
-  resolved "https://registry.yarnpkg.com/karma/-/karma-5.0.4.tgz#b374a1e541ad66da668460b99c6faf20cfffc97a"
-  integrity sha512-UGqTe2LBiGQBXRN+Fygeiq63tbfOX45639SKSbPkLpARwnxROWJZg+froGkpHxr84FXCe8UGCf+1PITM6frT5w==
+karma@^5.0.5:
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/karma/-/karma-5.0.5.tgz#f7716f459f354734a7856ef9ed67fe0a38270aa4"
+  integrity sha512-Q4Su7kNwkTgqS+KbSCYgH0p4a/0JIxVLyp7qKNV7vgPNhIF4kIoh0GlUfMKpw67BrR3hgPQSJoxgF7xnzUtPpg==
   dependencies:
     body-parser "^1.16.1"
     braces "^3.0.2"
