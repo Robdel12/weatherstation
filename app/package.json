@@ -39,7 +39,7 @@
     "pretender": "^3.4.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-router-dom": "^5.1.2",
+    "react-router-dom": "^5.2.0",
     "style-loader": "^1.2.0",
     "testing-hooks": "^0.2.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
