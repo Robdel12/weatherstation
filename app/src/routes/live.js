@@ -18,28 +18,28 @@ function avgCollection(collection) {
     {
       temp: 0,
       pressure: 0,
-      humidity: 0,
+      humidity: 0
     }
   );
 
   return {
     temp: sum.temp / collection.length,
     pressure: sum.pressure / collection.length,
-    humidity: sum.humidity / collection.length,
+    humidity: sum.humidity / collection.length
   };
 }
 
 let styles = {
   container: {
-    marginTop: '20px',
+    marginTop: '20px'
   },
   title: {
-    marginLeft: '10px',
+    marginLeft: '10px'
   },
   gridItem: {
     padding: '10px',
-    minWidth: '275px',
-  },
+    minWidth: '275px'
+  }
 };
 
 function focusRef(node) {
@@ -54,7 +54,7 @@ function Live({ classes }) {
     pressure: 0,
     humidity: 0,
     currentWindDirection: '',
-    currentWindSpeed: 0,
+    currentWindSpeed: 0
   });
 
   function updateWeather({ data }) {

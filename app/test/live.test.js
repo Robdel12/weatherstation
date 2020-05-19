@@ -13,7 +13,7 @@ let mockData = {
   humidity: 33.33,
   pressure: 991.23,
   currentWindSpeed: 2.22,
-  currentWindDirection: 'West',
+  currentWindDirection: 'West'
 };
 
 describe('Acceptance - Live', () => {
@@ -40,9 +40,10 @@ describe('Acceptance - Live', () => {
   it('renders the live route', async () => {
     // prettier-ignore
     await app
-      .assert.live(0).temp.text('81 F')
-      .assert.live(0).humidity.text('33%')
-      .assert.live(0).wind.text('2.22 mph (West)')
+      .assert.live(0).wind.text('2.22 mph')
+      .assert.live(1).temp.text('81 F')
+      .assert.live(2).pressure.text('991 hPa')
+      .assert.live(3).humidity.text('33%')
       .snapshot('Live');
   });
 
