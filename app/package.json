@@ -36,6 +36,7 @@
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
     "karma-webpack": "^4.0.2",
+    "mock-socket": "^9.0.3",
     "pretender": "^3.4.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

@@ -1,13 +1,33 @@
-import React, { Component, createRef } from 'react';
-import WeatherModel from '../models/weather';
-import { processResponse } from '../utils';
+import React, { useState, useEffect } from 'react';
 
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
-import Loading from '../components/loading';
+
+function avgCollection(collection) {
+  let sum = collection.reduce(
+    (acc, cv, i, src) => {
+      acc.temp += cv.temp;
+      acc.pressure += cv.pressure;
+      acc.humidity += cv.humidity;
+
+      return acc;
+    },
+    {
+      temp: 0,
+      pressure: 0,
+      humidity: 0
+    }
+  );
+
+  return {
+    temp: sum.temp / collection.length,
+    pressure: sum.pressure / collection.length,
+    humidity: sum.humidity / collection.length
+  };
+}
 
 let styles = {
   container: {
@@ -22,123 +42,97 @@ let styles = {
   }
 };
 
-let $heading = createRef();
-
-class LiveFeed extends Component {
-  state = {
-    data: [],
-    isLoading: true,
-    error: null
-  };
-
-  hasLoaded() {
-    if ($heading.current) {
-      $heading.current.focus();
-    }
-  }
-
-  componentDidMount() {
-    fetch('/v1/weather?limit=3')
-      .then(res => processResponse(res))
-      .then(weather => {
-        let data = weather.map(point => new WeatherModel(point));
-
-        this.setState({
-          data,
-          isLoading: false
-        });
-
-        this.hasLoaded();
-        this.pollForData();
-      })
-      .catch(error => {
-        this.setState({
-          error
-        });
-      });
-  }
-
-  pollForData() {
-    this.poller = window.setInterval(() => {
-      if (!document.hidden) {
-        fetch('/v1/weather')
-          .then(res => processResponse(res))
-          .then(weather => {
-            let data = weather.map(point => new WeatherModel(point));
-
-            this.setState({ data });
-          })
-          .catch(error => {
-            this.setState({
-              error
-            });
-          });
-      }
-    }, 3500);
-  }
-
-  componentWillUnmount() {
-    window.clearTimeout(this.poller);
-  }
-
-  render() {
-    let { data, error, isLoading } = this.state;
-    let { classes } = this.props;
-
-    if (isLoading) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return (
-        <span>
-          Robert needs to fix this: {error.text} ({error.status})
-        </span>
-      );
-    }
-
-    return (
-      <div className={classes.container} data-test-live-route>
-        <Typography variant="h3" component="h1" gutterBottom className={classes.title}>
-          <span tabIndex={-1} ref={$heading}>
-            Live weather
-          </span>
-        </Typography>
-
-        <Grid container spacing={0}>
-          {data.map((dataPoint, index) => (
-            <Grid item xs key={dataPoint.data._id} className={classes.gridItem}>
-              <Card data-test-live-card>
-                <CardContent>
-                  <Typography variant="h5" component="h2" gutterBottom data-test-time>
-                    {dataPoint.displayTime}
-                  </Typography>
-                  <Typography variant="body1" gutterBottom data-test-temp>
-                    {dataPoint.temp} F
-                  </Typography>
-                  <Typography variant="body1" gutterBottom data-test-humidity>
-                    {dataPoint.humidity}%
-                  </Typography>
-                  <Typography variant="body1" gutterBottom data-test-pressure>
-                    {dataPoint.pressure} hPa
-                  </Typography>
-                  <Typography variant="body1" gutterBottom data-test-wind>
-                    {dataPoint.currentWindSpeed} mph ({dataPoint.currentWindDirection})
-                  </Typography>
-                  <Typography variant="body1" gutterBottom data-test-rain>
-                    {dataPoint.rain} in
-                  </Typography>
-                  <Typography variant="body1" gutterBottom data-test-baro-temp>
-                    Barometer temp {dataPoint.barometerTemp} F
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </div>
-    );
-  }
+function focusRef(node) {
+  // eslint-disable-next-line no-unused-expressions
+  node?.focus();
 }
 
-export default withStyles(styles)(LiveFeed);
+function Live({ classes }) {
+  let [collection, updateCollection] = useState([]);
+  let [rawData, updateRawData] = useState({
+    temp: 0,
+    pressure: 0,
+    humidity: 0,
+    currentWindDirection: '',
+    currentWindSpeed: 0
+  });
+
+  function updateWeather({ data }) {
+    let parsedData = JSON.parse(data);
+    updateRawData(parsedData);
+
+    // Keep 15 recods around to avg (about 30 seconds of data)
+    if (collection.length > 15) {
+      collection = collection.slice(0, 14);
+    }
+
+    collection = collection.concat(parsedData);
+    updateCollection(collection);
+  }
+
+  useEffect(() => {
+    let protocol = window.location.protocol === 'https' ? 'wss://' : 'ws://';
+    let hasPort = window.location.port ? `:${window.location.port}` : '';
+    let hostname = `${window.location.hostname}${hasPort}`;
+    // let socket = new WebSocket(`ws:weather.deluca.house/v1`);
+    let socket = new WebSocket(`${protocol}${hostname}/v1`);
+
+    socket.addEventListener('message', updateWeather);
+    return () => socket.close();
+  }, []);
+
+  let data = collection.length < 3 ? rawData : avgCollection(collection);
+
+  return (
+    <div className={classes.container} data-test-live-route>
+      <Typography variant="h3" component="h1" gutterBottom className={classes.title}>
+        <span tabIndex={-1} ref={focusRef}>
+          Live weather
+        </span>
+      </Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm>
+          <Card data-test-live-card>
+            <CardContent>
+              <Typography variant="h4" gutterBottom data-test-wind>
+                {rawData.currentWindSpeed.toFixed(2)} mph
+              </Typography>
+              <Typography variant="h6" gutterBottom data-test-wind-direction>
+                {rawData.currentWindDirection}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm>
+          <Card data-test-live-card>
+            <CardContent>
+              <Typography variant="h4" gutterBottom data-test-temp>
+                {parseInt(data.temp, 10)} F
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm>
+          <Card data-test-live-card>
+            <CardContent>
+              <Typography variant="h4" gutterBottom data-test-pressure>
+                {parseInt(data.pressure, 10)} hPa
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm>
+          <Card data-test-live-card>
+            <CardContent>
+              <Typography variant="h4" gutterBottom data-test-humidity>
+                {parseInt(data.humidity, 10)}%
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </div>
+  );
+}
+
+export default withStyles(styles)(Live);
