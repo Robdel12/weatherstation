@@ -71,7 +71,7 @@ function Live({ classes }) {
   }
 
   useEffect(() => {
-    let protocol = window.location.protocol === 'https' ? 'wss://' : 'ws://';
+    let protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
     let hasPort = window.location.port ? `:${window.location.port}` : '';
     let hostname = `${window.location.hostname}${hasPort}`;
     // let socket = new WebSocket(`ws:weather.deluca.house/v1`);
