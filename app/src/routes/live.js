@@ -9,21 +9,21 @@ import CardContent from '@material-ui/core/CardContent';
 function avgCollection(collection) {
   let sum = collection.reduce(
     (acc, cv, i, src) => {
-      acc.temp += cv.temp;
+      acc.temperature += cv.temperature;
       acc.pressure += cv.pressure;
       acc.humidity += cv.humidity;
 
       return acc;
     },
     {
-      temp: 0,
+      temperature: 0,
       pressure: 0,
       humidity: 0
     }
   );
 
   return {
-    temp: sum.temp / collection.length,
+    temperature: sum.temperature / collection.length,
     pressure: sum.pressure / collection.length,
     humidity: sum.humidity / collection.length
   };
@@ -50,11 +50,11 @@ function focusRef(node) {
 function Live({ classes }) {
   let [collection, updateCollection] = useState([]);
   let [rawData, updateRawData] = useState({
-    temp: 0,
+    temperature: 0,
     pressure: 0,
     humidity: 0,
-    currentWindDirection: '',
-    currentWindSpeed: 0
+    windSpeed: 0,
+    windDirection: 0
   });
 
   function updateWeather({ data }) {
@@ -95,10 +95,10 @@ function Live({ classes }) {
           <Card data-test-live-card>
             <CardContent>
               <Typography variant="h4" gutterBottom data-test-wind>
-                {rawData.currentWindSpeed.toFixed(2)} mph
+                {rawData.windSpeed.toFixed(2)} mph
               </Typography>
               <Typography variant="h6" gutterBottom data-test-wind-direction>
-                {rawData.currentWindDirection}
+                {rawData.windDirection}
               </Typography>
             </CardContent>
           </Card>
@@ -106,8 +106,8 @@ function Live({ classes }) {
         <Grid item xs={12} sm>
           <Card data-test-live-card>
             <CardContent>
-              <Typography variant="h4" gutterBottom data-test-temp>
-                {parseInt(data.temp, 10)} F
+              <Typography variant="h4" gutterBottom data-test-temperature>
+                {parseInt(data.temperature, 10)} F
               </Typography>
             </CardContent>
           </Card>

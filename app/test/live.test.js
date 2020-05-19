@@ -9,11 +9,11 @@ let protocol = window.location.protocol === 'https' ? 'wss://' : 'ws://';
 let hasPort = window.location.port ? `:${window.location.port}` : '';
 let hostname = `${window.location.hostname}${hasPort}`;
 let mockData = {
-  temp: 81.0,
+  temperature: 81.0,
   humidity: 33.33,
   pressure: 991.23,
-  currentWindSpeed: 2.22,
-  currentWindDirection: 'West'
+  windSpeed: 2.22,
+  windDirection: 'West'
 };
 
 describe('Acceptance - Live', () => {

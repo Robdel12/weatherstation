@@ -5,7 +5,7 @@ import percySnapshot from '@interactor/percy';
 class DataCardInteractor {
   static defaultScope = '[data-test-data-card]';
 
-  temp = scoped('[data-test-temp]');
+  temp = scoped('[data-test-temperature]');
   wind = scoped('[data-test-wind]');
   rain = scoped('[data-test-rain]');
   heading = scoped('[data-test-heading]');

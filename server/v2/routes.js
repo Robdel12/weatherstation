@@ -6,16 +6,19 @@ const rootValue = require('./queries');
 const router = express.Router();
 
 router.post('/collect', (req, res) => {
-  req.app.locals.db.collection('weather/v2')
-    .insertOne({
-      temperature: req.body.data.temperature,
-      pressure: req.body.data.pressure,
-      humidity: req.body.data.humidity,
-      windSpeed: req.body.data.windSpeed,
-      windDirection: req.body.data.windDirection,
-      rain: req.body.data.rain,
+  let data = JSON.parse(req.body.data);
+
+  req.app.locals.db.collection('weather/v2').insertOne(
+    {
+      temperature: data.temperature,
+      pressure: data.pressure,
+      humidity: data.humidity,
+      windSpeed: data.windSpeed,
+      windDirection: data.windDirection,
+      rain: data.rain,
       createdAt: new Date()
-    }, (err, doc) => {
+    },
+    (err, doc) => {
       if (err) {
         res.status(500).json({
           error: 'Failed to create new weather data point.'

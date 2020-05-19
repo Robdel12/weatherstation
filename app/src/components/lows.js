@@ -22,11 +22,11 @@ class LowComponent extends Component {
     return (
       <DataCard apiEndpoint={`${this.props.lowType}-lows`} hasLoaded={this.props.hasLoaded}>
         <DataConsumer>
-          {data => (
+          {(data) => (
             <Card data-test-low-component>
               <CardContent>
                 {this.renderHeader()}
-                <Typography variant="body1" gutterBottom data-test-temp>
+                <Typography variant="body1" gutterBottom data-test-temperature>
                   Temp: {parseFloat(data.lowTemp).toFixed(2)} F
                 </Typography>
                 <Typography variant="body1" gutterBottom data-test-pressure>

@@ -22,11 +22,11 @@ class HighComponent extends Component {
     return (
       <DataCard apiEndpoint={`${this.props.highType}-highs`} hasLoaded={this.props.hasLoaded}>
         <DataConsumer>
-          {data => (
+          {(data) => (
             <Card data-test-high-component>
               <CardContent>
                 {this.renderHeader()}
-                <Typography variant="body1" gutterBottom data-test-temp>
+                <Typography variant="body1" gutterBottom data-test-temperature>
                   Temp: {parseFloat(data.highTemp).toFixed(2)} F
                 </Typography>
                 <Typography variant="body1" gutterBottom data-test-pressure>

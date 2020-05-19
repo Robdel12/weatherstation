@@ -22,11 +22,11 @@ class AvgComponent extends Component {
     return (
       <DataCard apiEndpoint={`${this.props.avgType}-average`} hasLoaded={this.props.hasLoaded}>
         <DataConsumer>
-          {data => (
+          {(data) => (
             <Card data-test-avg-component>
               <CardContent>
                 {this.renderHeader()}
-                <Typography variant="body1" gutterBottom data-test-temp>
+                <Typography variant="body1" gutterBottom data-test-temperature>
                   Temp: {parseFloat(data.avgTemp).toFixed(2)} F
                 </Typography>
                 <Typography variant="body1" gutterBottom data-test-baro-temp>
