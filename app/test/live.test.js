@@ -21,7 +21,7 @@ describe('Acceptance - Live', () => {
   let mockServer;
 
   beforeEach(async () => {
-    mockServer = new Server(`${protocol}${hostname}/v1`);
+    mockServer = new Server(`${protocol}${hostname}/v2`);
 
     await mount(<App />);
 

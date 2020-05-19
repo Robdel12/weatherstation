@@ -74,8 +74,8 @@ function Live({ classes }) {
     let protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
     let hasPort = window.location.port ? `:${window.location.port}` : '';
     let hostname = `${window.location.hostname}${hasPort}`;
-    // let socket = new WebSocket(`ws:weather.deluca.house/v1`);
-    let socket = new WebSocket(`${protocol}${hostname}/v1`);
+    // let socket = new WebSocket(`ws:weather.deluca.house/v2`);
+    let socket = new WebSocket(`${protocol}${hostname}/v2`);
 
     socket.addEventListener('message', updateWeather);
     return () => socket.close();
