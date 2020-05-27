@@ -1,5 +1,4 @@
 const timeframe = require('./timeframe');
-const { PROJECT_V1_TO_V2 } = require('./migrate');
 
 // Calulate average wind direction via a MongoDB query. Sum of x & y is
 // accumulated to preserve memory.
@@ -107,8 +106,8 @@ function groupBy(by, params, optimize) {
   ];
 }
 
-// Common aggregate helper to query data by a timeframe, migrate V1 data to V2,
-// and sort that data. Queries without "many" will always return a single entry.
+// Common aggregate helper to query data by a timeframe, and sort that
+// data. Queries without "many" will always return a single entry.
 function aggregate(collection, stages, params) {
   let { from, to, many, sort, order, limit } = params;
   let [$gt, $lt] = timeframe.range(from, to);
@@ -116,7 +115,6 @@ function aggregate(collection, stages, params) {
   return new Promise((resolve, reject) => {
     collection.aggregate([
       { $match: { createdAt: { $gt, $lt } } },
-      { $project: PROJECT_V1_TO_V2 },
       ...[].concat(stages),
       { $sort: { [sort || 'date']: order || -1 } },
       (!many || limit) && { $limit: limit || 1 }
@@ -130,7 +128,7 @@ function aggregate(collection, stages, params) {
 module.exports = {
   total({ from, to }, { app }, info) {
     return aggregate(
-      app.locals.db.collection('weather'),
+      app.locals.db.collection('weather/v2'),
       groupBy(null, GROUP.TOTAL, info),
       { from, to }
     );
@@ -138,7 +136,7 @@ module.exports = {
 
   totals({ by, from, to, sort, order, limit }, { app }, info) {
     return aggregate(
-      app.locals.db.collection('weather'),
+      app.locals.db.collection('weather/v2'),
       groupBy(by, GROUP.TOTAL, info),
       { from, to, sort, order, limit, many: true }
     );
@@ -146,7 +144,7 @@ module.exports = {
 
   average({ from, to }, { app }, info) {
     return aggregate(
-      app.locals.db.collection('weather'),
+      app.locals.db.collection('weather/v2'),
       groupBy(null, GROUP.AVERAGE, info).concat(AVG_WIND_DIR.STAGE),
       { from, to }
     );
@@ -154,7 +152,7 @@ module.exports = {
 
   averages({ by, from, to, sort, order, limit }, { app }, info) {
     return aggregate(
-      app.locals.db.collection('weather'),
+      app.locals.db.collection('weather/v2'),
       groupBy(by, GROUP.AVERAGE, info).concat(AVG_WIND_DIR.STAGE),
       { from, to, sort, order, limit, many: true }
     );
@@ -162,7 +160,7 @@ module.exports = {
 
   highest({ from, to }, { app }, info) {
     return aggregate(
-      app.locals.db.collection('weather'),
+      app.locals.db.collection('weather/v2'),
       groupBy(null, GROUP.HIGH, info),
       { from, to }
     );
@@ -170,7 +168,7 @@ module.exports = {
 
   highs({ by, from, to, sort, order, limit }, { app }, info) {
     return aggregate(
-      app.locals.db.collection('weather'),
+      app.locals.db.collection('weather/v2'),
       groupBy(by, GROUP.HIGH, info),
       { from, to, sort, order, limit, many: true }
     );
@@ -178,7 +176,7 @@ module.exports = {
 
   lowest({ from, to }, { app }, info) {
     return aggregate(
-      app.locals.db.collection('weather'),
+      app.locals.db.collection('weather/v2'),
       groupBy(null, GROUP.LOW, info),
       { from, to }
     );
@@ -186,7 +184,7 @@ module.exports = {
 
   lows({ by, from, to, sort, order, limit }, { app }, info) {
     return aggregate(
-      app.locals.db.collection('weather'),
+      app.locals.db.collection('weather/v2'),
       groupBy(by, GROUP.LOW, info),
       { from, to, sort, order, limit, many: true }
     );
