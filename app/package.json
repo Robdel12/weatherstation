@@ -29,7 +29,7 @@
     "eslint-plugin-react": "^7.20.0",
     "html-webpack-plugin": "^4.3.0",
     "interactor.js": "^1.6.1",
-    "karma": "^5.0.9",
+    "karma": "^5.1.0",
     "karma-coverage": "^2.0.2",
     "karma-firefox-launcher": "^1.3.0",
     "karma-junit-reporter": "^2.0.1",
