@@ -26,7 +26,7 @@
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.6.0",
     "dayjs": "^1.8.28",
-    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react": "^7.20.1",
     "html-webpack-plugin": "^4.3.0",
     "interactor.js": "^1.6.1",
     "karma": "^5.1.0",
