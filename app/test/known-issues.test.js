@@ -21,7 +21,7 @@ describe('Acceptance - Known Issues route', () => {
     // prettier-ignore
     await page
       .appBar.hamburgerMenu.click()
-      .appBar.links(5).click();
+      .appBar.links(2).click();
   });
 
   it('renders an issue in the list', async () => {
