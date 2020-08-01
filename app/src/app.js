@@ -8,12 +8,9 @@ import './global-styles.css';
 
 import Home from './routes/home';
 import LiveFeed from './routes/live';
-import Averages from './routes/averages';
-import Highs from './routes/highs';
-import Lows from './routes/lows';
 import Issues from './routes/issues';
 
-let styles = theme => ({
+let styles = (theme) => ({
   container: {
     [theme.breakpoints.down('sm')]: {
       margin: '8px'
@@ -57,10 +54,7 @@ class App extends Component {
             <Switch>
               <Route key="1" exact path="/" component={Home} />
               <Route key="2" exact path="/live" component={LiveFeed} />
-              <Route key="3" exact path="/averages" component={Averages} />
-              <Route key="4" exact path="/highs" component={Highs} />
-              <Route key="5" exact path="/lows" component={Lows} />
-              <Route key="6" exact path="/issues" component={Issues} />
+              <Route key="3" exact path="/issues" component={Issues} />
             </Switch>
           </div>
         </div>

@@ -115,24 +115,15 @@ describe('AppBar Component', () => {
   it('has 6 links with the correct label', async () => {
     await mount(
       <MemoryRouter>
-        <AppBar
-          drawerIsOpen={true}
-          openDrawer={() => {}}
-          closeDrawer={() => {}}
-          onRefresh={() => {}}
-        />
+        <AppBar drawerIsOpen={true} openDrawer={() => {}} closeDrawer={() => {}} onRefresh={() => {}} />
       </MemoryRouter>
     );
 
     // prettier-ignore
-    await navBar.assert.links().count(6)
+    await navBar.assert.links().count(3)
       .assert.links(0).text('Home')
       .assert.links(1).text('Live')
-      .assert.links(1).text('Live')
-      .assert.links(2).text('Averages')
-      .assert.links(3).text('Highs')
-      .assert.links(4).text('Lows')
-      .assert.links(5).text('Known issues')
+      .assert.links(2).text('Known issues')
       .snapshot('open');
   });
 });

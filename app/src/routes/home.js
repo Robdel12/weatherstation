@@ -1,5 +1,4 @@
 import React, { createRef } from 'react';
-import AvgComponent from '../components/average';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
@@ -11,9 +10,9 @@ let styles = {
 
 let $heading = createRef();
 
-function hasLoaded() {
-  $heading.current.focus();
-}
+// function hasLoaded() {
+//  $heading.current.focus();
+// }
 
 function Home({ classes }) {
   return (
@@ -23,7 +22,7 @@ function Home({ classes }) {
           Current weather
         </span>
       </Typography>
-      <AvgComponent avgType="ten-min" noHeader hasLoaded={hasLoaded} />
+      <p>lol todo</p>
     </>
   );
 }
