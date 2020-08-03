@@ -16,7 +16,7 @@
     "express": "^4.17.1",
     "express-graphql": "^0.9.0",
     "graphql": "^15.3.0",
-    "mongodb": "^3.5.9",
+    "mongodb": "^3.6.0",
     "node-github-graphql": "^0.2.7",
     "ws": "^7.3.1"
   },
