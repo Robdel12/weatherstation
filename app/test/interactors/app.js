@@ -1,20 +1,22 @@
 import percySnapshot from '@interactor/percy';
 import interactor, { scoped, collection } from 'interactor.js';
-import AppBar from '../../src/components/__tests__/app-bar.interactor';
-import DataCardInteractor from '../../src/components/__tests__/data-card.interactor';
 
 @interactor
 class AppInteractor {
-  navBar = new AppBar();
+  navBar = scoped('[data-test-nav]', {
+    link: collection('li a')
+  });
+
   pageHeading = scoped('h1', {
     nested: scoped('span')
   });
 
-  tenMinAvg = new DataCardInteractor();
-  lows = collection('[data-test-low-component]', DataCardInteractor);
-  highs = collection('[data-test-high-component]', DataCardInteractor);
-  averages = collection('[data-test-avg-component]', DataCardInteractor);
-  live = collection('[data-test-live-card]', DataCardInteractor);
+  live = scoped('[data-test-live-route]', {
+    wind: scoped('[data-test-wind]'),
+    temp: scoped('[data-test-temperature]'),
+    pressure: scoped('[data-test-pressure]'),
+    humidity: scoped('[data-test-humidity]')
+  });
 
   snapshot(title, options) {
     return percySnapshot(`Acceptance - ${title}`, options);

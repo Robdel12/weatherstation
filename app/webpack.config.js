@@ -10,9 +10,7 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   inject: 'body'
 });
 
-const CopyImages = new CopyWebpackPlugin([
-  { from: 'src/images', to: 'images' }
-]);
+const CopyImages = new CopyWebpackPlugin([{ from: 'src/images', to: 'images' }]);
 
 let plugins = [HtmlWebpackPluginConfig, CopyImages];
 
@@ -38,7 +36,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader', 'postcss-loader']
       }
     ]
   },

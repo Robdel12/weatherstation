@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import Card from '@material-ui/core/Card';
-import Grid from '@material-ui/core/Grid';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import CardContent from '@material-ui/core/CardContent';
-
 function avgCollection(collection) {
   let sum = collection.reduce(
     (acc, cv, i, src) => {
@@ -29,25 +23,12 @@ function avgCollection(collection) {
   };
 }
 
-let styles = {
-  container: {
-    marginTop: '20px'
-  },
-  title: {
-    marginLeft: '10px'
-  },
-  gridItem: {
-    padding: '10px',
-    minWidth: '275px'
-  }
-};
-
 function focusRef(node) {
   // eslint-disable-next-line no-unused-expressions
   node?.focus();
 }
 
-function Live({ classes }) {
+function Live() {
   let [collection, updateCollection] = useState([]);
   let [rawData, updateRawData] = useState({
     temperature: 0,
@@ -84,55 +65,37 @@ function Live({ classes }) {
   let data = collection.length < 3 ? rawData : avgCollection(collection);
 
   return (
-    <div className={classes.container} data-test-live-route>
-      <Typography variant="h3" component="h1" gutterBottom className={classes.title}>
-        <span tabIndex={-1} ref={focusRef}>
-          Live weather
-        </span>
-      </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm>
-          <Card data-test-live-card>
-            <CardContent>
-              <Typography variant="h4" gutterBottom data-test-wind>
-                {rawData.windSpeed.toFixed(2)} mph
-              </Typography>
-              <Typography variant="h6" gutterBottom data-test-wind-direction>
-                {rawData.windDirection}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm>
-          <Card data-test-live-card>
-            <CardContent>
-              <Typography variant="h4" gutterBottom data-test-temperature>
-                {parseInt(data.temperature, 10)} F
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm>
-          <Card data-test-live-card>
-            <CardContent>
-              <Typography variant="h4" gutterBottom data-test-pressure>
-                {parseInt(data.pressure, 10)} hPa
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm>
-          <Card data-test-live-card>
-            <CardContent>
-              <Typography variant="h4" gutterBottom data-test-humidity>
-                {parseInt(data.humidity, 10)}%
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+    <div data-test-live-route>
+      <h1 ref={focusRef} className="text-5xl font-semibold mb-6">
+        Live weather
+      </h1>
+      <div className="md:flex justify-around">
+        <div data-test-live-card="wind" className="bg-gray-200 m-3 p-4 flex-grow">
+          <h4 data-test-wind className="text-3xl">
+            {rawData.windSpeed.toFixed(2)} mph
+          </h4>
+          <h6 data-test-wind-direction className="text-2xl">
+            {rawData.windDirection}
+          </h6>
+        </div>
+        <div data-test-live-card="temp" className="bg-gray-200 m-3 p-4 flex-grow">
+          <h4 data-test-temperature className="text-3xl">
+            {parseInt(data.temperature, 10)} F
+          </h4>
+        </div>
+        <div data-test-live-card="pressure" className="bg-gray-200 m-3 p-4 flex-grow">
+          <h4 data-test-pressure className="text-3xl">
+            {parseInt(data.pressure, 10)} hPa
+          </h4>
+        </div>
+        <div data-test-live-card="humidity" className="bg-gray-200 m-3 p-4 flex-grow">
+          <h4 data-test-humidity className="text-3xl">
+            {parseInt(data.humidity, 10)}%
+          </h4>
+        </div>
+      </div>
     </div>
   );
 }
 
-export default withStyles(styles)(Live);
+export default Live;

@@ -1,12 +1,4 @@
 import React, { createRef } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-
-let styles = {
-  heading: {
-    marginLeft: '10px'
-  }
-};
 
 let $heading = createRef();
 
@@ -14,17 +6,14 @@ let $heading = createRef();
 //  $heading.current.focus();
 // }
 
-function Home({ classes }) {
+function Home() {
   return (
     <>
-      <Typography component="h1" variant="h3" gutterBottom>
-        <span ref={$heading} tabIndex={-1} className={classes.header}>
-          Current weather
-        </span>
-      </Typography>
-      <p>lol todo</p>
+      <h1 ref={$heading} className="text-5xl font-semibold">
+        Current weather
+      </h1>
     </>
   );
 }
 
-export default withStyles(styles)(Home);
+export default Home;
