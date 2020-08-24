@@ -9,7 +9,9 @@ let $heading = createRef();
 function Home() {
   return (
     <>
-      <h1 ref={$heading}>Current weather</h1>
+      <h1 ref={$heading} className="text-5xl font-semibold">
+        Current weather
+      </h1>
     </>
   );
 }

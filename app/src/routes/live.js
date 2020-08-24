@@ -66,20 +66,32 @@ function Live() {
 
   return (
     <div data-test-live-route>
-      <h1 ref={focusRef}>Live weather</h1>
-      <div data-test-live-card>
-        <h4 data-test-wind>{rawData.windSpeed.toFixed(2)} mph</h4>
-        <h6 data-test-wind-direction>{rawData.windDirection}</h6>
-      </div>
-      <div data-test-live-card>
-        <h4 data-test-temperature>{parseInt(data.temperature, 10)} F</h4>
-      </div>
-      <div data-test-live-card>
-        <div>
-          <h4 data-test-pressure>{parseInt(data.pressure, 10)} hPa</h4>
+      <h1 ref={focusRef} className="text-5xl font-semibold mb-6">
+        Live weather
+      </h1>
+      <div className="md:flex justify-around">
+        <div data-test-live-card className="bg-gray-200 m-3 p-4 flex-grow">
+          <h4 data-test-wind className="text-3xl">
+            {rawData.windSpeed.toFixed(2)} mph
+          </h4>
+          <h6 data-test-wind-direction className="text-2xl">
+            {rawData.windDirection}
+          </h6>
         </div>
-        <div data-test-live-card>
-          <h4 data-test-humidity>{parseInt(data.humidity, 10)}%</h4>
+        <div data-test-live-card className="bg-gray-200 m-3 p-4 flex-grow">
+          <h4 data-test-temperature className="text-3xl">
+            {parseInt(data.temperature, 10)} F
+          </h4>
+        </div>
+        <div data-test-live-card className="bg-gray-200 m-3 p-4 flex-grow">
+          <h4 data-test-pressure className="text-3xl">
+            {parseInt(data.pressure, 10)} hPa
+          </h4>
+        </div>
+        <div data-test-live-card className="bg-gray-200 m-3 p-4 flex-grow">
+          <h4 data-test-humidity className="text-3xl">
+            {parseInt(data.humidity, 10)}%
+          </h4>
         </div>
       </div>
     </div>

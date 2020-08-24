@@ -76,11 +76,11 @@ class Issues extends Component {
 
     return (
       <div>
-        <h1 data-test-heading ref={$heading}>
+        <h1 data-test-heading ref={$heading} className="text-5xl font-semibold mb-6">
           Known issues
         </h1>
 
-        <p>
+        <p className="mb-6">
           These are currently known issues with the weather station. If you notice anything and would like to
           report it, you can{' '}
           <a
