@@ -70,7 +70,7 @@ function Live() {
         Live weather
       </h1>
       <div className="md:flex justify-around">
-        <div data-test-live-card className="bg-gray-200 m-3 p-4 flex-grow">
+        <div data-test-live-card="wind" className="bg-gray-200 m-3 p-4 flex-grow">
           <h4 data-test-wind className="text-3xl">
             {rawData.windSpeed.toFixed(2)} mph
           </h4>
@@ -78,17 +78,17 @@ function Live() {
             {rawData.windDirection}
           </h6>
         </div>
-        <div data-test-live-card className="bg-gray-200 m-3 p-4 flex-grow">
+        <div data-test-live-card="temp" className="bg-gray-200 m-3 p-4 flex-grow">
           <h4 data-test-temperature className="text-3xl">
             {parseInt(data.temperature, 10)} F
           </h4>
         </div>
-        <div data-test-live-card className="bg-gray-200 m-3 p-4 flex-grow">
+        <div data-test-live-card="pressure" className="bg-gray-200 m-3 p-4 flex-grow">
           <h4 data-test-pressure className="text-3xl">
             {parseInt(data.pressure, 10)} hPa
           </h4>
         </div>
-        <div data-test-live-card className="bg-gray-200 m-3 p-4 flex-grow">
+        <div data-test-live-card="humidity" className="bg-gray-200 m-3 p-4 flex-grow">
           <h4 data-test-humidity className="text-3xl">
             {parseInt(data.humidity, 10)}%
           </h4>

@@ -20,10 +20,7 @@ describe('Acceptance - App', () => {
   describe('Home page', () => {
     beforeEach(async () => {
       await mount(<App />);
-      // prettier-ignore
-      await app
-        .navBar.hamburgerMenu.click()
-        .navBar.links(0).click();
+      await app.navBar.link(0).click();
     });
 
     // I'm ripping the app apart -- not going to fix this until
@@ -33,10 +30,7 @@ describe('Acceptance - App', () => {
     });
 
     it('renders the page', async () => {
-      // prettier-ignore
-      await app
-        .assert.scoped('h1').text('Current weather')
-        .assert.tenMinAvg.exists();
+      await app.assert.scoped('h1').text('Current weather');
     });
   });
 });

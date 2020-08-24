@@ -7,7 +7,7 @@ let $heading = createRef();
 
 class Issues extends Component {
   static defaultProps = {
-    hasLoaded: function () {}
+    hasLoaded: function() {}
   };
 
   state = {
@@ -50,12 +50,10 @@ class Issues extends Component {
       <div data-test-issues-list>
         {issues.map((data) => {
           let issue = data.node;
-          let firstLabel = issue.labels.edges[0].node;
 
           return (
             <a key={issue.id} href={issue.url} data-test-issue>
               <h3 data-test-issue-title>
-                <span data-test-issue-icon={firstLabel.name}>{firstLabel.name}</span>
                 {issue.title} (#{issue.number})
               </h3>
               <span

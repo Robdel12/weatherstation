@@ -12,7 +12,7 @@ class App extends Component {
     return (
       <Router>
         <div className="lg:container lg:mx-auto mx-3">
-          <nav>
+          <nav data-test-nav>
             <ul className="flex space-x-6 my-5">
               <li>
                 <Link to="/">Home</Link>
