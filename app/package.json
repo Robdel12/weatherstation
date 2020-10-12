@@ -44,7 +44,7 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "style-loader": "^2.0.0",
-    "tailwindcss": "^1.8.10",
+    "tailwindcss": "^1.8.13",
     "testing-hooks": "^0.2.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.44.2",
