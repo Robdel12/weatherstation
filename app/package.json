@@ -41,7 +41,7 @@
     "postcss-preset-env": "^6.7.0",
     "pretender": "^3.4.3",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react-dom": "^16.14.0",
     "react-router-dom": "^5.2.0",
     "style-loader": "^2.0.0",
     "tailwindcss": "^1.8.13",
