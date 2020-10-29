@@ -1,6 +1,14 @@
 import { useQuery } from 'urql';
 import React, { createRef, useState } from 'react';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  LineChart as ReLineChart,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer
+} from 'recharts';
 
 let $heading = createRef();
 
@@ -57,31 +65,18 @@ const HighsAndLowsQuery = `
 `;
 
 // wtf is this name robert
-function TheLineChart({ data, domain, dataKey, render = () => {} }) {
+function LineChart({ data, domain, dataKey, render = () => {} }) {
   return (
     <ResponsiveContainer minWidth={325} height={300}>
-      <LineChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+      <ReLineChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }} syncId="highsAndLows">
         <Line type="monotone" dataKey={dataKey} stroke="#8884d8" />
         <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
         <XAxis dataKey="date" />
         <YAxis domain={domain} />
         <Tooltip />
         {render()}
-      </LineChart>
+      </ReLineChart>
     </ResponsiveContainer>
-  );
-}
-
-function Select({ value, setFn, id, children }) {
-  return (
-    <select
-      value={value}
-      onChange={(event) => setFn(event.target.value)}
-      id={id}
-      className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-    >
-      {children}
-    </select>
   );
 }
 
@@ -108,25 +103,25 @@ function Home() {
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div>
           <label htmlFor="fromSelect">From last:</label>
-          <Select value={from} setFn={setFrom} id="fromSelect">
+          <select value={from} onChange={(event) => setBy(event.target.value)} id="fromSelect">
             <option value="last hour">Hour</option>
             <option value="last day">Day</option>
             <option value="last week">Week</option>
             <option value="last month">Month</option>
             <option value="last year">Year</option>
-          </Select>
+          </select>
         </div>
 
         <div>
           <label htmlFor="bySelect">By:</label>
-          <Select value={by} setFn={setBy} id="bySelect">
+          <select value={by} onChange={(event) => setBy(event.target.value)} id="bySelect">
             <option value="minute">Minute</option>
             <option value="hour">Hour</option>
             <option value="day">Day</option>
             <option value="week">Week</option>
             <option value="month">Month</option>
             <option value="year">Year</option>
-          </Select>
+          </select>
         </div>
       </div>
 
@@ -135,11 +130,11 @@ function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <h3 className="text-xl mb-4">Rain</h3>
-            <TheLineChart data={data.rain.reverse()} dataKey="rain" />
+            <LineChart data={data.rain.reverse()} dataKey="rain" />
           </div>
           <div>
             <h3 className="text-xl mb-4">Pressure</h3>
-            <TheLineChart
+            <LineChart
               data={zipper(data.pressureHighs, data.pressureLows).reverse()}
               dataKey="high"
               domain={[800, 1200]}
@@ -148,7 +143,7 @@ function Home() {
           </div>
           <div>
             <h3 className="text-xl mb-4">Temperature</h3>
-            <TheLineChart
+            <LineChart
               data={zipper(data.temperatureHighs, data.temperatureLows).reverse()}
               dataKey="high"
               render={() => <Line type="monotone" dataKey="low" stroke="#8884d8" />}
@@ -156,7 +151,7 @@ function Home() {
           </div>
           <div>
             <h3 className="text-xl mb-4">Humidity</h3>
-            <TheLineChart
+            <LineChart
               data={zipper(data.humidityHighs, data.humidityLows).reverse()}
               dataKey="high"
               render={() => <Line type="monotone" dataKey="low" stroke="#8884d8" />}
@@ -164,7 +159,7 @@ function Home() {
           </div>
           <div>
             <h3 className="text-xl mb-4">Wind</h3>
-            <TheLineChart data={data.wind.reverse()} dataKey="windSpeed" />
+            <LineChart data={data.wind.reverse()} dataKey="windSpeed" />
           </div>
         </div>
       )}
