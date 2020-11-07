@@ -5,7 +5,7 @@ import AppInteractor from './interactors/app';
 import { setupServer } from './utils/server';
 
 // The apps functionality is so small I can cover it in one file
-describe('Acceptance - App', () => {
+describe.skip('Acceptance - App', () => {
   let app = new AppInteractor();
   let server;
 
