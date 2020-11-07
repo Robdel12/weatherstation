@@ -125,6 +125,7 @@ const tf = {
       } else if ((m = f.match(ISO_REG))) {
         d = m[7] && tf.day.of(m[8] || 0, tf.week.of(m[7]));
         d = d || tf.set(tf.now(), m[1], m[2] - 1, m[3], m[4], m[5], m[6]);
+        // eslint-disable-next-line
         u = m[6] ? 'second' : m[5] ? 'minute' : m[4] ? 'hour'
           : (m[3] || m[8]) ? 'day' : m[7] ? 'week' : 'month';
       } else if ((m = f.match(FRAME_REG))) {

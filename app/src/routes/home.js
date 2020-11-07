@@ -16,17 +16,6 @@ let $heading = createRef();
 //  $heading.current.focus();
 // }
 
-const DEFAULT_DATA = {
-  rain: [],
-  wind: [],
-  humidityHighs: [],
-  humidityLows: [],
-  pressureHighs: [],
-  pressureLows: [],
-  temperatureHighs: [],
-  temperatureLows: []
-};
-
 const HighsAndLowsQuery = `
   query($from: String!, $by: WeatherGroup!) {
     rain:totals(from: $from, by: $by) {
@@ -86,7 +75,7 @@ function Home() {
   let [from, setFrom] = useState('last week');
   let [by, setBy] = useState('day');
 
-  let [result, reexecuteQuery] = useQuery({
+  let [result] = useQuery({
     query: HighsAndLowsQuery,
     variables: { from, by }
   });
@@ -103,7 +92,7 @@ function Home() {
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div>
           <label htmlFor="fromSelect">From last:</label>
-          <select value={from} onChange={(event) => setBy(event.target.value)} id="fromSelect">
+          <select value={from} onChange={(event) => setFrom(event.target.value)} id="fromSelect">
             <option value="last hour">Hour</option>
             <option value="last day">Day</option>
             <option value="last week">Week</option>
