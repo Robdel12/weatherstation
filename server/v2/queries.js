@@ -95,6 +95,7 @@ function groupBy(by, params, optimize) {
 
   if (optimize) {
     params = optimize.fieldNodes[0].selectionSet.selections
+      // eslint-disable-next-line
       .reduce((q, { name: { value: property } }) => !params[property] ? q : (
         Object.assign(q, { [property]: params[property] })
       ), {});

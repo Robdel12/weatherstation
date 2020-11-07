@@ -9,13 +9,13 @@ module.exports = function(config) {
       type: config.coverage === true ? 'text-summary' : config.coverage || 'none',
       check: config.converage
         ? {
-          global: {
-            statements: 100,
-            lines: 100,
-            functions: 100,
-            branches: 100
+            global: {
+              statements: 100,
+              lines: 100,
+              functions: 100,
+              branches: 100
+            }
           }
-        }
         : undefined,
       watermarks: {
         statements: [100, 100],

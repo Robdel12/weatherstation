@@ -16,3 +16,12 @@ h3 span:focus,
 h4 span:focus {
   outline: none;
 }
+
+select {
+  @apply appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight;
+  display: block;
+}
+
+select:focus {
+  @apply outline-none bg-white border-gray-500;
+}
