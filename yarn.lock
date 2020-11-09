@@ -1278,10 +1278,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
 
-"@urql/core@^1.15.0":
-  version "1.15.0"
-  resolved "https://registry.yarnpkg.com/@urql/core/-/core-1.15.0.tgz#0f87e7046330580c499bd6e0d982ac3e8917adc0"
-  integrity sha512-M0HHiyxfmRa7jsReZU1gKAxoUoM/V5VCTYldJK96zuvvYllSw9aUwW0EX3/hRJRJaFWHOkhQ1p9Nto/Oou1y4A==
+"@urql/core@^1.15.1":
+  version "1.15.1"
+  resolved "https://registry.yarnpkg.com/@urql/core/-/core-1.15.1.tgz#fa49909f2841d092796dd540cef6e9df89222560"
+  integrity sha512-a05ablx/aKNCUc9dEbx0GvE28UC0sJ1FmfsSfmJNqecYlYeb4XvSQW4FLVy0e/MjQeB9op/weiVIEw+za2ssGw==
   dependencies:
     "@graphql-typed-document-node/core" "^3.1.0"
     wonka "^4.0.14"
@@ -9025,12 +9025,12 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
-urql@^1.11.0:
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/urql/-/urql-1.11.0.tgz#177027e125307b1a2f274a2a2308d5f83edaa2a3"
-  integrity sha512-F9g7wdS9ZJESwfa2tGwpbe8GhEtPuFaSgfQ/m77d/d8yDzKEWAZbZ7AN7ctEdX1O38PjhuPTcVLFY2U4ixGfRg==
+urql@^1.11.1:
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/urql/-/urql-1.11.1.tgz#f73576d94f129ea329340c7b9ade026d4b91c7df"
+  integrity sha512-2oHC1FMnvHEMlC/WmeWe2mHzuQ37Od6xYkURvqIC25/CDe4dr0oDbhSuSPCw0PDNRWutaqmY6/ltZCk6Yu8NUw==
   dependencies:
-    "@urql/core" "^1.15.0"
+    "@urql/core" "^1.15.1"
     wonka "^4.0.14"
 
 use@^3.1.0:
