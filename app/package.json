@@ -21,7 +21,7 @@
     "@interactor/percy": "^0.2.2",
     "autoprefixer": "^9.8.6",
     "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.1.0",
+    "babel-loader": "^8.2.1",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^5.0.1",
     "dayjs": "^1.9.6",
