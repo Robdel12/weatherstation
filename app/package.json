@@ -53,6 +53,6 @@
   "dependencies": {
     "graphql": "^15.4.0",
     "recharts": "^1.8.5",
-    "urql": "^1.11.2"
+    "urql": "^1.11.3"
   }
 }
