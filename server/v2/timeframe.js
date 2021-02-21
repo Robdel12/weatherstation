@@ -145,6 +145,7 @@ const tf = {
 
       return clamp ? tf[u][clamp](d) : d;
     } catch (e) {
+      console.log('e = ', e);
       d = new Date(frame);
       if (!isNaN(d.getTime())) return d;
       throw new Error(`Unrecognizable timeframe: ${frame}`);
