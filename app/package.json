@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "graphql": "^15.5.0",
-    "recharts": "^2.0.7",
+    "recharts": "^2.0.8",
     "urql": "^2.0.1"
   }
 }
