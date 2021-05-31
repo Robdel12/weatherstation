@@ -1686,10 +1686,10 @@ acorn@^7.0.0, acorn@^7.4.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.0.tgz#e1ad486e6c54501634c6c397c5c121daa383607c"
   integrity sha512-+G7P8jJmCHr+S+cLfQxygbWhXy+8YTVGzAkpEbcLo2mLoL7tij/VG41QSHACSf5QgYRhMZYHuNc6drJaO0Da+w==
 
-agenda@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/agenda/-/agenda-4.1.0.tgz#3e796a08f3609accca0a8ea9e44727e22289d835"
-  integrity sha512-gAJGTB2UswCHmTEx0mZOttOsFnw2lEdKGoi8eFqmOMs/4mcE6WcbuqUCSZgSu9g9+/HC1gZmcsyJOUUdA//S0w==
+agenda@^4.1.3:
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/agenda/-/agenda-4.1.3.tgz#3cdf587deb889815370bee72a5c6ecb5048c4244"
+  integrity sha512-QT89CzmO67dwM3Ku7j4qLemm4VEBSMu/bLMbgbQCuE9utJEF0+ZTCCY0Cd/OkoqsMq7d92x02FWnLe7LoIUKAQ==
   dependencies:
     cron-parser "^3.0.0"
     date.js "~0.3.3"
