@@ -51,7 +51,7 @@
     "webpack-cli": "^4.7.2"
   },
   "dependencies": {
-    "graphql": "^15.5.0",
+    "graphql": "^15.5.1",
     "recharts": "^2.0.9",
     "urql": "^2.0.3"
   }
