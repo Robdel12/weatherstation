@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "expect": "^27.0.2",
-    "nodemon": "^2.0.7",
+    "nodemon": "^2.0.9",
     "timekeeper": "^2.2.0"
   }
 }
