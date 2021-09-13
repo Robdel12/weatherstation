@@ -19,7 +19,7 @@
     "graphql": "^15.5.1",
     "mongodb": "^4.0.0",
     "node-github-graphql": "^0.2.7",
-    "ws": "^7.5.3"
+    "ws": "^8.2.2"
   },
   "devDependencies": {
     "expect": "^27.0.6",
