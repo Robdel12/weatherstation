@@ -4,6 +4,7 @@
   "private": true,
   "description": "React SPA to display weather station data",
   "main": "dist/index.js",
+  "license": "MIT",
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "lint": "eslint --ignore-path ../.gitignore .",
