@@ -2,6 +2,7 @@ parser: babel-eslint
 extends:
   - ../.eslintrc
   - plugin:react/recommended
+  - plugin:cypress/recommended
 plugins:
   - react
 settings:
