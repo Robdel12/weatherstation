@@ -5,7 +5,7 @@
   "description": "React SPA to display weather station data",
   "license": "MIT",
   "scripts": {
-    "start": "parcel src/index.html",
+    "start": "parcel watch src/index.html",
     "test": "start-server-and-test 'yarn workspace server start' 8080 'cypress run'",
     "lint": "eslint --ignore-path ../.gitignore .",
     "test:percy": "percy exec -- yarn test --single-run",

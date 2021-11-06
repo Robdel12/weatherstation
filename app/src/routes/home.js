@@ -1,5 +1,5 @@
 import { useQuery } from 'urql';
-import React, { createRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
   LineChart as ReLineChart,
   Line,
@@ -9,12 +9,6 @@ import {
   Tooltip,
   ResponsiveContainer
 } from 'recharts';
-
-let $heading = createRef();
-
-// function hasLoaded() {
-//  $heading.current.focus();
-// }
 
 const HighsAndLowsQuery = `
   query($from: String!, $by: WeatherGroup!) {
@@ -57,7 +51,11 @@ const HighsAndLowsQuery = `
 function LineChart({ data, domain, dataKey, render = () => {} }) {
   return (
     <ResponsiveContainer minWidth={325} height={300}>
-      <ReLineChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }} syncId="highsAndLows">
+      <ReLineChart
+        data={data}
+        margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+        syncId="highsAndLows"
+      >
         <Line type="monotone" dataKey={dataKey} stroke="#8884d8" />
         <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
         <XAxis dataKey="date" />
@@ -69,7 +67,8 @@ function LineChart({ data, domain, dataKey, render = () => {} }) {
   );
 }
 
-let zipper = (high, low) => high.map((obj, index) => ({ ...obj, low: low[index].low }));
+let zipper = (high, low) =>
+  high.map((obj, index) => ({ ...obj, low: low[index].low }));
 
 function Home() {
   let [from, setFrom] = useState('last week');
@@ -81,18 +80,20 @@ function Home() {
   });
 
   let { data, fetching, error } = result;
-  if (error) return <p>{error}</p>;
+  if (error) return <p>{error?.message}</p>;
 
   return (
     <>
-      <h1 ref={$heading} className="text-5xl font-semibold mb-5">
-        Weather
-      </h1>
+      <h1 className="text-5xl font-semibold mb-5">Weather</h1>
       <h3 className="text-3xl mb-5">Highs & lows</h3>
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div>
           <label htmlFor="fromSelect">From last:</label>
-          <select value={from} onChange={(event) => setFrom(event.target.value)} id="fromSelect">
+          <select
+            value={from}
+            onChange={(event) => setFrom(event.target.value)}
+            id="fromSelect"
+          >
             <option value="last hour">Hour</option>
             <option value="last day">Day</option>
             <option value="last week">Week</option>
@@ -103,7 +104,11 @@ function Home() {
 
         <div>
           <label htmlFor="bySelect">By:</label>
-          <select value={by} onChange={(event) => setBy(event.target.value)} id="bySelect">
+          <select
+            value={by}
+            onChange={(event) => setBy(event.target.value)}
+            id="bySelect"
+          >
             <option value="minute">Minute</option>
             <option value="hour">Hour</option>
             <option value="day">Day</option>
@@ -127,15 +132,22 @@ function Home() {
               data={zipper(data.pressureHighs, data.pressureLows).reverse()}
               dataKey="high"
               domain={[800, 1200]}
-              render={() => <Line type="monotone" dataKey="low" stroke="#8884d8" />}
+              render={() => (
+                <Line type="monotone" dataKey="low" stroke="#8884d8" />
+              )}
             />
           </div>
           <div>
             <h3 className="text-xl mb-4">Temperature</h3>
             <LineChart
-              data={zipper(data.temperatureHighs, data.temperatureLows).reverse()}
+              data={zipper(
+                data.temperatureHighs,
+                data.temperatureLows
+              ).reverse()}
               dataKey="high"
-              render={() => <Line type="monotone" dataKey="low" stroke="#8884d8" />}
+              render={() => (
+                <Line type="monotone" dataKey="low" stroke="#8884d8" />
+              )}
             />
           </div>
           <div>
@@ -143,7 +155,9 @@ function Home() {
             <LineChart
               data={zipper(data.humidityHighs, data.humidityLows).reverse()}
               dataKey="high"
-              render={() => <Line type="monotone" dataKey="low" stroke="#8884d8" />}
+              render={() => (
+                <Line type="monotone" dataKey="low" stroke="#8884d8" />
+              )}
             />
           </div>
           <div>

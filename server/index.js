@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: `${__dirname}/../.env` });
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -54,7 +54,10 @@ let client;
       console.log(`App now running on http://localhost:${server.address().port}`);
     });
 
-    let agenda = new Agenda({ db: { address: MONGODB_URI }, collection: 'jobs' });
+    let agenda = new Agenda({
+      db: { address: MONGODB_URI },
+      collection: 'jobs'
+    });
     registerJobs(agenda, app.locals.db);
     await startJobs(agenda);
 
