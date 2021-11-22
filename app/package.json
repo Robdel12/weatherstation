@@ -43,7 +43,7 @@
     "babel-eslint": "^10.1.0",
     "cypress": "^9.0.0",
     "eslint-plugin-cypress": "^2.12.1",
-    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react": "^7.27.1",
     "start-server-and-test": "^1.14.0"
   }
 }
