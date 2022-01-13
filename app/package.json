@@ -28,7 +28,7 @@
     "autoprefixer": "^10.4.2",
     "dayjs": "^1.10.7",
     "graphql": "^16.2.0",
-    "parcel": "^2.0.1",
+    "parcel": "^2.2.0",
     "postcss": "^8.4.5",
     "postcss-import": "^14.0.2",
     "postcss-preset-env": "^7.2.0",
