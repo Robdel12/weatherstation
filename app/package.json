@@ -27,7 +27,7 @@
     "@babel/preset-react": "^7.16.7",
     "autoprefixer": "^10.4.2",
     "dayjs": "^1.10.7",
-    "graphql": "^16.2.0",
+    "graphql": "^16.3.0",
     "parcel": "^2.0.1",
     "postcss": "^8.4.5",
     "postcss-import": "^14.0.2",
