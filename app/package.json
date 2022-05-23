@@ -24,7 +24,7 @@
     "@babel/plugin-proposal-decorators": "^7.17.12",
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.18.0",
-    "@babel/preset-react": "^7.16.7",
+    "@babel/preset-react": "^7.17.12",
     "autoprefixer": "^10.4.7",
     "dayjs": "^1.11.2",
     "graphql": "^16.5.0",
