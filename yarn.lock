@@ -9282,10 +9282,10 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
-urql@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/urql/-/urql-2.2.1.tgz#34b0e4abe38ee310e794bfd873517b3d78b9e863"
-  integrity sha512-KoGxe8FBUkX0Ava5qOlnK2bRup2JTKF577MfQ8mpdt/kqq+b2RHJiAYdCLcMEE0Xh6kGQoY99pteFp/F47Buzg==
+urql@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/urql/-/urql-2.2.2.tgz#7d7d06ef4a78aef391222255b1c92bba0af3e296"
+  integrity sha512-jaVhDxWS2gfJLWWupFXtRkTCuGeRX+b9v19PU6TnKIJ7VP+xyrgpNHghHcTBGo58F+rxvCXVNEvSvdlKFMiHhg==
   dependencies:
     "@urql/core" "^2.4.3"
     wonka "^4.0.14"
