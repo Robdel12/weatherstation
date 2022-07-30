@@ -37,7 +37,7 @@
     "react-router-dom": "^5.3.0",
     "recharts": "^2.1.12",
     "tailwindcss": "^3.1.6",
-    "urql": "^2.2.2"
+    "urql": "^2.2.3"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
