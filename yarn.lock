@@ -2191,16 +2191,16 @@ acorn@^8.5.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.8.0.tgz#88c0187620435c7f6015803f5539dae05a9dbea8"
   integrity sha512-QOxyigPVrpZ2GXT+PFyZTl6TtOFc5egxHIP9IlQ+RbupQuX4RkT/Bee4/kQuC02Xkzg84JcT7oLYtDIQxp+v7w==
 
-agenda@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/agenda/-/agenda-4.3.0.tgz#0ca4ffac3695f63ffbd6ddf4a5fca607ec5a6513"
-  integrity sha512-hX/EfTrxWViuWlAY+vCdidwXX5QzqTi+cKMCOSOuFUHf1xNLcaHfi3FawChy/KdtSzcNSwIVQmxS+1GbWv+R2A==
+agenda@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/agenda/-/agenda-4.4.0.tgz#96edbed3d653cddd9551facbcb472e632059f8b4"
+  integrity sha512-7fIO4indmmrtkDmj2woOBJnhHIM7jPtkdGR4VOApB46eeBrPGUnO28RFrmjHebc3PMDnKJI0PWFyu9L9VotgJg==
   dependencies:
     cron-parser "^3.0.0"
     date.js "~0.3.3"
     debug "~4.3.0"
     human-interval "~2.0.0"
-    moment-timezone "~0.5.27"
+    moment-timezone "~0.5.37"
     mongodb "^4.1.0"
 
 agent-base@^4.3.0:
@@ -5173,10 +5173,10 @@ mocha@^10.1.0:
     yargs-parser "20.2.4"
     yargs-unparser "2.0.0"
 
-moment-timezone@~0.5.27:
-  version "0.5.37"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.37.tgz#adf97f719c4e458fdb12e2b4e87b8bec9f4eef1e"
-  integrity sha512-uEDzDNFhfaywRl+vwXxffjjq1q0Vzr+fcQpQ1bU0kbzorfS7zVtZnCnGc8mhWmF39d4g4YriF6kwA75mJKE/Zg==
+moment-timezone@~0.5.37:
+  version "0.5.38"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.38.tgz#9674a5397b8be7c13de820fd387d8afa0f725aad"
+  integrity sha512-nMIrzGah4+oYZPflDvLZUgoVUO4fvAqHstvG3xAUnMolWncuAiLDWNnJZj6EwJGMGfb1ZcuTFE6GI3hNOVWI/Q==
   dependencies:
     moment ">= 2.9.0"
 
